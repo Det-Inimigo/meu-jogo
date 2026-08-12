@@ -174,7 +174,7 @@
             font-weight: 700;
         }
 
-        /* ===== CARTAS NA MESA (estilo baralho) ===== */
+        /* ===== CARTAS NA MESA ===== */
         .cartas-mesa {
             display: flex;
             justify-content: center;
@@ -195,7 +195,6 @@
             letter-spacing: 0.02em;
         }
 
-        /* ——— CARTA ESTILO BARALHO ——— */
         .carta-mesa {
             background: linear-gradient(145deg, #f5f0e8, #e8e0d5);
             border-radius: 10px;
@@ -338,6 +337,18 @@
             animation: blinkDot 1s ease-in-out infinite;
         }
 
+        .jogador-card .nome .badge-humano {
+            font-size: 9px;
+            background: rgba(91, 124, 250, 0.12);
+            color: #6b8af5;
+            padding: 1px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-left: 6px;
+            text-transform: uppercase;
+            font-family: 'Inter', sans-serif;
+        }
+
         @keyframes blinkDot {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.2; }
@@ -368,7 +379,6 @@
             min-height: 44px;
         }
 
-        /* ——— CARTA NA MÃO (estilo baralho) ——— */
         .jogador-card .carta-mao {
             background: linear-gradient(145deg, #f5f0e8, #e8e0d5);
             border: 1px solid rgba(200, 180, 160, 0.2);
@@ -508,17 +518,6 @@
             border-color: rgba(232, 99, 107, 0.15);
         }
 
-        .acoes button.btn-primary {
-            background: rgba(91, 124, 250, 0.08);
-            border-color: rgba(91, 124, 250, 0.1);
-            color: #8ba4fa;
-        }
-
-        .acoes button.btn-primary:hover:not(:disabled) {
-            background: rgba(91, 124, 250, 0.15);
-            border-color: rgba(91, 124, 250, 0.15);
-        }
-
         .acoes button .sub {
             font-size: 10px;
             opacity: 0.6;
@@ -559,6 +558,13 @@
         .mensagem .info {
             color: #6b8af5;
             font-weight: 700;
+        }
+
+        .mensagem .automatico {
+            font-size: 12px;
+            opacity: 0.6;
+            display: block;
+            margin-top: 4px;
         }
 
         /* ===== STATUS BAR ===== */
@@ -756,7 +762,6 @@
             <button class="btn-truco" id="btnDoze" disabled>12 <span class="sub">aumentar</span></button>
             <button class="btn-fugir" id="btnFugir" disabled>Fugir</button>
             <button class="btn-aceitar" id="btnAceitar" disabled>Aceitar</button>
-            <button class="btn-primary" id="btnNovaMao">Nova Mão</button>
         </div>
 
         <!-- ===== MENSAGEM ===== -->
@@ -773,7 +778,7 @@
 
     <script>
         // ================================================================
-        //  TRUCO PAULISTA — VERSÃO COM CARTAS ESTILIZADAS E RITMO LENTO
+        //  TRUCO PAULISTA — COM NOVA MÃO AUTOMÁTICA E NOMES CORRIGIDOS
         // ================================================================
 
         // CONSTANTES
@@ -806,7 +811,8 @@
             mãoDeFerro: false,
             indexEmbaralhador: 0,
             codigo: '',
-            processando: false, // trava para evitar múltiplas execuções
+            processando: false,
+            novaMaoTimeout: null,
         };
 
         // FUNÇÕES DO BARALHO
@@ -873,13 +879,19 @@
         function initJogadores() {
             return [
                 { id: 'p1', nome: 'Você', dupla: 'A', cartas: [], pontos: 0, humano: true, ativo: true },
-                { id: 'p2', nome: 'Bot 1', dupla: 'B', cartas: [], pontos: 0, humano: false, ativo: true },
-                { id: 'p3', nome: 'Bot 2', dupla: 'A', cartas: [], pontos: 0, humano: false, ativo: true },
-                { id: 'p4', nome: 'Bot 3', dupla: 'B', cartas: [], pontos: 0, humano: false, ativo: true },
+                { id: 'p2', nome: 'Oponente 1', dupla: 'B', cartas: [], pontos: 0, humano: false, ativo: true },
+                { id: 'p3', nome: 'Parceiro', dupla: 'A', cartas: [], pontos: 0, humano: false, ativo: true },
+                { id: 'p4', nome: 'Oponente 2', dupla: 'B', cartas: [], pontos: 0, humano: false, ativo: true },
             ];
         }
 
         function iniciarNovaMao() {
+            // Limpa timeout anterior
+            if (estado.novaMaoTimeout) {
+                clearTimeout(estado.novaMaoTimeout);
+                estado.novaMaoTimeout = null;
+            }
+
             if (estado.processando) return;
             estado.processando = true;
 
@@ -942,6 +954,13 @@
             }, 600);
         }
 
+        function iniciarPrimeiraMao() {
+            estado.jogadores = initJogadores();
+            estado.pontos = { A: 0, B: 0 };
+            estado.indexEmbaralhador = 0;
+            iniciarNovaMao();
+        }
+
         // LÓGICA DO JOGO
         function jogarCarta(jogadorIndex, cartaIndex) {
             if (estado.processando) return;
@@ -957,13 +976,11 @@
             estado.cartasMesa.push({ jogador: jogadorIndex, carta: carta });
             jogador.cartas.splice(cartaIndex, 1);
 
-            // Mensagem de quem jogou
             setMensagem(`<span class="destaque">${jogador.nome}</span> jogou <strong>${carta}</strong>`);
 
             atualizarUI();
             atualizarAcoes();
 
-            // Delay para ver a carta
             setTimeout(() => {
                 if (estado.cartasMesa.length === 4) {
                     resolverRodada();
@@ -1016,10 +1033,8 @@
             const nomeVencedor = estado.jogadores[maior.jogador].nome;
             setMensagem(`🏆 <span class="destaque">${nomeVencedor}</span> ganhou a rodada!`);
 
-            // Mostra quem ganhou com destaque
             atualizarUI();
 
-            // Delay para ver o resultado da rodada
             setTimeout(() => {
                 if (estado.rodadasGanhas.A >= 2 || estado.rodadasGanhas.B >= 2) {
                     finalizarMao(duplaVencedora);
@@ -1052,22 +1067,40 @@
             const pontos = estado.valorMao;
             estado.pontos[duplaVencedora] += pontos;
 
-            setMensagem(`🎉 <span class="sucesso">Dupla ${duplaVencedora}</span> venceu a mão! +${pontos} pontos.`);
+            let msg = `🎉 <span class="sucesso">Dupla ${duplaVencedora}</span> venceu a mão! +${pontos} pontos.`;
 
             if (estado.pontos.A >= 12) {
-                setMensagem(`🏆 <span class="sucesso">Dupla A venceu o jogo!</span> Parabéns!`);
+                msg = `🏆 <span class="sucesso">Dupla A venceu o jogo!</span> Parabéns!`;
                 estado.fase = 'fim_jogo';
+                setMensagem(msg);
+                atualizarUI();
+                atualizarAcoes();
+                estado.processando = false;
+                return;
             } else if (estado.pontos.B >= 12) {
-                setMensagem(`🏆 <span class="sucesso">Dupla B venceu o jogo!</span> Parabéns!`);
+                msg = `🏆 <span class="sucesso">Dupla B venceu o jogo!</span> Parabéns!`;
                 estado.fase = 'fim_jogo';
+                setMensagem(msg);
+                atualizarUI();
+                atualizarAcoes();
+                estado.processando = false;
+                return;
             }
 
+            setMensagem(msg + ' <span class="automatico">🔄 Nova mão em 2 segundos...</span>');
             atualizarUI();
             atualizarAcoes();
             estado.processando = false;
+
+            // Nova mão automática após 2 segundos
+            estado.novaMaoTimeout = setTimeout(() => {
+                if (estado.fase === 'fim_mao' || estado.fase === 'jogando') {
+                    iniciarNovaMao();
+                }
+            }, 2200);
         }
 
-        // TRUCO (mesmas funções, sem alterações)
+        // TRUCO
         function pedirTruco() {
             if (estado.fase !== 'jogando') return;
             if (estado.trucoPedidoPor) return;
@@ -1114,16 +1147,27 @@
             estado.maoAtiva = false;
             estado.fase = 'fim_mao';
 
-            setMensagem(`🏃 <span class="erro">Fugiu!</span> Dupla ${duplaQuePediu} ganha ${pontos} pontos.`);
+            let msg = `🏃 <span class="erro">Fugiu!</span> Dupla ${duplaQuePediu} ganha ${pontos} pontos.`;
             estado.trucoPedidoPor = null;
 
             if (estado.pontos.A >= 12 || estado.pontos.B >= 12) {
                 estado.fase = 'fim_jogo';
-                setMensagem(`🏆 <span class="sucesso">Dupla ${duplaQuePediu} venceu o jogo!</span>`);
+                msg = `🏆 <span class="sucesso">Dupla ${duplaQuePediu} venceu o jogo!</span>`;
+                setMensagem(msg);
+                atualizarUI();
+                atualizarAcoes();
+                return;
             }
 
+            setMensagem(msg + ' <span class="automatico">🔄 Nova mão em 2 segundos...</span>');
             atualizarUI();
             atualizarAcoes();
+
+            estado.novaMaoTimeout = setTimeout(() => {
+                if (estado.fase === 'fim_mao') {
+                    iniciarNovaMao();
+                }
+            }, 2200);
         }
 
         function pedirMais(nivel) {
@@ -1214,7 +1258,7 @@
         }
 
         // ================================================================
-        //  UI — CARTAS ESTILIZADAS
+        //  UI
         // ================================================================
 
         function renderCarta(carta, tamanho = 'grande') {
@@ -1271,7 +1315,6 @@
                 document.getElementById('manilhaInfo').innerHTML = 'Manilha: <strong>—</strong>';
             }
 
-            // Cartas na mesa
             const mesaDiv = document.getElementById('cartasMesa');
             if (estado.cartasMesa.length === 0) {
                 mesaDiv.innerHTML = '<span class="empty-msg">Aguardando jogadas...</span>';
@@ -1287,7 +1330,6 @@
                 }).join('');
             }
 
-            // Jogadores
             const grid = document.getElementById('jogadoresGrid');
             grid.innerHTML = estado.jogadores.map((j, index) => {
                 const isAtivo = estado.jogadorDaVez === index && estado.fase === 'jogando';
@@ -1310,11 +1352,12 @@
                 }
 
                 const indicadorVez = isAtivo ? '<span class="indicador-vez"></span>' : '';
+                const badgeHumano = isHumano ? '<span class="badge-humano">Você</span>' : '';
 
                 return `
                             <div class="jogador-card dupla-${j.dupla.toLowerCase()} ${isAtivo ? 'ativo' : ''} ${isBot ? 'bot' : 'humano'}">
                                 <div class="topo">
-                                    <span class="nome">${indicadorVez}${j.nome}</span>
+                                    <span class="nome">${indicadorVez}${j.nome} ${badgeHumano}</span>
                                     <span class="badge-dupla ${j.dupla.toLowerCase()}">Dupla ${j.dupla}</span>
                                 </div>
                                 <div class="cartas">${cartasHTML}</div>
@@ -1323,7 +1366,6 @@
                         `;
             }).join('');
 
-            // Destaque na mesa se tiver truco
             const mesa = document.getElementById('mesa');
             if (estado.trucoPedidoPor && !estado.trucoRespondido) {
                 mesa.className = 'mesa destaque';
@@ -1352,7 +1394,6 @@
             const btnDoze = document.getElementById('btnDoze');
             const btnFugir = document.getElementById('btnFugir');
             const btnAceitar = document.getElementById('btnAceitar');
-            const btnNovaMao = document.getElementById('btnNovaMao');
 
             const isJogando = estado.fase === 'jogando';
             const isHumano = estado.jogadores[estado.jogadorDaVez]?.humano || false;
@@ -1365,8 +1406,6 @@
             btnDoze.disabled = !(isJogando && isHumano && temTruco && !estado.processando);
             btnFugir.disabled = !(isJogando && isHumano && temTruco && !estado.processando);
             btnAceitar.disabled = !(isJogando && isHumano && temTruco && !estado.processando);
-
-            btnNovaMao.textContent = isFimJogo ? 'Reiniciar Jogo' : 'Nova Mão';
         }
 
         function setMensagem(msg) {
@@ -1380,14 +1419,6 @@
         document.getElementById('btnDoze').addEventListener('click', () => pedirMais(12));
         document.getElementById('btnFugir').addEventListener('click', fugir);
         document.getElementById('btnAceitar').addEventListener('click', aceitarTruco);
-        document.getElementById('btnNovaMao').addEventListener('click', () => {
-            if (estado.fase === 'fim_jogo') {
-                estado.pontos = { A: 0, B: 0 };
-                estado.jogadores = initJogadores();
-                estado.indexEmbaralhador = 0;
-            }
-            iniciarNovaMao();
-        });
 
         // INICIALIZAÇÃO
         function gerarCodigo() {
@@ -1403,12 +1434,17 @@
         estado.codigo = gerarCodigo();
         document.getElementById('codigoDisplay').textContent = estado.codigo;
 
-        setMensagem('Bem-vindo ao Truco Paulista. Clique em <span class="destaque">Nova Mão</span> para começar.');
+        setMensagem('Bem-vindo ao Truco Paulista. <span class="destaque">Nova mão</span> começando...');
         atualizarUI();
         atualizarAcoes();
 
-        console.log('🃏 Truco Paulista — Com cartas estilizadas e ritmo lento!');
-        console.log('📌 Clique em "Nova Mão" para começar.');
+        // Começa automaticamente após 1 segundo
+        setTimeout(() => {
+            iniciarPrimeiraMao();
+        }, 1000);
+
+        console.log('🃏 Truco Paulista — Com nova mão automática!');
+        console.log('📌 Os bots são: Oponente 1, Parceiro, Oponente 2');
 
         // EXPORTAR
         window.jogarCarta = jogarCarta;
@@ -1417,6 +1453,7 @@
         window.fugir = fugir;
         window.pedirMais = pedirMais;
         window.iniciarNovaMao = iniciarNovaMao;
+        window.iniciarPrimeiraMao = iniciarPrimeiraMao;
     </script>
 
 </body>
