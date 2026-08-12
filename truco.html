@@ -17,7 +17,7 @@
             min-height: 100vh;
             background: #0b0b12;
             background-image:
-                radial-gradient(ellipse at 20% 50%, rgba(30, 60, 114, 0.10) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 50%, rgba(30, 60, 114, 0.12) 0%, transparent 60%),
                 radial-gradient(ellipse at 80% 50%, rgba(114, 60, 30, 0.06) 0%, transparent 60%);
             display: flex;
             justify-content: center;
@@ -28,37 +28,42 @@
 
         .game-container {
             background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.04);
-            border-radius: 24px;
-            padding: 24px 28px 26px;
-            max-width: 900px;
+            border-radius: 28px;
+            padding: 28px 32px 30px;
+            max-width: 960px;
             width: 100%;
-            box-shadow: 0 32px 64px -16px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.8);
+            transition: all 0.3s ease;
         }
 
+        /* ===== HEADER ===== */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 12px;
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
 
         .header .title-group {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
 
-        .header .title-group svg {
-            width: 30px;
-            height: 30px;
+        .header .title-group .icon-symbol {
+            font-size: 28px;
+            font-weight: 800;
+            color: #d4a54a;
+            opacity: 0.6;
+            font-family: 'Georgia', serif;
         }
 
         .header h1 {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 700;
             color: #e8e8f0;
             letter-spacing: -0.01em;
@@ -67,127 +72,203 @@
         .header .score-group {
             display: flex;
             align-items: center;
-            gap: 16px;
-            background: rgba(255, 255, 255, 0.02);
-            padding: 6px 18px;
-            border-radius: 30px;
+            gap: 18px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 8px 22px;
+            border-radius: 40px;
             border: 1px solid rgba(255, 255, 255, 0.04);
         }
 
         .header .score-group .dupla-a {
             color: #6b8af5;
-            font-weight: 700;
+            font-weight: 800;
+            font-size: 22px;
         }
         .header .score-group .dupla-b {
             color: #d4a54a;
-            font-weight: 700;
+            font-weight: 800;
+            font-size: 22px;
         }
         .header .score-group .vs {
             color: #3a3f55;
             font-weight: 600;
             font-size: 14px;
         }
+        .header .score-group .label-pts {
+            font-size: 11px;
+            color: #4a4f6a;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
 
+        /* ===== MESA ===== */
         .mesa {
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.35);
             border-radius: 20px;
-            padding: 20px;
+            padding: 24px;
             min-height: 200px;
             border: 1px solid rgba(255, 255, 255, 0.03);
             position: relative;
+            transition: all 0.3s ease;
         }
 
+        .mesa.destaque {
+            border-color: rgba(212, 165, 74, 0.15);
+            box-shadow: inset 0 0 60px rgba(212, 165, 74, 0.02);
+        }
+
+        /* Vira */
         .vira-area {
-            text-align: center;
-            margin-bottom: 14px;
-            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 16px;
+            padding: 10px 16px;
             background: rgba(255, 255, 255, 0.02);
-            border-radius: 12px;
+            border-radius: 14px;
             border: 1px solid rgba(255, 255, 255, 0.03);
+            flex-wrap: wrap;
         }
 
         .vira-area .label {
             font-size: 12px;
             color: #5a5f7a;
             text-transform: uppercase;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.08em;
+            font-weight: 600;
         }
 
         .vira-area .vira-card {
             display: inline-block;
-            font-size: 28px;
+            font-size: 30px;
             font-weight: 800;
-            padding: 4px 18px;
+            padding: 6px 22px;
             background: rgba(212, 165, 74, 0.08);
-            border: 1px solid rgba(212, 165, 74, 0.12);
-            border-radius: 8px;
+            border: 2px solid rgba(212, 165, 74, 0.15);
+            border-radius: 10px;
             color: #d4a54a;
-            margin-top: 2px;
+            font-family: 'Georgia', serif;
+            transition: 0.3s;
+        }
+
+        .vira-area .vira-card.revelada {
+            animation: pulseGold 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulseGold {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(212, 165, 74, 0); }
+            50% { box-shadow: 0 0 30px rgba(212, 165, 74, 0.08); }
         }
 
         .vira-area .manilha-info {
-            font-size: 13px;
+            font-size: 14px;
             color: #6a6f8a;
-            margin-top: 2px;
+            font-weight: 500;
         }
 
+        .vira-area .manilha-info strong {
+            color: #d4a54a;
+            font-weight: 700;
+        }
+
+        /* Cartas na mesa */
         .cartas-mesa {
             display: flex;
             justify-content: center;
-            gap: 12px;
-            min-height: 70px;
+            gap: 16px;
+            min-height: 90px;
             align-items: center;
             flex-wrap: wrap;
-            margin: 8px 0;
+            margin: 6px 0;
+            padding: 8px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .cartas-mesa .empty-msg {
+            color: #3a3f55;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.02em;
         }
 
         .carta-mesa {
-            background: #1a1a2e;
+            background: linear-gradient(145deg, #1a1a2e, #12121f);
             border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 8px;
-            padding: 10px 16px;
-            font-size: 22px;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 26px;
             font-weight: 700;
-            min-width: 50px;
+            min-width: 60px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+            font-family: 'Georgia', serif;
+            position: relative;
         }
 
         .carta-mesa .jogador-nome {
             display: block;
             font-size: 10px;
-            font-weight: 400;
+            font-weight: 500;
             color: #5a5f7a;
-            margin-top: 2px;
+            margin-top: 4px;
+            font-family: 'Inter', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
         }
 
+        .carta-mesa.vencedor {
+            border-color: #4caf84;
+            box-shadow: 0 0 30px rgba(76, 175, 132, 0.15);
+            transform: scale(1.05);
+        }
+
+        .carta-mesa .carta-naipe-vermelho {
+            color: #e8636b;
+        }
+        .carta-mesa .carta-naipe-preto {
+            color: #d0d0e0;
+        }
+
+        /* ===== JOGADORES ===== */
         .jogadores-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 14px;
+            gap: 14px;
+            margin-top: 18px;
         }
 
         .jogador-card {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.04);
-            border-radius: 14px;
-            padding: 12px 16px;
-            transition: 0.3s;
+            border-radius: 16px;
+            padding: 14px 18px;
+            transition: all 0.3s ease;
         }
 
         .jogador-card.dupla-a {
-            border-left: 3px solid #6b8af5;
+            border-left: 4px solid rgba(91, 124, 250, 0.3);
         }
         .jogador-card.dupla-b {
-            border-left: 3px solid #d4a54a;
+            border-left: 4px solid rgba(212, 165, 74, 0.3);
         }
+
         .jogador-card.ativo {
             background: rgba(255, 255, 255, 0.05);
             border-color: rgba(255, 255, 255, 0.08);
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
+
+        .jogador-card.ativo .nome {
+            color: #fff;
+        }
+
         .jogador-card.bot {
-            opacity: 0.7;
+            opacity: 0.75;
         }
         .jogador-card.humano {
             opacity: 1;
@@ -197,20 +278,38 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .jogador-card .nome {
             font-weight: 600;
-            font-size: 14px;
+            font-size: 15px;
+            color: #aab4d6;
+            transition: 0.3s;
+        }
+
+        .jogador-card .nome .indicador-vez {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4caf84;
+            margin-right: 6px;
+            animation: blinkDot 1s ease-in-out infinite;
+        }
+
+        @keyframes blinkDot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
         }
 
         .jogador-card .badge-dupla {
             font-size: 10px;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
-            padding: 2px 10px;
-            border-radius: 12px;
+            padding: 3px 12px;
+            border-radius: 20px;
+            letter-spacing: 0.04em;
         }
 
         .badge-dupla.a {
@@ -224,277 +323,394 @@
 
         .jogador-card .cartas {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             flex-wrap: wrap;
+            min-height: 36px;
         }
 
         .jogador-card .carta-mao {
-            background: #1a1a2e;
+            background: linear-gradient(145deg, #1a1a2e, #12121f);
             border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 6px;
-            padding: 4px 10px;
-            font-size: 18px;
+            border-radius: 8px;
+            padding: 4px 12px;
+            font-size: 20px;
             font-weight: 700;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s ease;
+            font-family: 'Georgia', serif;
+            min-width: 36px;
+            text-align: center;
         }
 
-        .jogador-card .carta-mao:hover {
-            border-color: rgba(91, 124, 250, 0.3);
-            transform: translateY(-2px);
+        .jogador-card .carta-mao:hover:not(.jogada):not(.bot-card) {
+            border-color: rgba(91, 124, 250, 0.4);
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
         }
 
         .jogador-card .carta-mao.jogada {
-            opacity: 0.3;
+            opacity: 0.2;
             cursor: not-allowed;
+            transform: scale(0.9);
         }
 
         .jogador-card .carta-mao.bot-card {
-            opacity: 0.2;
+            opacity: 0.15;
             cursor: default;
+            font-size: 16px;
         }
 
+        .jogador-card .carta-mao .naipe-vermelho {
+            color: #e8636b;
+        }
+        .jogador-card .carta-mao .naipe-preto {
+            color: #d0d0e0;
+        }
+
+        .jogador-card .pontos-info {
+            font-size: 11px;
+            color: #4a4f6a;
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        .jogador-card .pontos-info strong {
+            color: #8b92b0;
+        }
+
+        /* ===== AÇÕES ===== */
         .acoes {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 16px;
+            gap: 10px;
+            margin-top: 18px;
             justify-content: center;
         }
 
         .acoes button {
-            padding: 8px 20px;
+            padding: 10px 24px;
             border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 10px;
+            border-radius: 12px;
             background: rgba(255, 255, 255, 0.03);
             color: #aab4d6;
             font-family: 'Inter', sans-serif;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.25s;
+            transition: all 0.25s ease;
+            letter-spacing: 0.02em;
         }
 
         .acoes button:hover:not(:disabled) {
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.07);
             border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
         }
 
         .acoes button:disabled {
-            opacity: 0.3;
+            opacity: 0.25;
             cursor: not-allowed;
+            transform: none;
         }
 
-        .acoes button.primary {
-            background: rgba(91, 124, 250, 0.12);
-            border-color: rgba(91, 124, 250, 0.15);
-            color: #8ba4fa;
+        .acoes button.btn-truco {
+            background: rgba(212, 165, 74, 0.08);
+            border-color: rgba(212, 165, 74, 0.12);
+            color: #d4a54a;
         }
 
-        .acoes button.primary:hover:not(:disabled) {
-            background: rgba(91, 124, 250, 0.2);
+        .acoes button.btn-truco:hover:not(:disabled) {
+            background: rgba(212, 165, 74, 0.15);
+            border-color: rgba(212, 165, 74, 0.2);
         }
 
-        .acoes button.danger {
-            background: rgba(232, 99, 107, 0.08);
-            border-color: rgba(232, 99, 107, 0.1);
-            color: #e8636b;
-        }
-
-        .acoes button.danger:hover:not(:disabled) {
-            background: rgba(232, 99, 107, 0.15);
-        }
-
-        .acoes button.success {
+        .acoes button.btn-aceitar {
             background: rgba(76, 175, 132, 0.08);
             border-color: rgba(76, 175, 132, 0.1);
             color: #4caf84;
         }
 
-        .acoes button.success:hover:not(:disabled) {
+        .acoes button.btn-aceitar:hover:not(:disabled) {
             background: rgba(76, 175, 132, 0.15);
+            border-color: rgba(76, 175, 132, 0.15);
         }
 
-        .acoes button.gold {
-            background: rgba(212, 165, 74, 0.08);
-            border-color: rgba(212, 165, 74, 0.1);
-            color: #d4a54a;
+        .acoes button.btn-fugir {
+            background: rgba(232, 99, 107, 0.08);
+            border-color: rgba(232, 99, 107, 0.1);
+            color: #e8636b;
         }
 
-        .acoes button.gold:hover:not(:disabled) {
-            background: rgba(212, 165, 74, 0.15);
+        .acoes button.btn-fugir:hover:not(:disabled) {
+            background: rgba(232, 99, 107, 0.15);
+            border-color: rgba(232, 99, 107, 0.15);
         }
 
+        .acoes button.btn-primary {
+            background: rgba(91, 124, 250, 0.08);
+            border-color: rgba(91, 124, 250, 0.1);
+            color: #8ba4fa;
+        }
+
+        .acoes button.btn-primary:hover:not(:disabled) {
+            background: rgba(91, 124, 250, 0.15);
+            border-color: rgba(91, 124, 250, 0.15);
+        }
+
+        .acoes button .sub {
+            font-size: 10px;
+            opacity: 0.6;
+            font-weight: 400;
+            display: block;
+        }
+
+        /* ===== MENSAGEM ===== */
         .mensagem {
-            margin-top: 12px;
-            padding: 10px 16px;
+            margin-top: 14px;
+            padding: 14px 20px;
             background: rgba(255, 255, 255, 0.02);
-            border-radius: 10px;
+            border-radius: 12px;
             text-align: center;
-            font-size: 14px;
+            font-size: 15px;
             color: #8b92b0;
-            min-height: 40px;
+            min-height: 48px;
             border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.3s ease;
+            font-weight: 500;
         }
 
         .mensagem .destaque {
             color: #d4a54a;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .mensagem .sucesso {
             color: #4caf84;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .mensagem .erro {
             color: #e8636b;
-            font-weight: 600;
+            font-weight: 700;
         }
 
+        .mensagem .info {
+            color: #6b8af5;
+            font-weight: 700;
+        }
+
+        .mensagem .pulso {
+            animation: pulseMsg 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulseMsg {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* ===== STATUS BAR ===== */
         .status-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 14px;
+            margin-top: 16px;
             font-size: 12px;
             color: #4a4f6a;
             flex-wrap: wrap;
             gap: 8px;
-            padding-top: 12px;
+            padding-top: 14px;
             border-top: 1px solid rgba(255, 255, 255, 0.03);
         }
 
         .status-bar .codigo {
-            font-family: monospace;
-            font-size: 16px;
+            font-family: 'Inter', monospace;
+            font-size: 18px;
             font-weight: 700;
             color: #d4a54a;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.08em;
+            background: rgba(212, 165, 74, 0.06);
+            padding: 2px 16px;
+            border-radius: 6px;
+            border: 1px solid rgba(212, 165, 74, 0.06);
+        }
+
+        .status-bar .status-info {
+            color: #5a5f7a;
+            font-weight: 500;
+        }
+
+        .status-bar .status-info .vez {
+            color: #aab4d6;
+            font-weight: 600;
         }
 
         .btn-voltar {
             display: inline-block;
-            padding: 8px 20px;
+            padding: 8px 22px;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 30px;
             color: #6a6f8a;
             text-decoration: none;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 500;
-            transition: 0.25s;
-            font-family: inherit;
+            transition: all 0.25s ease;
+            font-family: 'Inter', sans-serif;
         }
 
         .btn-voltar:hover {
             background: rgba(255, 255, 255, 0.06);
             color: #e8e8f0;
+            border-color: rgba(255, 255, 255, 0.08);
         }
 
-        @media (max-width: 700px) {
+        .btn-voltar .seta {
+            margin-right: 6px;
+        }
+
+        /* ===== RESPONSIVO ===== */
+        @media (max-width: 750px) {
             .game-container {
-                padding: 16px;
+                padding: 18px 16px 20px;
             }
             .header h1 {
                 font-size: 20px;
             }
+            .header .score-group {
+                padding: 4px 14px;
+                gap: 12px;
+            }
+            .header .score-group .dupla-a,
+            .header .score-group .dupla-b {
+                font-size: 18px;
+            }
             .jogadores-grid {
                 grid-template-columns: 1fr 1fr;
-                gap: 8px;
+                gap: 10px;
             }
             .jogador-card {
-                padding: 8px 10px;
+                padding: 10px 12px;
             }
             .jogador-card .carta-mao {
-                font-size: 14px;
+                font-size: 16px;
                 padding: 2px 8px;
+                min-width: 28px;
             }
             .carta-mesa {
-                font-size: 18px;
-                padding: 6px 12px;
+                font-size: 20px;
+                padding: 8px 14px;
+                min-width: 44px;
             }
             .acoes button {
                 font-size: 12px;
-                padding: 6px 14px;
+                padding: 8px 14px;
             }
             .vira-area .vira-card {
-                font-size: 22px;
+                font-size: 24px;
+                padding: 4px 16px;
+            }
+            .mensagem {
+                font-size: 13px;
+                padding: 10px 14px;
             }
         }
 
-        @media (max-width: 450px) {
+        @media (max-width: 480px) {
             .jogadores-grid {
                 grid-template-columns: 1fr;
             }
-            .header .score-group {
-                font-size: 14px;
-                padding: 4px 12px;
+            .header .score-group .label-pts {
+                display: none;
             }
             .mesa {
-                padding: 12px;
+                padding: 14px;
+            }
+            .vira-area {
+                gap: 12px;
+                padding: 8px 12px;
+            }
+            .cartas-mesa {
+                gap: 10px;
+            }
+            .acoes button {
+                font-size: 11px;
+                padding: 6px 12px;
+            }
+            .acoes button .sub {
+                display: none;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="game-container" id="app">
+    <div class="game-container">
 
+        <!-- ===== HEADER ===== -->
         <div class="header">
             <div class="title-group">
-                <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="4" y="4" width="22" height="22" rx="3" stroke="#d4a54a" stroke-width="2"/>
-                    <text x="15" y="21" font-size="16" font-weight="800" fill="#d4a54a" text-anchor="middle" font-family="Georgia, serif">♠</text>
-                    <circle cx="9" cy="9" r="2" fill="#d4a54a" opacity="0.3"/>
-                    <circle cx="21" cy="21" r="2" fill="#d4a54a" opacity="0.3"/>
-                </svg>
+                <span class="icon-symbol">♠</span>
                 <h1>Truco Paulista</h1>
             </div>
             <div class="score-group">
-                <span class="dupla-a" id="scoreA">0</span>
+                <div>
+                    <div class="dupla-a" id="scoreA">0</div>
+                    <div class="label-pts">Dupla A</div>
+                </div>
                 <span class="vs">×</span>
-                <span class="dupla-b" id="scoreB">0</span>
+                <div>
+                    <div class="dupla-b" id="scoreB">0</div>
+                    <div class="label-pts">Dupla B</div>
+                </div>
             </div>
         </div>
 
-        <div class="mesa">
+        <!-- ===== MESA ===== -->
+        <div class="mesa" id="mesa">
+
+            <!-- Vira -->
             <div class="vira-area">
-                <div class="label">Vira</div>
-                <div class="vira-card" id="viraDisplay">—</div>
-                <div class="manilha-info" id="manilhaInfo">Manilha: —</div>
+                <span class="label">Vira</span>
+                <span class="vira-card" id="viraDisplay">—</span>
+                <span class="manilha-info" id="manilhaInfo">Manilha: <strong>—</strong></span>
             </div>
 
+            <!-- Cartas na mesa -->
             <div class="cartas-mesa" id="cartasMesa">
-                <span style="color:#3a3f55; font-size:13px;">Aguardando jogadas...</span>
+                <span class="empty-msg">Aguardando jogadas...</span>
             </div>
+
         </div>
 
+        <!-- ===== JOGADORES ===== -->
         <div class="jogadores-grid" id="jogadoresGrid"></div>
 
+        <!-- ===== AÇÕES ===== -->
         <div class="acoes" id="acoes">
-            <button class="gold" id="btnTruco" disabled>Pedir Truco</button>
-            <button class="gold" id="btnSeis" disabled>Seis</button>
-            <button class="gold" id="btnNove" disabled>Nove</button>
-            <button class="gold" id="btnDoze" disabled>Doze</button>
-            <button class="danger" id="btnFugir" disabled>Fugir</button>
-            <button class="success" id="btnAceitar" disabled>Aceitar</button>
-            <button class="primary" id="btnNovaMao">Nova Mão</button>
+            <button class="btn-truco" id="btnTruco" disabled>Pedir Truco</button>
+            <button class="btn-truco" id="btnSeis" disabled>6 <span class="sub">aumentar</span></button>
+            <button class="btn-truco" id="btnNove" disabled>9 <span class="sub">aumentar</span></button>
+            <button class="btn-truco" id="btnDoze" disabled>12 <span class="sub">aumentar</span></button>
+            <button class="btn-fugir" id="btnFugir" disabled>Fugir</button>
+            <button class="btn-aceitar" id="btnAceitar" disabled>Aceitar</button>
+            <button class="btn-primary" id="btnNovaMao">Nova Mão</button>
         </div>
 
-        <div class="mensagem" id="mensagem">🃏 Bem-vindo ao Truco Paulista! Clique em "Nova Mão" para começar.</div>
+        <!-- ===== MENSAGEM ===== -->
+        <div class="mensagem" id="mensagem">Bem-vindo ao Truco Paulista. Clique em <span class="destaque">Nova Mão</span> para começar.</div>
 
+        <!-- ===== STATUS BAR ===== -->
         <div class="status-bar">
             <span>Código: <span class="codigo" id="codigoDisplay">—</span></span>
-            <span id="statusInfo">Aguardando início</span>
-            <a href="index.html" class="btn-voltar">← Voltar</a>
+            <span class="status-info" id="statusInfo">Aguardando início</span>
+            <a href="index.html" class="btn-voltar"><span class="seta">←</span> Voltar</a>
         </div>
 
     </div>
 
     <script>
         // ================================================================
-        //  TRUCO PAULISTA — VERSÃO COMPLETA E TESTADA
+        //  TRUCO PAULISTA — VERSÃO PREMIUM (SEM EMOJIS)
         // ================================================================
 
         // CONSTANTES
@@ -502,6 +718,7 @@
         const ORDEM = ['4', '5', '6', '7', 'Q', 'J', 'K', '1', '2', '3'];
         const VALORES = { '4': 0, '5': 1, '6': 2, '7': 3, 'Q': 4, 'J': 5, 'K': 6, '1': 7, '2': 8, '3': 9 };
         const FORCA_NAIPES = { '♣': 3, '♥': 2, '♠': 1, '♦': 0 };
+        const NIPES_CORES = { '♣': 'preto', '♥': 'vermelho', '♠': 'preto', '♦': 'vermelho' };
 
         // ESTADO
         let estado = {
@@ -574,6 +791,11 @@
             return NAIPES.map(n => manilhaValor + n);
         }
 
+        function getCorCarta(carta) {
+            const naipe = getNaipe(carta);
+            return NIPES_CORES[naipe];
+        }
+
         // INICIALIZAÇÃO
         function initJogadores() {
             return [
@@ -633,7 +855,7 @@
             atualizarAcoes();
 
             const nome = estado.jogadores[estado.jogadorDaVez].nome;
-            setMensagem(`🃏 Nova mão! <span class="destaque">${nome}</span> começa.`);
+            setMensagem(`Nova mão! <span class="destaque">${nome}</span> começa.`);
 
             setTimeout(() => {
                 if (estado.fase === 'jogando' && !estado.jogadores[estado.jogadorDaVez].humano) {
@@ -733,10 +955,10 @@
             setMensagem(`🎉 <span class="sucesso">Dupla ${duplaVencedora}</span> venceu a mão! +${pontos} pontos.`);
 
             if (estado.pontos.A >= 12) {
-                setMensagem('🏆 <span class="sucesso">Dupla A venceu o jogo!</span> Parabéns!');
+                setMensagem(`🏆 <span class="sucesso">Dupla A venceu o jogo!</span> Parabéns!`);
                 estado.fase = 'fim_jogo';
             } else if (estado.pontos.B >= 12) {
-                setMensagem('🏆 <span class="sucesso">Dupla B venceu o jogo!</span> Parabéns!');
+                setMensagem(`🏆 <span class="sucesso">Dupla B venceu o jogo!</span> Parabéns!`);
                 estado.fase = 'fim_jogo';
             }
 
@@ -791,7 +1013,7 @@
             estado.maoAtiva = false;
             estado.fase = 'fim_mao';
 
-            setMensagem(`🏃‍♂️ <span class="erro">Fugiu!</span> Dupla ${duplaQuePediu} ganha ${pontos} pontos.`);
+            setMensagem(`🏃 <span class="erro">Fugiu!</span> Dupla ${duplaQuePediu} ganha ${pontos} pontos.`);
             estado.trucoPedidoPor = null;
 
             if (estado.pontos.A >= 12 || estado.pontos.B >= 12) {
@@ -898,21 +1120,26 @@
             const viraDisplay = document.getElementById('viraDisplay');
             if (estado.vira) {
                 viraDisplay.textContent = estado.vira;
+                viraDisplay.className = 'vira-card revelada';
                 const manilhaValor = estado.manilhas[0][0];
-                document.getElementById('manilhaInfo').textContent = `Manilha: ${manilhaValor} ♣♥♠♦`;
+                document.getElementById('manilhaInfo').innerHTML = `Manilha: <strong>${manilhaValor}</strong> ♣ ♥ ♠ ♦`;
             } else {
                 viraDisplay.textContent = '—';
-                document.getElementById('manilhaInfo').textContent = 'Manilha: —';
+                viraDisplay.className = 'vira-card';
+                document.getElementById('manilhaInfo').innerHTML = 'Manilha: <strong>—</strong>';
             }
 
             const mesaDiv = document.getElementById('cartasMesa');
             if (estado.cartasMesa.length === 0) {
-                mesaDiv.innerHTML = '<span style="color:#3a3f55; font-size:13px;">Aguardando jogadas...</span>';
+                mesaDiv.innerHTML = '<span class="empty-msg">Aguardando jogadas...</span>';
             } else {
+                const vencedor = estado.vencedorMao;
                 mesaDiv.innerHTML = estado.cartasMesa.map(c => {
                     const jogador = estado.jogadores[c.jogador];
-                    return `<div class="carta-mesa">
-                                ${c.carta}
+                    const cor = getCorCarta(c.carta);
+                    const isVencedor = vencedor && jogador.dupla === vencedor && estado.fase === 'fim_mao';
+                    return `<div class="carta-mesa ${isVencedor ? 'vencedor' : ''}">
+                                <span class="${cor === 'vermelho' ? 'carta-naipe-vermelho' : 'carta-naipe-preto'}">${c.carta}</span>
                                 <span class="jogador-nome">${jogador.nome}</span>
                             </div>`;
                 }).join('');
@@ -927,40 +1154,52 @@
                 let cartasHTML = '';
                 if (isBot) {
                     cartasHTML = j.cartas.map(() =>
-                        `<span class="carta-mao bot-card">🂠</span>`
+                        `<span class="carta-mao bot-card">◆</span>`
                     ).join('');
                 } else {
                     cartasHTML = j.cartas.map((c, i) => {
                         const jaJogou = estado.cartasMesa.some(c => c.jogador === index);
+                        const cor = getCorCarta(c);
                         return `<span class="carta-mao ${jaJogou ? 'jogada' : ''}" 
                                      onclick="if(!${jaJogou}) jogarCarta(${index}, ${i})">
-                                    ${c}
+                                    <span class="${cor === 'vermelho' ? 'naipe-vermelho' : 'naipe-preto'}">${c}</span>
                                 </span>`;
                     }).join('');
                 }
 
+                const indicadorVez = isAtivo ? '<span class="indicador-vez"></span>' : '';
+
                 return `
                             <div class="jogador-card dupla-${j.dupla.toLowerCase()} ${isAtivo ? 'ativo' : ''} ${isBot ? 'bot' : 'humano'}">
                                 <div class="topo">
-                                    <span class="nome">${isBot ? '🤖 ' : '🎮 '}${j.nome}</span>
+                                    <span class="nome">${indicadorVez}${j.nome}</span>
                                     <span class="badge-dupla ${j.dupla.toLowerCase()}">Dupla ${j.dupla}</span>
                                 </div>
                                 <div class="cartas">${cartasHTML}</div>
-                                <div style="font-size:11px;color:#4a4f6a;margin-top:4px;">${j.pontos} pts</div>
+                                <div class="pontos-info">Pontos: <strong>${j.pontos}</strong></div>
                             </div>
                         `;
             }).join('');
 
+            // Destaque na mesa se tiver truco
+            const mesa = document.getElementById('mesa');
+            if (estado.trucoPedidoPor && !estado.trucoRespondido) {
+                mesa.className = 'mesa destaque';
+            } else {
+                mesa.className = 'mesa';
+            }
+
             const statusInfo = document.getElementById('statusInfo');
             if (estado.fase === 'fim_jogo') {
-                statusInfo.textContent = '🏆 Jogo finalizado!';
+                statusInfo.innerHTML = '🏆 Jogo finalizado';
             } else if (estado.fase === 'jogando') {
                 const nome = estado.jogadores[estado.jogadorDaVez].nome;
-                statusInfo.textContent = `Vez de: ${nome}`;
+                const isHumano = estado.jogadores[estado.jogadorDaVez].humano;
+                statusInfo.innerHTML = `Vez de: <span class="vez">${nome}</span> ${isHumano ? '🎯' : '🤖'}`;
             } else if (estado.fase === 'fim_mao') {
-                statusInfo.textContent = `Mão finalizada!`;
+                statusInfo.innerHTML = 'Mão finalizada';
             } else {
-                statusInfo.textContent = 'Aguardando...';
+                statusInfo.innerHTML = 'Aguardando...';
             }
         }
 
@@ -971,10 +1210,12 @@
             const btnDoze = document.getElementById('btnDoze');
             const btnFugir = document.getElementById('btnFugir');
             const btnAceitar = document.getElementById('btnAceitar');
+            const btnNovaMao = document.getElementById('btnNovaMao');
 
             const isJogando = estado.fase === 'jogando';
             const isHumano = estado.jogadores[estado.jogadorDaVez]?.humano || false;
             const temTruco = estado.trucoPedidoPor !== null && !estado.trucoRespondido;
+            const isFimJogo = estado.fase === 'fim_jogo';
 
             btnTruco.disabled = !(isJogando && isHumano && !temTruco && !estado.mãoDe11);
             btnSeis.disabled = !(isJogando && isHumano && temTruco);
@@ -982,6 +1223,8 @@
             btnDoze.disabled = !(isJogando && isHumano && temTruco);
             btnFugir.disabled = !(isJogando && isHumano && temTruco);
             btnAceitar.disabled = !(isJogando && isHumano && temTruco);
+
+            btnNovaMao.textContent = isFimJogo ? 'Reiniciar Jogo' : 'Nova Mão';
         }
 
         function setMensagem(msg) {
@@ -1018,11 +1261,11 @@
         estado.codigo = gerarCodigo();
         document.getElementById('codigoDisplay').textContent = estado.codigo;
 
-        setMensagem('🃏 Bem-vindo ao Truco Paulista! Clique em <span class="destaque">"Nova Mão"</span> para começar.');
+        setMensagem('Bem-vindo ao Truco Paulista. Clique em <span class="destaque">Nova Mão</span> para começar.');
         atualizarUI();
         atualizarAcoes();
 
-        console.log('🃏 Truco Paulista carregado com sucesso!');
+        console.log('🃏 Truco Paulista — Versão Premium carregada!');
         console.log('📌 Clique em "Nova Mão" para começar.');
 
         // EXPORTAR
