@@ -32,10 +32,9 @@
             border: 1px solid rgba(255, 255, 255, 0.04);
             border-radius: 28px;
             padding: 28px 32px 30px;
-            max-width: 960px;
+            max-width: 980px;
             width: 100%;
             box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.8);
-            transition: all 0.3s ease;
         }
 
         /* ===== HEADER ===== */
@@ -107,7 +106,7 @@
             background: rgba(0, 0, 0, 0.35);
             border-radius: 20px;
             padding: 24px;
-            min-height: 200px;
+            min-height: 220px;
             border: 1px solid rgba(255, 255, 255, 0.03);
             position: relative;
             transition: all 0.3s ease;
@@ -142,15 +141,17 @@
 
         .vira-area .vira-card {
             display: inline-block;
-            font-size: 30px;
+            font-size: 26px;
             font-weight: 800;
-            padding: 6px 22px;
-            background: rgba(212, 165, 74, 0.08);
+            padding: 4px 18px;
+            background: linear-gradient(145deg, #1e1e34, #12121f);
             border: 2px solid rgba(212, 165, 74, 0.15);
             border-radius: 10px;
             color: #d4a54a;
             font-family: 'Georgia', serif;
             transition: 0.3s;
+            min-width: 50px;
+            text-align: center;
         }
 
         .vira-area .vira-card.revelada {
@@ -173,16 +174,16 @@
             font-weight: 700;
         }
 
-        /* Cartas na mesa */
+        /* ===== CARTAS NA MESA (estilo baralho) ===== */
         .cartas-mesa {
             display: flex;
             justify-content: center;
-            gap: 16px;
-            min-height: 90px;
+            gap: 20px;
+            min-height: 110px;
             align-items: center;
             flex-wrap: wrap;
             margin: 6px 0;
-            padding: 8px;
+            padding: 10px;
             border-radius: 12px;
             transition: all 0.3s ease;
         }
@@ -194,43 +195,82 @@
             letter-spacing: 0.02em;
         }
 
+        /* ——— CARTA ESTILO BARALHO ——— */
         .carta-mesa {
-            background: linear-gradient(145deg, #1a1a2e, #12121f);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: linear-gradient(145deg, #f5f0e8, #e8e0d5);
             border-radius: 10px;
-            padding: 12px 20px;
-            font-size: 26px;
-            font-weight: 700;
-            min-width: 60px;
+            padding: 10px 16px 8px;
+            min-width: 70px;
+            min-height: 95px;
             text-align: center;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            transition: all 0.4s ease;
             font-family: 'Georgia', serif;
             position: relative;
+            border: 1px solid rgba(200, 180, 160, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carta-mesa .carta-valor {
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .carta-mesa .carta-naipe {
+            font-size: 24px;
+            line-height: 1;
+            margin-top: 2px;
+        }
+
+        .carta-mesa .carta-naipe-vermelho {
+            color: #cc2233;
+        }
+        .carta-mesa .carta-naipe-preto {
+            color: #1a1a2e;
         }
 
         .carta-mesa .jogador-nome {
             display: block;
             font-size: 10px;
-            font-weight: 500;
-            color: #5a5f7a;
-            margin-top: 4px;
+            font-weight: 600;
+            color: #4a4a5a;
+            margin-top: 6px;
             font-family: 'Inter', sans-serif;
             text-transform: uppercase;
             letter-spacing: 0.04em;
+            background: rgba(0, 0, 0, 0.04);
+            padding: 2px 10px;
+            border-radius: 10px;
         }
 
         .carta-mesa.vencedor {
             border-color: #4caf84;
-            box-shadow: 0 0 30px rgba(76, 175, 132, 0.15);
-            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(76, 175, 132, 0.2), 0 4px 20px rgba(0, 0, 0, 0.4);
+            transform: scale(1.05) translateY(-6px);
         }
 
-        .carta-mesa .carta-naipe-vermelho {
-            color: #e8636b;
+        .carta-mesa.vencedor .jogador-nome {
+            background: rgba(76, 175, 132, 0.15);
+            color: #4caf84;
         }
-        .carta-mesa .carta-naipe-preto {
-            color: #d0d0e0;
+
+        .carta-mesa .carta-badge-vencedor {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #4caf84;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.04em;
+            box-shadow: 0 2px 8px rgba(76, 175, 132, 0.3);
         }
 
         /* ===== JOGADORES ===== */
@@ -325,46 +365,68 @@
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
-            min-height: 36px;
+            min-height: 44px;
         }
 
+        /* ——— CARTA NA MÃO (estilo baralho) ——— */
         .jogador-card .carta-mao {
-            background: linear-gradient(145deg, #1a1a2e, #12121f);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: linear-gradient(145deg, #f5f0e8, #e8e0d5);
+            border: 1px solid rgba(200, 180, 160, 0.2);
             border-radius: 8px;
-            padding: 4px 12px;
-            font-size: 20px;
-            font-weight: 700;
+            padding: 4px 12px 2px;
+            min-width: 42px;
+            min-height: 52px;
+            text-align: center;
             cursor: pointer;
             transition: all 0.2s ease;
             font-family: 'Georgia', serif;
-            min-width: 36px;
-            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-        .jogador-card .carta-mao:hover:not(.jogada):not(.bot-card) {
-            border-color: rgba(91, 124, 250, 0.4);
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        .jogador-card .carta-mao .carta-valor {
+            font-size: 18px;
+            font-weight: 800;
+            line-height: 1;
         }
 
-        .jogador-card .carta-mao.jogada {
-            opacity: 0.2;
-            cursor: not-allowed;
-            transform: scale(0.9);
-        }
-
-        .jogador-card .carta-mao.bot-card {
-            opacity: 0.15;
-            cursor: default;
-            font-size: 16px;
+        .jogador-card .carta-mao .carta-naipe {
+            font-size: 14px;
+            line-height: 1;
         }
 
         .jogador-card .carta-mao .naipe-vermelho {
-            color: #e8636b;
+            color: #cc2233;
         }
         .jogador-card .carta-mao .naipe-preto {
-            color: #d0d0e0;
+            color: #1a1a2e;
+        }
+
+        .jogador-card .carta-mao:hover:not(.jogada):not(.bot-card) {
+            transform: translateY(-6px) scale(1.04);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            border-color: rgba(91, 124, 250, 0.3);
+        }
+
+        .jogador-card .carta-mao.jogada {
+            opacity: 0.15;
+            cursor: not-allowed;
+            transform: scale(0.85);
+            filter: grayscale(1);
+        }
+
+        .jogador-card .carta-mao.bot-card {
+            opacity: 0.1;
+            cursor: default;
+            background: linear-gradient(145deg, #1a1a2e, #12121f);
+            border-color: rgba(255, 255, 255, 0.03);
+            min-height: 52px;
+            min-width: 42px;
+            font-size: 12px;
+            color: #3a3f55;
         }
 
         .jogador-card .pontos-info {
@@ -499,15 +561,6 @@
             font-weight: 700;
         }
 
-        .mensagem .pulso {
-            animation: pulseMsg 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulseMsg {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
-        }
-
         /* ===== STATUS BAR ===== */
         .status-bar {
             display: flex;
@@ -564,10 +617,6 @@
             border-color: rgba(255, 255, 255, 0.08);
         }
 
-        .btn-voltar .seta {
-            margin-right: 6px;
-        }
-
         /* ===== RESPONSIVO ===== */
         @media (max-width: 750px) {
             .game-container {
@@ -592,22 +641,35 @@
                 padding: 10px 12px;
             }
             .jogador-card .carta-mao {
-                font-size: 16px;
+                min-width: 34px;
+                min-height: 42px;
                 padding: 2px 8px;
-                min-width: 28px;
+            }
+            .jogador-card .carta-mao .carta-valor {
+                font-size: 14px;
+            }
+            .jogador-card .carta-mao .carta-naipe {
+                font-size: 12px;
             }
             .carta-mesa {
-                font-size: 20px;
-                padding: 8px 14px;
-                min-width: 44px;
+                min-width: 56px;
+                min-height: 76px;
+                padding: 6px 10px 4px;
+            }
+            .carta-mesa .carta-valor {
+                font-size: 22px;
+            }
+            .carta-mesa .carta-naipe {
+                font-size: 18px;
             }
             .acoes button {
                 font-size: 12px;
                 padding: 8px 14px;
             }
             .vira-area .vira-card {
-                font-size: 24px;
-                padding: 4px 16px;
+                font-size: 20px;
+                padding: 2px 12px;
+                min-width: 40px;
             }
             .mensagem {
                 font-size: 13px;
@@ -630,7 +692,8 @@
                 padding: 8px 12px;
             }
             .cartas-mesa {
-                gap: 10px;
+                gap: 12px;
+                padding: 6px;
             }
             .acoes button {
                 font-size: 11px;
@@ -703,14 +766,14 @@
         <div class="status-bar">
             <span>Código: <span class="codigo" id="codigoDisplay">—</span></span>
             <span class="status-info" id="statusInfo">Aguardando início</span>
-            <a href="index.html" class="btn-voltar"><span class="seta">←</span> Voltar</a>
+            <a href="index.html" class="btn-voltar">← Voltar</a>
         </div>
 
     </div>
 
     <script>
         // ================================================================
-        //  TRUCO PAULISTA — VERSÃO PREMIUM (SEM EMOJIS)
+        //  TRUCO PAULISTA — VERSÃO COM CARTAS ESTILIZADAS E RITMO LENTO
         // ================================================================
 
         // CONSTANTES
@@ -738,10 +801,12 @@
             jogadorDaVez: 0,
             fase: 'aguardando',
             vencedorMao: null,
+            vencedorRodada: null,
             mãoDe11: false,
             mãoDeFerro: false,
             indexEmbaralhador: 0,
             codigo: '',
+            processando: false, // trava para evitar múltiplas execuções
         };
 
         // FUNÇÕES DO BARALHO
@@ -796,6 +861,14 @@
             return NIPES_CORES[naipe];
         }
 
+        function getValorDisplay(carta) {
+            return carta[0];
+        }
+
+        function getNaipeDisplay(carta) {
+            return carta[1];
+        }
+
         // INICIALIZAÇÃO
         function initJogadores() {
             return [
@@ -807,6 +880,9 @@
         }
 
         function iniciarNovaMao() {
+            if (estado.processando) return;
+            estado.processando = true;
+
             const baralho = embaralhar(criarBaralho());
 
             for (const j of estado.jogadores) {
@@ -833,7 +909,9 @@
             estado.trucoRespondido = false;
             estado.maoAtiva = true;
             estado.vencedorMao = null;
+            estado.vencedorRodada = null;
             estado.fase = 'jogando';
+            estado.processando = false;
 
             estado.mãoDe11 = (estado.pontos.A >= 11 || estado.pontos.B >= 11);
             estado.mãoDeFerro = (estado.pontos.A >= 11 && estado.pontos.B >= 11);
@@ -861,14 +939,17 @@
                 if (estado.fase === 'jogando' && !estado.jogadores[estado.jogadorDaVez].humano) {
                     botJogar();
                 }
-            }, 500);
+            }, 600);
         }
 
         // LÓGICA DO JOGO
         function jogarCarta(jogadorIndex, cartaIndex) {
+            if (estado.processando) return;
             if (estado.fase !== 'jogando') return;
             if (estado.jogadorDaVez !== jogadorIndex) return;
             if (!estado.maoAtiva) return;
+
+            estado.processando = true;
 
             const jogador = estado.jogadores[jogadorIndex];
             const carta = jogador.cartas[cartaIndex];
@@ -876,23 +957,32 @@
             estado.cartasMesa.push({ jogador: jogadorIndex, carta: carta });
             jogador.cartas.splice(cartaIndex, 1);
 
-            proximoJogador();
-
-            if (estado.cartasMesa.length === 4) {
-                resolverRodada();
-            }
+            // Mensagem de quem jogou
+            setMensagem(`<span class="destaque">${jogador.nome}</span> jogou <strong>${carta}</strong>`);
 
             atualizarUI();
             atualizarAcoes();
 
+            // Delay para ver a carta
             setTimeout(() => {
-                if (estado.fase === 'jogando' && estado.cartasMesa.length < 4) {
-                    const next = estado.jogadores[estado.jogadorDaVez];
-                    if (!next.humano) {
-                        botJogar();
-                    }
+                if (estado.cartasMesa.length === 4) {
+                    resolverRodada();
+                } else {
+                    proximoJogador();
+                    atualizarUI();
+                    atualizarAcoes();
+
+                    setTimeout(() => {
+                        estado.processando = false;
+                        if (estado.fase === 'jogando' && estado.cartasMesa.length < 4) {
+                            const next = estado.jogadores[estado.jogadorDaVez];
+                            if (!next.humano) {
+                                botJogar();
+                            }
+                        }
+                    }, 300);
                 }
-            }, 300);
+            }, 700);
         }
 
         function proximoJogador() {
@@ -921,27 +1011,37 @@
 
             const duplaVencedora = estado.jogadores[maior.jogador].dupla;
             estado.rodadasGanhas[duplaVencedora]++;
+            estado.vencedorRodada = maior.jogador;
 
             const nomeVencedor = estado.jogadores[maior.jogador].nome;
             setMensagem(`🏆 <span class="destaque">${nomeVencedor}</span> ganhou a rodada!`);
 
-            if (estado.rodadasGanhas.A >= 2 || estado.rodadasGanhas.B >= 2) {
-                finalizarMao(duplaVencedora);
-                return;
-            }
-
-            estado.rodadaAtual++;
-            estado.cartasMesa = [];
-            estado.jogadorDaVez = maior.jogador;
-
+            // Mostra quem ganhou com destaque
             atualizarUI();
-            atualizarAcoes();
 
+            // Delay para ver o resultado da rodada
             setTimeout(() => {
-                if (estado.fase === 'jogando' && !estado.jogadores[estado.jogadorDaVez].humano) {
-                    botJogar();
+                if (estado.rodadasGanhas.A >= 2 || estado.rodadasGanhas.B >= 2) {
+                    finalizarMao(duplaVencedora);
+                    estado.processando = false;
+                    return;
                 }
-            }, 500);
+
+                estado.rodadaAtual++;
+                estado.cartasMesa = [];
+                estado.jogadorDaVez = maior.jogador;
+                estado.vencedorRodada = null;
+
+                atualizarUI();
+                atualizarAcoes();
+                estado.processando = false;
+
+                setTimeout(() => {
+                    if (estado.fase === 'jogando' && !estado.jogadores[estado.jogadorDaVez].humano) {
+                        botJogar();
+                    }
+                }, 500);
+            }, 1000);
         }
 
         function finalizarMao(duplaVencedora) {
@@ -964,9 +1064,10 @@
 
             atualizarUI();
             atualizarAcoes();
+            estado.processando = false;
         }
 
-        // TRUCO
+        // TRUCO (mesmas funções, sem alterações)
         function pedirTruco() {
             if (estado.fase !== 'jogando') return;
             if (estado.trucoPedidoPor) return;
@@ -1061,9 +1162,9 @@
             const jogadorIndex = estado.jogadorDaVez;
             const jogador = estado.jogadores[jogadorIndex];
 
-            if (!jogador.humano && estado.fase === 'jogando' && estado.maoAtiva) {
+            if (!jogador.humano && estado.fase === 'jogando' && estado.maoAtiva && !estado.processando) {
                 setTimeout(() => {
-                    if (estado.fase !== 'jogando' || !estado.maoAtiva) return;
+                    if (estado.fase !== 'jogando' || !estado.maoAtiva || estado.processando) return;
 
                     if (!estado.trucoPedidoPor && !estado.mãoDe11 && estado.cartasMesa.length === 0) {
                         const forca = avaliarMao(jogador);
@@ -1100,7 +1201,7 @@
                     }
 
                     jogarCarta(jogadorIndex, melhorIndex);
-                }, 500 + Math.random() * 400);
+                }, 300 + Math.random() * 400);
             }
         }
 
@@ -1112,14 +1213,55 @@
             return forcaTotal;
         }
 
-        // UI
+        // ================================================================
+        //  UI — CARTAS ESTILIZADAS
+        // ================================================================
+
+        function renderCarta(carta, tamanho = 'grande') {
+            const valor = getValorDisplay(carta);
+            const naipe = getNaipeDisplay(carta);
+            const cor = getCorCarta(carta);
+            const classeCor = cor === 'vermelho' ? 'carta-naipe-vermelho' : 'carta-naipe-preto';
+
+            if (tamanho === 'grande') {
+                return `
+                            <div class="carta-valor ${classeCor}">${valor}</div>
+                            <div class="carta-naipe ${classeCor}">${naipe}</div>
+                        `;
+            } else {
+                return `
+                            <span class="carta-valor ${classeCor}">${valor}</span>
+                            <span class="carta-naipe ${classeCor}">${naipe}</span>
+                        `;
+            }
+        }
+
+        function renderCartaMao(carta, tamanho = 'pequeno') {
+            const valor = getValorDisplay(carta);
+            const naipe = getNaipeDisplay(carta);
+            const cor = getCorCarta(carta);
+            const classeCor = cor === 'vermelho' ? 'naipe-vermelho' : 'naipe-preto';
+
+            if (tamanho === 'pequeno') {
+                return `
+                            <span class="carta-valor ${classeCor}">${valor}</span>
+                            <span class="carta-naipe ${classeCor}">${naipe}</span>
+                        `;
+            } else {
+                return `
+                            <div class="carta-valor ${classeCor}">${valor}</div>
+                            <div class="carta-naipe ${classeCor}">${naipe}</div>
+                        `;
+            }
+        }
+
         function atualizarUI() {
             document.getElementById('scoreA').textContent = estado.pontos.A;
             document.getElementById('scoreB').textContent = estado.pontos.B;
 
             const viraDisplay = document.getElementById('viraDisplay');
             if (estado.vira) {
-                viraDisplay.textContent = estado.vira;
+                viraDisplay.innerHTML = renderCarta(estado.vira, 'grande');
                 viraDisplay.className = 'vira-card revelada';
                 const manilhaValor = estado.manilhas[0][0];
                 document.getElementById('manilhaInfo').innerHTML = `Manilha: <strong>${manilhaValor}</strong> ♣ ♥ ♠ ♦`;
@@ -1129,22 +1271,23 @@
                 document.getElementById('manilhaInfo').innerHTML = 'Manilha: <strong>—</strong>';
             }
 
+            // Cartas na mesa
             const mesaDiv = document.getElementById('cartasMesa');
             if (estado.cartasMesa.length === 0) {
                 mesaDiv.innerHTML = '<span class="empty-msg">Aguardando jogadas...</span>';
             } else {
-                const vencedor = estado.vencedorMao;
-                mesaDiv.innerHTML = estado.cartasMesa.map(c => {
+                mesaDiv.innerHTML = estado.cartasMesa.map((c, index) => {
                     const jogador = estado.jogadores[c.jogador];
-                    const cor = getCorCarta(c.carta);
-                    const isVencedor = vencedor && jogador.dupla === vencedor && estado.fase === 'fim_mao';
+                    const isVencedor = estado.vencedorRodada === c.jogador;
                     return `<div class="carta-mesa ${isVencedor ? 'vencedor' : ''}">
-                                <span class="${cor === 'vermelho' ? 'carta-naipe-vermelho' : 'carta-naipe-preto'}">${c.carta}</span>
+                                ${renderCarta(c.carta, 'grande')}
                                 <span class="jogador-nome">${jogador.nome}</span>
+                                ${isVencedor ? '<span class="carta-badge-vencedor">Venceu</span>' : ''}
                             </div>`;
                 }).join('');
             }
 
+            // Jogadores
             const grid = document.getElementById('jogadoresGrid');
             grid.innerHTML = estado.jogadores.map((j, index) => {
                 const isAtivo = estado.jogadorDaVez === index && estado.fase === 'jogando';
@@ -1159,10 +1302,9 @@
                 } else {
                     cartasHTML = j.cartas.map((c, i) => {
                         const jaJogou = estado.cartasMesa.some(c => c.jogador === index);
-                        const cor = getCorCarta(c);
                         return `<span class="carta-mao ${jaJogou ? 'jogada' : ''}" 
                                      onclick="if(!${jaJogou}) jogarCarta(${index}, ${i})">
-                                    <span class="${cor === 'vermelho' ? 'naipe-vermelho' : 'naipe-preto'}">${c}</span>
+                                    ${renderCartaMao(c, 'pequeno')}
                                 </span>`;
                     }).join('');
                 }
@@ -1217,12 +1359,12 @@
             const temTruco = estado.trucoPedidoPor !== null && !estado.trucoRespondido;
             const isFimJogo = estado.fase === 'fim_jogo';
 
-            btnTruco.disabled = !(isJogando && isHumano && !temTruco && !estado.mãoDe11);
-            btnSeis.disabled = !(isJogando && isHumano && temTruco);
-            btnNove.disabled = !(isJogando && isHumano && temTruco);
-            btnDoze.disabled = !(isJogando && isHumano && temTruco);
-            btnFugir.disabled = !(isJogando && isHumano && temTruco);
-            btnAceitar.disabled = !(isJogando && isHumano && temTruco);
+            btnTruco.disabled = !(isJogando && isHumano && !temTruco && !estado.mãoDe11 && !estado.processando);
+            btnSeis.disabled = !(isJogando && isHumano && temTruco && !estado.processando);
+            btnNove.disabled = !(isJogando && isHumano && temTruco && !estado.processando);
+            btnDoze.disabled = !(isJogando && isHumano && temTruco && !estado.processando);
+            btnFugir.disabled = !(isJogando && isHumano && temTruco && !estado.processando);
+            btnAceitar.disabled = !(isJogando && isHumano && temTruco && !estado.processando);
 
             btnNovaMao.textContent = isFimJogo ? 'Reiniciar Jogo' : 'Nova Mão';
         }
@@ -1265,7 +1407,7 @@
         atualizarUI();
         atualizarAcoes();
 
-        console.log('🃏 Truco Paulista — Versão Premium carregada!');
+        console.log('🃏 Truco Paulista — Com cartas estilizadas e ritmo lento!');
         console.log('📌 Clique em "Nova Mão" para começar.');
 
         // EXPORTAR
