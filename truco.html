@@ -1,1 +1,1198 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Truco Paulista — PlayHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background: #0b0b12;
+            background-image:
+                radial-gradient(ellipse at 20% 50%, rgba(30, 60, 114, 0.10) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(114, 60, 30, 0.06) 0%, transparent 60%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #e8e8f0;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 24px;
+            padding: 24px 28px 26px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 32px 64px -16px rgba(0, 0, 0, 0.6);
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .header .title-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header .title-group svg {
+            width: 30px;
+            height: 30px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #e8e8f0;
+            letter-spacing: -0.01em;
+        }
+
+        .header .score-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 6px 18px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .header .score-group .dupla-a {
+            color: #6b8af5;
+            font-weight: 700;
+        }
+        .header .score-group .dupla-b {
+            color: #d4a54a;
+            font-weight: 700;
+        }
+        .header .score-group .vs {
+            color: #3a3f55;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* ===== MESA ===== */
+        .mesa {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 20px;
+            min-height: 340px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            position: relative;
+        }
+
+        /* Vira */
+        .vira-area {
+            text-align: center;
+            margin-bottom: 14px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .vira-area .label {
+            font-size: 12px;
+            color: #5a5f7a;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .vira-area .vira-card {
+            display: inline-block;
+            font-size: 28px;
+            font-weight: 800;
+            padding: 4px 18px;
+            background: rgba(212, 165, 74, 0.08);
+            border: 1px solid rgba(212, 165, 74, 0.12);
+            border-radius: 8px;
+            color: #d4a54a;
+            margin-top: 2px;
+        }
+
+        .vira-area .manilha-info {
+            font-size: 13px;
+            color: #6a6f8a;
+            margin-top: 2px;
+        }
+
+        /* Cartas na mesa */
+        .cartas-mesa {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            min-height: 70px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 8px 0;
+        }
+
+        .carta-mesa {
+            background: #1a1a2e;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 22px;
+            font-weight: 700;
+            min-width: 50px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: 0.2s;
+        }
+
+        .carta-mesa .jogador-nome {
+            display: block;
+            font-size: 10px;
+            font-weight: 400;
+            color: #5a5f7a;
+            margin-top: 2px;
+        }
+
+        .carta-mesa.vencedor {
+            border-color: #4caf84;
+            box-shadow: 0 0 20px rgba(76, 175, 132, 0.15);
+        }
+
+        /* ===== JOGADORES ===== */
+        .jogadores-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .jogador-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 14px;
+            padding: 12px 16px;
+            transition: 0.3s;
+        }
+
+        .jogador-card.dupla-a {
+            border-left: 3px solid #6b8af5;
+        }
+        .jogador-card.dupla-b {
+            border-left: 3px solid #d4a54a;
+        }
+        .jogador-card.ativo {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+        .jogador-card.bot {
+            opacity: 0.7;
+        }
+        .jogador-card.humano {
+            opacity: 1;
+        }
+
+        .jogador-card .topo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .jogador-card .nome {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .jogador-card .badge-dupla {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 2px 10px;
+            border-radius: 12px;
+        }
+
+        .badge-dupla.a {
+            background: rgba(91, 124, 250, 0.12);
+            color: #6b8af5;
+        }
+        .badge-dupla.b {
+            background: rgba(212, 165, 74, 0.12);
+            color: #d4a54a;
+        }
+
+        .jogador-card .cartas {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .jogador-card .carta-mao {
+            background: #1a1a2e;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .jogador-card .carta-mao:hover {
+            border-color: rgba(91, 124, 250, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .jogador-card .carta-mao.selecionada {
+            border-color: #6b8af5;
+            background: rgba(91, 124, 250, 0.08);
+        }
+
+        .jogador-card .carta-mao.jogada {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .jogador-card .carta-mao.bot-card {
+            opacity: 0.2;
+            cursor: default;
+        }
+
+        /* ===== AÇÕES ===== */
+        .acoes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+            justify-content: center;
+        }
+
+        .acoes button {
+            padding: 8px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            color: #aab4d6;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .acoes button:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .acoes button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .acoes button.primary {
+            background: rgba(91, 124, 250, 0.12);
+            border-color: rgba(91, 124, 250, 0.15);
+            color: #8ba4fa;
+        }
+
+        .acoes button.primary:hover:not(:disabled) {
+            background: rgba(91, 124, 250, 0.2);
+        }
+
+        .acoes button.danger {
+            background: rgba(232, 99, 107, 0.08);
+            border-color: rgba(232, 99, 107, 0.1);
+            color: #e8636b;
+        }
+
+        .acoes button.danger:hover:not(:disabled) {
+            background: rgba(232, 99, 107, 0.15);
+        }
+
+        .acoes button.success {
+            background: rgba(76, 175, 132, 0.08);
+            border-color: rgba(76, 175, 132, 0.1);
+            color: #4caf84;
+        }
+
+        .acoes button.success:hover:not(:disabled) {
+            background: rgba(76, 175, 132, 0.15);
+        }
+
+        .acoes button.gold {
+            background: rgba(212, 165, 74, 0.08);
+            border-color: rgba(212, 165, 74, 0.1);
+            color: #d4a54a;
+        }
+
+        .acoes button.gold:hover:not(:disabled) {
+            background: rgba(212, 165, 74, 0.15);
+        }
+
+        /* ===== MENSAGEM ===== */
+        .mensagem {
+            margin-top: 12px;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #8b92b0;
+            min-height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .mensagem .destaque {
+            color: #d4a54a;
+            font-weight: 600;
+        }
+
+        .mensagem .sucesso {
+            color: #4caf84;
+            font-weight: 600;
+        }
+
+        .mensagem .erro {
+            color: #e8636b;
+            font-weight: 600;
+        }
+
+        /* ===== STATUS ===== */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 14px;
+            font-size: 12px;
+            color: #4a4f6a;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .status-bar .codigo {
+            font-family: monospace;
+            font-size: 16px;
+            font-weight: 700;
+            color: #d4a54a;
+            letter-spacing: 0.06em;
+        }
+
+        .btn-voltar {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            color: #6a6f8a;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            transition: 0.25s;
+            font-family: inherit;
+        }
+
+        .btn-voltar:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: #e8e8f0;
+        }
+
+        /* ===== RESPONSIVO ===== */
+        @media (max-width: 700px) {
+            .game-container {
+                padding: 16px;
+            }
+            .header h1 {
+                font-size: 20px;
+            }
+            .jogadores-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            .jogador-card {
+                padding: 8px 10px;
+            }
+            .jogador-card .carta-mao {
+                font-size: 14px;
+                padding: 2px 8px;
+            }
+            .carta-mesa {
+                font-size: 18px;
+                padding: 6px 12px;
+            }
+            .acoes button {
+                font-size: 12px;
+                padding: 6px 14px;
+            }
+            .vira-area .vira-card {
+                font-size: 22px;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .jogadores-grid {
+                grid-template-columns: 1fr;
+            }
+            .header .score-group {
+                font-size: 14px;
+                padding: 4px 12px;
+            }
+            .mesa {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container" id="app">
+
+        <!-- ===== HEADER ===== -->
+        <div class="header">
+            <div class="title-group">
+                <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="4" y="4" width="22" height="22" rx="3" stroke="#d4a54a" stroke-width="2"/>
+                    <text x="15" y="21" font-size="16" font-weight="800" fill="#d4a54a" text-anchor="middle" font-family="Georgia, serif">♠</text>
+                    <circle cx="9" cy="9" r="2" fill="#d4a54a" opacity="0.3"/>
+                    <circle cx="21" cy="21" r="2" fill="#d4a54a" opacity="0.3"/>
+                </svg>
+                <h1>Truco Paulista</h1>
+            </div>
+            <div class="score-group">
+                <span class="dupla-a" id="scoreA">0</span>
+                <span class="vs">×</span>
+                <span class="dupla-b" id="scoreB">0</span>
+            </div>
+        </div>
+
+        <!-- ===== MESA ===== -->
+        <div class="mesa">
+            <!-- Vira -->
+            <div class="vira-area">
+                <div class="label">Vira</div>
+                <div class="vira-card" id="viraDisplay">—</div>
+                <div class="manilha-info" id="manilhaInfo">Manilha: —</div>
+            </div>
+
+            <!-- Cartas na mesa -->
+            <div class="cartas-mesa" id="cartasMesa">
+                <span style="color:#3a3f55; font-size:13px;">Aguardando jogadas...</span>
+            </div>
+        </div>
+
+        <!-- ===== JOGADORES ===== -->
+        <div class="jogadores-grid" id="jogadoresGrid">
+            <!-- Gerado pelo JavaScript -->
+        </div>
+
+        <!-- ===== AÇÕES ===== -->
+        <div class="acoes" id="acoes">
+            <button class="gold" id="btnTruco" disabled>Pedir Truco</button>
+            <button class="gold" id="btnSeis" disabled>Seis</button>
+            <button class="gold" id="btnNove" disabled>Nove</button>
+            <button class="gold" id="btnDoze" disabled>Doze</button>
+            <button class="danger" id="btnFugir" disabled>Fugir</button>
+            <button class="success" id="btnAceitar" disabled>Aceitar</button>
+            <button class="primary" id="btnNovaMao" disabled>Nova Mão</button>
+        </div>
+
+        <!-- ===== MENSAGEM ===== -->
+        <div class="mensagem" id="mensagem">🃏 Bem-vindo ao Truco Paulista! Clique em "Nova Mão" para começar.</div>
+
+        <!-- ===== STATUS ===== -->
+        <div class="status-bar">
+            <span>Código: <span class="codigo" id="codigoDisplay">—</span></span>
+            <span id="statusInfo">Aguardando início</span>
+            <a href="index.html" class="btn-voltar">← Voltar</a>
+        </div>
+
+    </div>
+
+    <script>
+        // ================================================================
+        //  TRUCO PAULISTA — CÓDIGO COMPLETO
+        // ================================================================
+
+        // ================================================================
+        //  1. CONSTANTES E CONFIGURAÇÕES
+        // ================================================================
+
+        const NAIPES = ['♣', '♥', '♠', '♦'];
+        const ORDEM = ['4', '5', '6', '7', 'Q', 'J', 'K', '1', '2', '3'];
+        const VALORES = { '4': 0, '5': 1, '6': 2, '7': 3, 'Q': 4, 'J': 5, 'K': 6, '1': 7, '2': 8, '3': 9 };
+        const FORCA_NAIPES = { '♣': 3, '♥': 2, '♠': 1, '♦': 0 };
+
+        // ================================================================
+        //  2. ESTADO DO JOGO
+        // ================================================================
+
+        let estado = {
+            baralho: [],
+            vira: null,
+            manilhas: [],
+            jogadores: [],
+            cartasMesa: [], // { jogador, carta }
+            rodadaAtual: 0, // 0, 1, 2
+            rodadasGanhas: { A: 0, B: 0 },
+            pontos: { A: 0, B: 0 },
+            valorMao: 1,
+            trucoNivel: 1, // 1, 3, 6, 9, 12
+            trucoPedidoPor: null, // 'A' ou 'B'
+            trucoRespondido: false,
+            maoAtiva: false,
+            jogadorDaVez: 0, // índice
+            fase: 'aguardando', // 'aguardando', 'jogando', 'fim_mao', 'fim_jogo'
+            vencedorMao: null, // 'A' ou 'B'
+            historico: [],
+            mãoDe11: false,
+            mãoDeFerro: false,
+            jogadoresEmbaralhar: ['p1', 'p2', 'p3', 'p4'], // ordem de quem embaralha
+            indexEmbaralhador: 0,
+        };
+
+        // ================================================================
+        //  3. FUNÇÕES DO BARALHO
+        // ================================================================
+
+        function criarBaralho() {
+            const baralho = [];
+            for (const naipe of NAIPES) {
+                for (const valor of ORDEM) {
+                    baralho.push(valor + naipe);
+                }
+            }
+            return baralho;
+        }
+
+        function embaralhar(baralho) {
+            for (let i = baralho.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [baralho[i], baralho[j]] = [baralho[j], baralho[i]];
+            }
+            return baralho;
+        }
+
+        function getValor(carta) {
+            return VALORES[carta[0]];
+        }
+
+        function getNaipe(carta) {
+            return carta[1];
+        }
+
+        function isManilha(carta, manilhas) {
+            return manilhas.includes(carta);
+        }
+
+        function getForca(carta, manilhas) {
+            const valor = getValor(carta);
+            const naipe = getNaipe(carta);
+
+            // Se for manilha, força é 10 + força do naipe
+            if (isManilha(carta, manilhas)) {
+                return 10 + FORCA_NAIPES[naipe];
+            }
+
+            return valor;
+        }
+
+        function getManilhas(vira) {
+            const index = ORDEM.indexOf(vira[0]);
+            const manilhaValor = ORDEM[(index + 1) % ORDEM.length];
+            return NAIPES.map(n => manilhaValor + n);
+        }
+
+        function getNomeCarta(carta) {
+            return carta;
+        }
+
+        // ================================================================
+        //  4. INICIALIZAÇÃO DO JOGO
+        // ================================================================
+
+        function initJogadores() {
+            return [
+                { id: 'p1', nome: 'Você', dupla: 'A', cartas: [], pontos: 0, humano: true, ativo: true },
+                { id: 'p2', nome: 'Bot 1', dupla: 'B', cartas: [], pontos: 0, humano: false, ativo: true },
+                { id: 'p3', nome: 'Bot 2', dupla: 'A', cartas: [], pontos: 0, humano: false, ativo: true },
+                { id: 'p4', nome: 'Bot 3', dupla: 'B', cartas: [], pontos: 0, humano: false, ativo: true },
+            ];
+        }
+
+        function iniciarNovaMao() {
+            const baralho = embaralhar(criarBaralho());
+
+            // Define o embaralhador
+            const embaralhador = estado.jogadores[estado.indexEmbaralhador];
+            estado.indexEmbaralhador = (estado.indexEmbaralhador + 1) % 4;
+
+            // Distribui cartas
+            const jogadores = estado.jogadores;
+            for (const j of jogadores) {
+                j.cartas = [];
+            }
+
+            // Distribui 3 cartas para cada jogador
+            let idx = 0;
+            for (let i = 0; i < 3; i++) {
+                for (const j of jogadores) {
+                    j.cartas.push(baralho[idx++]);
+                }
+            }
+
+            // Vira
+            const vira = baralho[idx];
+            estado.vira = vira;
+            estado.manilhas = getManilhas(vira);
+
+            // Reseta estado da mão
+            estado.cartasMesa = [];
+            estado.rodadaAtual = 0;
+            estado.rodadasGanhas = { A: 0, B: 0 };
+            estado.valorMao = 1;
+            estado.trucoNivel = 1;
+            estado.trucoPedidoPor = null;
+            estado.trucoRespondido = false;
+            estado.maoAtiva = true;
+            estado.vencedorMao = null;
+            estado.fase = 'jogando';
+
+            // Verifica mão de 11
+            estado.mãoDe11 = (estado.pontos.A === 11 || estado.pontos.B === 11);
+            estado.mãoDeFerro = (estado.pontos.A === 11 && estado.pontos.B === 11);
+
+            if (estado.mãoDe11) {
+                estado.valorMao = 3;
+                estado.trucoNivel = 3;
+                setMensagem('⚠️ <span class="destaque">Mão de 11!</span> Vale 3 pontos automaticamente.', '');
+            }
+
+            if (estado.mãoDeFerro) {
+                setMensagem('🔥 <span class="destaque">Mão de Ferro!</span> Jogar no escuro!', '');
+                // Esconde as cartas dos jogadores
+                for (const j of jogadores) {
+                    j.cartas = j.cartas.map(() => '🂠');
+                }
+            }
+
+            // Define quem começa (quem cortou o baralho)
+            estado.jogadorDaVez = (estado.indexEmbaralhador + 1) % 4;
+
+            // Atualiza UI
+            atualizarUI();
+            atualizarAcoes();
+
+            setMensagem(`🃏 Nova mão! <span class="destaque">${jogadores[estado.jogadorDaVez].nome}</span> começa.`, '');
+        }
+
+        // ================================================================
+        //  5. LÓGICA DO JOGO
+        // ================================================================
+
+        function jogarCarta(jogadorIndex, cartaIndex) {
+            if (estado.fase !== 'jogando') return;
+            if (estado.jogadorDaVez !== jogadorIndex) return;
+            if (!estado.maoAtiva) return;
+
+            const jogador = estado.jogadores[jogadorIndex];
+
+            // Se for mão de ferro, não pode ver as cartas
+            if (estado.mãoDeFerro) {
+                // Mostra a carta real (já que o bot precisa saber)
+                // Na UI, o jogador vê como '🂠' mas o código sabe qual é
+                // Vamos jogar a primeira carta disponível
+                const cartaReal = jogador.cartasReais ? jogador.cartasReais[cartaIndex] : jogador.cartas[cartaIndex];
+                const cartaJogada = cartaReal;
+
+                // Remove a carta da mão (usando a real)
+                if (jogador.cartasReais) {
+                    jogador.cartasReais.splice(cartaIndex, 1);
+                }
+                jogador.cartas.splice(cartaIndex, 1);
+
+                estado.cartasMesa.push({ jogador: jogadorIndex, carta: cartaJogada });
+            } else {
+                const carta = jogador.cartas[cartaIndex];
+                estado.cartasMesa.push({ jogador: jogadorIndex, carta: carta });
+                jogador.cartas.splice(cartaIndex, 1);
+            }
+
+            // Avança para o próximo jogador
+            proximoJogador();
+
+            // Verifica se todos jogaram
+            if (estado.cartasMesa.length === 4) {
+                resolverRodada();
+            }
+
+            atualizarUI();
+            atualizarAcoes();
+        }
+
+        function proximoJogador() {
+            let next = (estado.jogadorDaVez + 1) % 4;
+            // Pula jogadores inativos (se houver)
+            while (!estado.jogadores[next].ativo) {
+                next = (next + 1) % 4;
+            }
+            estado.jogadorDaVez = next;
+        }
+
+        function resolverRodada() {
+            const cartas = estado.cartasMesa;
+            const manilhas = estado.manilhas;
+
+            // Ordena por força
+            const ordenadas = cartas.map(c => ({
+                ...c,
+                forca: getForca(c.carta, manilhas)
+            }));
+
+            // Encontra a maior carta
+            let maior = ordenadas[0];
+            for (const c of ordenadas) {
+                if (c.forca > maior.forca) {
+                    maior = c;
+                }
+            }
+
+            // Se tiver empate, quem ganhou a primeira rodada leva
+            // (implementação simplificada)
+            const vencedor = maior;
+
+            // Marca o vencedor da rodada
+            const duplaVencedora = estado.jogadores[vencedor.jogador].dupla;
+            estado.rodadasGanhas[duplaVencedora]++;
+
+            // Exibe na UI
+            const nomeVencedor = estado.jogadores[vencedor.jogador].nome;
+            setMensagem(`🏆 <span class="destaque">${nomeVencedor}</span> ganhou a rodada!`, '');
+
+            // Verifica se alguém ganhou a mão
+            if (estado.rodadasGanhas.A >= 2 || estado.rodadasGanhas.B >= 2) {
+                finalizarMao(duplaVencedora);
+                return;
+            }
+
+            // Se não, próxima rodada
+            estado.rodadaAtual++;
+            estado.cartasMesa = [];
+            estado.jogadorDaVez = vencedor.jogador; // Quem ganhou começa a próxima
+
+            atualizarUI();
+            atualizarAcoes();
+        }
+
+        function finalizarMao(duplaVencedora) {
+            estado.maoAtiva = false;
+            estado.fase = 'fim_mao';
+            estado.vencedorMao = duplaVencedora;
+
+            // Pontuação
+            const pontos = estado.valorMao;
+            estado.pontos[duplaVencedora] += pontos;
+
+            setMensagem(`🎉 <span class="sucesso">Dupla ${duplaVencedora}</span> venceu a mão! +${pontos} pontos.`, '');
+
+            // Verifica fim de jogo
+            if (estado.pontos.A >= 12) {
+                setMensagem('🏆 <span class="sucesso">Dupla A venceu o jogo!</span> Parabéns!', '');
+                estado.fase = 'fim_jogo';
+            } else if (estado.pontos.B >= 12) {
+                setMensagem('🏆 <span class="sucesso">Dupla B venceu o jogo!</span> Parabéns!', '');
+                estado.fase = 'fim_jogo';
+            }
+
+            atualizarUI();
+            atualizarAcoes();
+        }
+
+        // ================================================================
+        //  6. TRUCO
+        // ================================================================
+
+        function pedirTruco() {
+            if (estado.fase !== 'jogando') return;
+            if (estado.trucoPedidoPor) return; // já foi pedido
+            if (estado.mãoDe11) {
+                setMensagem('❌ <span class="erro">Não pode pedir truco na mão de 11!</span>', '');
+                return;
+            }
+
+            const jogador = estado.jogadores[estado.jogadorDaVez];
+            const dupla = jogador.dupla;
+
+            estado.trucoPedidoPor = dupla;
+            estado.trucoRespondido = false;
+
+            setMensagem(`⚡ <span class="destaque">${jogador.nome}</span> pediu TRUCO! (Vale ${estado.valorMao + 2})`, '');
+
+            // A outra dupla deve responder
+            // Na UI, mostra botões para aceitar/fugir/pedir mais
+            atualizarAcoes();
+        }
+
+        function aceitarTruco() {
+            if (estado.fase !== 'jogando') return;
+            if (!estado.trucoPedidoPor) return;
+
+            estado.valorMao += 2;
+            estado.trucoNivel = estado.valorMao;
+            estado.trucoPedidoPor = null;
+            estado.trucoRespondido = true;
+
+            setMensagem(`✅ Truco aceito! Mão vale <span class="destaque">${estado.valorMao}</span> pontos.`, '');
+            atualizarAcoes();
+        }
+
+        function fugir() {
+            if (estado.fase !== 'jogando') return;
+            if (!estado.trucoPedidoPor) return;
+
+            const duplaQuePediu = estado.trucoPedidoPor;
+            const pontos = Math.min(estado.valorMao, 3); // foge e dá o valor atual (máx 3)
+
+            estado.pontos[duplaQuePediu] += pontos;
+            estado.maoAtiva = false;
+            estado.fase = 'fim_mao';
+
+            setMensagem(`🏃‍♂️ <span class="erro">Fugiu!</span> Dupla ${duplaQuePediu} ganha ${pontos} pontos.`, '');
+            estado.trucoPedidoPor = null;
+
+            atualizarUI();
+            atualizarAcoes();
+        }
+
+        function pedirMais(nivel) {
+            if (estado.fase !== 'jogando') return;
+            if (!estado.trucoPedidoPor) return;
+
+            const duplaQuePediu = estado.trucoPedidoPor;
+            const jogador = estado.jogadores[estado.jogadorDaVez];
+            const duplaAtual = jogador.dupla;
+
+            if (duplaAtual === duplaQuePediu) {
+                setMensagem('❌ <span class="erro">Quem pediu não pode pedir mais!</span>', '');
+                return;
+            }
+
+            // Verifica se pode pedir esse nível
+            const niveis = [3, 6, 9, 12];
+            const indexAtual = niveis.indexOf(estado.valorMao);
+            const indexNovo = niveis.indexOf(nivel);
+
+            if (indexNovo <= indexAtual) {
+                setMensagem(`❌ <span class="erro">Só pode pedir ${nivel} depois de ${estado.valorMao}!</span>`, '');
+                return;
+            }
+
+            estado.valorMao = nivel;
+            estado.trucoNivel = nivel;
+            estado.trucoPedidoPor = duplaAtual;
+            estado.trucoRespondido = false;
+
+            setMensagem(`⚡ <span class="destaque">${jogador.nome}</span> pediu ${nivel}! (Vale ${nivel})`, '');
+            atualizarAcoes();
+        }
+
+        // ================================================================
+        //  7. BOTS
+        // ================================================================
+
+        function botJogar() {
+            const jogadorIndex = estado.jogadorDaVez;
+            const jogador = estado.jogadores[jogadorIndex];
+
+            if (!jogador.humano && estado.fase === 'jogando' && estado.maoAtiva) {
+                // Lógica do bot
+                setTimeout(() => {
+                    if (estado.fase !== 'jogando') return;
+
+                    // Avalia se deve pedir truco
+                    if (!estado.trucoPedidoPor && !estado.mãoDe11) {
+                        const forca = avaliarMao(jogador);
+                        if (forca > 20 && Math.random() < 0.3) {
+                            pedirTruco();
+                            // Aguarda resposta
+                            setTimeout(() => {
+                                if (estado.trucoPedidoPor && !estado.trucoRespondido) {
+                                    // Se o bot pediu truco e ninguém respondeu, simula aceite
+                                    // Na prática, o jogador humano responde
+                                }
+                            }, 500);
+                            return;
+                        }
+                    }
+
+                    // Se tem truco pendente e o bot é da outra dupla
+                    if (estado.trucoPedidoPor && !estado.trucoRespondido) {
+                        const duplaBot = jogador.dupla;
+                        const duplaQuePediu = estado.trucoPedidoPor;
+
+                        if (duplaBot !== duplaQuePediu) {
+                            // Decide se aceita ou foge baseado na força da mão
+                            const forca = avaliarMao(jogador);
+                            if (forca > 15) {
+                                aceitarTruco();
+                            } else {
+                                fugir();
+                            }
+                            return;
+                        }
+                    }
+
+                    // Joga uma carta
+                    const cartas = jogador.cartas;
+                    if (cartas.length === 0) return;
+
+                    // Escolhe a melhor carta
+                    let melhorIndex = 0;
+                    let melhorForca = -1;
+
+                    for (let i = 0; i < cartas.length; i++) {
+                        const forca = getForca(cartas[i], estado.manilhas);
+                        if (forca > melhorForca) {
+                            melhorForca = forca;
+                            melhorIndex = i;
+                        }
+                    }
+
+                    jogarCarta(jogadorIndex, melhorIndex);
+                }, 700 + Math.random() * 500);
+            }
+        }
+
+        function avaliarMao(jogador) {
+            let forcaTotal = 0;
+            for (const carta of jogador.cartas) {
+                forcaTotal += getForca(carta, estado.manilhas);
+            }
+            return forcaTotal;
+        }
+
+        // ================================================================
+        //  8. UI
+        // ================================================================
+
+        function atualizarUI() {
+            // Placar
+            document.getElementById('scoreA').textContent = estado.pontos.A;
+            document.getElementById('scoreB').textContent = estado.pontos.B;
+
+            // Vira
+            const viraDisplay = document.getElementById('viraDisplay');
+            if (estado.vira) {
+                viraDisplay.textContent = estado.vira;
+                const manilhaValor = estado.manilhas[0][0];
+                document.getElementById('manilhaInfo').textContent = `Manilha: ${manilhaValor} ♣♥♠♦`;
+            } else {
+                viraDisplay.textContent = '—';
+                document.getElementById('manilhaInfo').textContent = 'Manilha: —';
+            }
+
+            // Cartas na mesa
+            const mesaDiv = document.getElementById('cartasMesa');
+            if (estado.cartasMesa.length === 0) {
+                mesaDiv.innerHTML = '<span style="color:#3a3f55; font-size:13px;">Aguardando jogadas...</span>';
+            } else {
+                mesaDiv.innerHTML = estado.cartasMesa.map(c => {
+                    const jogador = estado.jogadores[c.jogador];
+                    const isVencedor = estado.fase === 'fim_mao' && estado.vencedorMao === jogador.dupla;
+                    return `<div class="carta-mesa ${isVencedor ? 'vencedor' : ''}">
+                                ${c.carta}
+                                <span class="jogador-nome">${jogador.nome}</span>
+                            </div>`;
+                }).join('');
+            }
+
+            // Jogadores
+            const grid = document.getElementById('jogadoresGrid');
+            grid.innerHTML = estado.jogadores.map((j, index) => {
+                const isAtivo = estado.jogadorDaVez === index && estado.fase === 'jogando';
+                const isHumano = j.humano;
+                const isBot = !j.humano;
+
+                let cartasHTML = '';
+                if (estado.mãoDeFerro && isHumano) {
+                    // Mostra como '🂠' mas guarda as reais
+                    cartasHTML = j.cartas.map((c, i) => {
+                        const jaJogou = estado.cartasMesa.some(c => c.jogador === index);
+                        return `<span class="carta-mao bot-card" style="opacity:0.2;">🂠</span>`;
+                    }).join('');
+                } else if (isBot) {
+                    cartasHTML = j.cartas.map(() => {
+                        return `<span class="carta-mao bot-card" style="opacity:0.15;">🂠</span>`;
+                    }).join('');
+                } else {
+                    cartasHTML = j.cartas.map((c, i) => {
+                        const jaJogou = estado.cartasMesa.some(c => c.jogador === index);
+                        return `<span class="carta-mao ${jaJogou ? 'jogada' : ''}" 
+                                     onclick="if(!${jaJogou}) jogarCarta(${index}, ${i})">
+                                    ${c}
+                                </span>`;
+                    }).join('');
+                }
+
+                return `
+                            <div class="jogador-card dupla-${j.dupla.toLowerCase()} ${isAtivo ? 'ativo' : ''} ${isBot ? 'bot' : 'humano'}">
+                                <div class="topo">
+                                    <span class="nome">${isBot ? '🤖 ' : '🎮 '}${j.nome}</span>
+                                    <span class="badge-dupla ${j.dupla.toLowerCase()}">Dupla ${j.dupla}</span>
+                                </div>
+                                <div class="cartas">
+                                    ${cartasHTML}
+                                </div>
+                                <div style="font-size:11px;color:#4a4f6a;margin-top:4px;">
+                                    ${j.pontos} pts
+                                </div>
+                            </div>
+                        `;
+            }).join('');
+
+            // Status
+            const statusInfo = document.getElementById('statusInfo');
+            if (estado.fase === 'fim_jogo') {
+                statusInfo.textContent = '🏆 Jogo finalizado!';
+            } else if (estado.fase === 'jogando') {
+                const nome = estado.jogadores[estado.jogadorDaVez].nome;
+                const isHumano = estado.jogadores[estado.jogadorDaVez].humano;
+                statusInfo.textContent = `Vez de: ${nome} ${isHumano ? '🎮' : '🤖'}`;
+            } else if (estado.fase === 'fim_mao') {
+                statusInfo.textContent = `Mão finalizada!`;
+            } else {
+                statusInfo.textContent = 'Aguardando...';
+            }
+        }
+
+        function atualizarAcoes() {
+            const btnTruco = document.getElementById('btnTruco');
+            const btnSeis = document.getElementById('btnSeis');
+            const btnNove = document.getElementById('btnNove');
+            const btnDoze = document.getElementById('btnDoze');
+            const btnFugir = document.getElementById('btnFugir');
+            const btnAceitar = document.getElementById('btnAceitar');
+            const btnNovaMao = document.getElementById('btnNovaMao');
+
+            const isJogando = estado.fase === 'jogando';
+            const isHumano = estado.jogadores[estado.jogadorDaVez]?.humano || false;
+            const temTrucoPendente = estado.trucoPedidoPor !== null && !estado.trucoRespondido;
+            const mãoDe11 = estado.mãoDe11;
+
+            // Truco - só pode pedir se for humano, estiver jogando, não tiver truco pendente, e não for mão de 11
+            btnTruco.disabled = !(isJogando && isHumano && !temTrucoPendente && !mãoDe11 && estado.fase === 'jogando');
+
+            // Seis, Nove, Doze - só se tiver truco pendente e for humano
+            btnSeis.disabled = !(isJogando && isHumano && temTrucoPendente);
+            btnNove.disabled = !(isJogando && isHumano && temTrucoPendente);
+            btnDoze.disabled = !(isJogando && isHumano && temTrucoPendente);
+
+            // Fugir - só se tiver truco pendente e for humano
+            btnFugir.disabled = !(isJogando && isHumano && temTrucoPendente);
+
+            // Aceitar - só se tiver truco pendente e for humano
+            btnAceitar.disabled = !(isJogando && isHumano && temTrucoPendente);
+
+            // Nova mão
+            btnNovaMao.disabled = (estado.fase === 'jogando') || (estado.fase === 'fim_jogo');
+        }
+
+        function setMensagem(msg, tipo = '') {
+            document.getElementById('mensagem').innerHTML = msg;
+        }
+
+        // ================================================================
+        //  9. BOTÕES
+        // ================================================================
+
+        document.getElementById('btnTruco').addEventListener('click', pedirTruco);
+        document.getElementById('btnSeis').addEventListener('click', () => pedirMais(6));
+        document.getElementById('btnNove').addEventListener('click', () => pedirMais(9));
+        document.getElementById('btnDoze').addEventListener('click', () => pedirMais(12));
+        document.getElementById('btnFugir').addEventListener('click', fugir);
+        document.getElementById('btnAceitar').addEventListener('click', aceitarTruco);
+        document.getElementById('btnNovaMao').addEventListener('click', () => {
+            if (estado.fase === 'fim_jogo') {
+                // Reseta tudo
+                estado.pontos = { A: 0, B: 0 };
+                estado.jogadores = initJogadores();
+            }
+            iniciarNovaMao();
+            // Se o primeiro jogador for bot, ele joga automaticamente
+            setTimeout(botTurn, 300);
+        });
+
+        // ================================================================
+        //  10. LOOP DOS BOTS
+        // ================================================================
+
+        function botTurn() {
+            if (estado.fase === 'jogando' && estado.maoAtiva) {
+                const jogador = estado.jogadores[estado.jogadorDaVez];
+                if (!jogador.humano) {
+                    botJogar();
+                }
+            }
+        }
+
+        // Observa mudanças de turno para bots
+        setInterval(() => {
+            if (estado.fase === 'jogando' && estado.maoAtiva) {
+                const jogador = estado.jogadores[estado.jogadorDaVez];
+                if (!jogador.humano) {
+                    botJogar();
+                }
+            }
+        }, 100);
+
+        // ================================================================
+        //  11. INICIALIZAÇÃO
+        // ================================================================
+
+        estado.jogadores = initJogadores();
+        estado.codigo = gerarCodigo();
+        document.getElementById('codigoDisplay').textContent = estado.codigo;
+
+        setMensagem('🃏 Bem-vindo ao Truco Paulista! Clique em "Nova Mão" para começar.', '');
+
+        function gerarCodigo() {
+            const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let codigo = '';
+            for (let i = 0; i < 5; i++) {
+                codigo += letras.charAt(Math.floor(Math.random() * letras.length));
+            }
+            return codigo;
+        }
+
+        // ================================================================
+        //  12. EXPORTAR FUNÇÕES PARA O GLOBAL
+        // ================================================================
+
+        window.jogarCarta = jogarCarta;
+        window.pedirTruco = pedirTruco;
+        window.aceitarTruco = aceitarTruco;
+        window.fugir = fugir;
+        window.pedirMais = pedirMais;
+        window.iniciarNovaMao = iniciarNovaMao;
+
+        console.log('🃏 Truco Paulista carregado!');
+        console.log('📌 Clique em "Nova Mão" para começar.');
+        console.log('🎮 Você joga contra 3 bots.');
+        console.log('📋 Regras implementadas: distribuição, manilhas, truco, mão de 11.');
+    </script>
+
+</body>
+</html>
