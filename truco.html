@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Truco Paulista — PlayHub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <style>
         * {
             margin: 0;
@@ -31,7 +31,7 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.04);
             border-radius: 28px;
-            padding: 28px 32px 30px;
+            padding: 24px 28px 26px;
             max-width: 980px;
             width: 100%;
             box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.8);
@@ -44,7 +44,7 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .header .title-group {
@@ -62,7 +62,7 @@
         }
 
         .header h1 {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 700;
             color: #e8e8f0;
             letter-spacing: -0.01em;
@@ -73,7 +73,7 @@
             align-items: center;
             gap: 18px;
             background: rgba(255, 255, 255, 0.03);
-            padding: 8px 22px;
+            padding: 6px 20px;
             border-radius: 40px;
             border: 1px solid rgba(255, 255, 255, 0.04);
         }
@@ -94,7 +94,7 @@
             font-size: 14px;
         }
         .header .score-group .label-pts {
-            font-size: 11px;
+            font-size: 10px;
             color: #4a4f6a;
             font-weight: 500;
             text-transform: uppercase;
@@ -105,8 +105,8 @@
         .mesa {
             background: rgba(0, 0, 0, 0.35);
             border-radius: 20px;
-            padding: 24px;
-            min-height: 220px;
+            padding: 20px;
+            min-height: 200px;
             border: 1px solid rgba(255, 255, 255, 0.03);
             position: relative;
             transition: all 0.3s ease;
@@ -117,14 +117,14 @@
             box-shadow: inset 0 0 60px rgba(212, 165, 74, 0.02);
         }
 
-        /* Vira */
+        /* ===== VIRA ===== */
         .vira-area {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 24px;
-            margin-bottom: 16px;
-            padding: 10px 16px;
+            gap: 20px;
+            margin-bottom: 14px;
+            padding: 8px 16px;
             background: rgba(255, 255, 255, 0.02);
             border-radius: 14px;
             border: 1px solid rgba(255, 255, 255, 0.03);
@@ -132,7 +132,7 @@
         }
 
         .vira-area .label {
-            font-size: 12px;
+            font-size: 11px;
             color: #5a5f7a;
             text-transform: uppercase;
             letter-spacing: 0.08em;
@@ -141,17 +141,32 @@
 
         .vira-area .vira-card {
             display: inline-block;
-            font-size: 26px;
+            font-size: 22px;
             font-weight: 800;
-            padding: 4px 18px;
-            background: linear-gradient(145deg, #1e1e34, #12121f);
-            border: 2px solid rgba(212, 165, 74, 0.15);
-            border-radius: 10px;
-            color: #d4a54a;
+            padding: 2px 14px;
+            background: linear-gradient(145deg, #f5f0e8, #e8e0d5);
+            border: 2px solid rgba(200, 180, 160, 0.3);
+            border-radius: 8px;
+            color: #1a1a2e;
             font-family: 'Georgia', serif;
             transition: 0.3s;
-            min-width: 50px;
+            min-width: 44px;
             text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .vira-area .vira-card .vira-valor {
+            font-size: 24px;
+            font-weight: 800;
+        }
+        .vira-area .vira-card .vira-naipe {
+            font-size: 20px;
+        }
+        .vira-area .vira-card .vira-vermelho {
+            color: #cc2233;
+        }
+        .vira-area .vira-card .vira-preto {
+            color: #1a1a2e;
         }
 
         .vira-area .vira-card.revelada {
@@ -174,39 +189,59 @@
             font-weight: 700;
         }
 
+        .vira-area .manilha-info .manilha-carta {
+            display: inline-block;
+            background: linear-gradient(145deg, #f5f0e8, #e8e0d5);
+            border: 1px solid rgba(200, 180, 160, 0.3);
+            border-radius: 6px;
+            padding: 0 10px;
+            font-family: 'Georgia', serif;
+            font-weight: 800;
+            font-size: 18px;
+            margin: 0 2px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+        .vira-area .manilha-info .manilha-vermelho {
+            color: #cc2233;
+        }
+        .vira-area .manilha-info .manilha-preto {
+            color: #1a1a2e;
+        }
+
         /* ===== CARTAS NA MESA ===== */
         .cartas-mesa {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            min-height: 110px;
+            gap: 18px;
+            min-height: 100px;
             align-items: center;
             flex-wrap: wrap;
-            margin: 6px 0;
-            padding: 10px;
+            margin: 4px 0;
+            padding: 8px;
             border-radius: 12px;
             transition: all 0.3s ease;
         }
 
         .cartas-mesa .empty-msg {
             color: #3a3f55;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 400;
             letter-spacing: 0.02em;
         }
 
+        /* ——— CARTA ESTILO BARALHO ——— */
         .carta-mesa {
-            background: linear-gradient(145deg, #f5f0e8, #e8e0d5);
+            background: linear-gradient(145deg, #f8f4ee, #ece4d8);
             border-radius: 10px;
-            padding: 10px 16px 8px;
-            min-width: 70px;
-            min-height: 95px;
+            padding: 8px 14px 6px;
+            min-width: 64px;
+            min-height: 88px;
             text-align: center;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4);
             transition: all 0.4s ease;
             font-family: 'Georgia', serif;
             position: relative;
-            border: 1px solid rgba(200, 180, 160, 0.3);
+            border: 1.5px solid rgba(180, 160, 140, 0.3);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -214,13 +249,13 @@
         }
 
         .carta-mesa .carta-valor {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 800;
             line-height: 1;
         }
 
         .carta-mesa .carta-naipe {
-            font-size: 24px;
+            font-size: 22px;
             line-height: 1;
             margin-top: 2px;
         }
@@ -234,15 +269,15 @@
 
         .carta-mesa .jogador-nome {
             display: block;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 600;
             color: #4a4a5a;
-            margin-top: 6px;
+            margin-top: 4px;
             font-family: 'Inter', sans-serif;
             text-transform: uppercase;
             letter-spacing: 0.04em;
             background: rgba(0, 0, 0, 0.04);
-            padding: 2px 10px;
+            padding: 1px 10px;
             border-radius: 10px;
         }
 
@@ -263,9 +298,9 @@
             right: -8px;
             background: #4caf84;
             color: #fff;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 700;
-            padding: 2px 8px;
+            padding: 1px 8px;
             border-radius: 10px;
             font-family: 'Inter', sans-serif;
             letter-spacing: 0.04em;
@@ -276,15 +311,15 @@
         .jogadores-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin-top: 18px;
+            gap: 12px;
+            margin-top: 16px;
         }
 
         .jogador-card {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.04);
             border-radius: 16px;
-            padding: 14px 18px;
+            padding: 12px 16px;
             transition: all 0.3s ease;
         }
 
@@ -317,12 +352,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .jogador-card .nome {
             font-weight: 600;
-            font-size: 15px;
+            font-size: 14px;
             color: #aab4d6;
             transition: 0.3s;
         }
@@ -338,7 +373,7 @@
         }
 
         .jogador-card .nome .badge-humano {
-            font-size: 9px;
+            font-size: 8px;
             background: rgba(91, 124, 250, 0.12);
             color: #6b8af5;
             padding: 1px 8px;
@@ -355,10 +390,10 @@
         }
 
         .jogador-card .badge-dupla {
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 700;
             text-transform: uppercase;
-            padding: 3px 12px;
+            padding: 2px 10px;
             border-radius: 20px;
             letter-spacing: 0.04em;
         }
@@ -374,23 +409,24 @@
 
         .jogador-card .cartas {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
-            min-height: 44px;
+            min-height: 40px;
         }
 
+        /* ——— CARTA NA MÃO ——— */
         .jogador-card .carta-mao {
-            background: linear-gradient(145deg, #f5f0e8, #e8e0d5);
-            border: 1px solid rgba(200, 180, 160, 0.2);
+            background: linear-gradient(145deg, #f8f4ee, #ece4d8);
+            border: 1.5px solid rgba(180, 160, 140, 0.25);
             border-radius: 8px;
-            padding: 4px 12px 2px;
-            min-width: 42px;
-            min-height: 52px;
+            padding: 3px 10px 2px;
+            min-width: 38px;
+            min-height: 48px;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s ease;
             font-family: 'Georgia', serif;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -398,13 +434,13 @@
         }
 
         .jogador-card .carta-mao .carta-valor {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 800;
             line-height: 1;
         }
 
         .jogador-card .carta-mao .carta-naipe {
-            font-size: 14px;
+            font-size: 13px;
             line-height: 1;
         }
 
@@ -416,33 +452,33 @@
         }
 
         .jogador-card .carta-mao:hover:not(.jogada):not(.bot-card) {
-            transform: translateY(-6px) scale(1.04);
+            transform: translateY(-5px) scale(1.04);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
             border-color: rgba(91, 124, 250, 0.3);
         }
 
         .jogador-card .carta-mao.jogada {
-            opacity: 0.15;
+            opacity: 0.12;
             cursor: not-allowed;
             transform: scale(0.85);
             filter: grayscale(1);
         }
 
         .jogador-card .carta-mao.bot-card {
-            opacity: 0.1;
+            opacity: 0.08;
             cursor: default;
             background: linear-gradient(145deg, #1a1a2e, #12121f);
             border-color: rgba(255, 255, 255, 0.03);
-            min-height: 52px;
-            min-width: 42px;
-            font-size: 12px;
+            min-height: 48px;
+            min-width: 38px;
+            font-size: 10px;
             color: #3a3f55;
         }
 
         .jogador-card .pontos-info {
-            font-size: 11px;
+            font-size: 10px;
             color: #4a4f6a;
-            margin-top: 6px;
+            margin-top: 4px;
             font-weight: 500;
         }
 
@@ -454,19 +490,19 @@
         .acoes {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 18px;
+            gap: 8px;
+            margin-top: 16px;
             justify-content: center;
         }
 
         .acoes button {
-            padding: 10px 24px;
+            padding: 8px 18px;
             border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 12px;
+            border-radius: 10px;
             background: rgba(255, 255, 255, 0.03);
             color: #aab4d6;
             font-family: 'Inter', sans-serif;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.25s ease;
@@ -480,7 +516,7 @@
         }
 
         .acoes button:disabled {
-            opacity: 0.25;
+            opacity: 0.2;
             cursor: not-allowed;
             transform: none;
         }
@@ -519,22 +555,30 @@
         }
 
         .acoes button .sub {
-            font-size: 10px;
-            opacity: 0.6;
+            font-size: 9px;
+            opacity: 0.5;
             font-weight: 400;
             display: block;
+            line-height: 1;
+            margin-top: 1px;
+        }
+
+        .acoes .grupo-truco {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
         }
 
         /* ===== MENSAGEM ===== */
         .mensagem {
-            margin-top: 14px;
-            padding: 14px 20px;
+            margin-top: 12px;
+            padding: 12px 18px;
             background: rgba(255, 255, 255, 0.02);
             border-radius: 12px;
             text-align: center;
-            font-size: 15px;
+            font-size: 14px;
             color: #8b92b0;
-            min-height: 48px;
+            min-height: 44px;
             border: 1px solid rgba(255, 255, 255, 0.03);
             transition: all 0.3s ease;
             font-weight: 500;
@@ -561,10 +605,10 @@
         }
 
         .mensagem .automatico {
-            font-size: 12px;
-            opacity: 0.6;
+            font-size: 11px;
+            opacity: 0.5;
             display: block;
-            margin-top: 4px;
+            margin-top: 3px;
         }
 
         /* ===== STATUS BAR ===== */
@@ -572,23 +616,23 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 16px;
-            font-size: 12px;
+            margin-top: 14px;
+            font-size: 11px;
             color: #4a4f6a;
             flex-wrap: wrap;
-            gap: 8px;
-            padding-top: 14px;
+            gap: 6px;
+            padding-top: 12px;
             border-top: 1px solid rgba(255, 255, 255, 0.03);
         }
 
         .status-bar .codigo {
             font-family: 'Inter', monospace;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
             color: #d4a54a;
             letter-spacing: 0.08em;
             background: rgba(212, 165, 74, 0.06);
-            padding: 2px 16px;
+            padding: 1px 14px;
             border-radius: 6px;
             border: 1px solid rgba(212, 165, 74, 0.06);
         }
@@ -605,13 +649,13 @@
 
         .btn-voltar {
             display: inline-block;
-            padding: 8px 22px;
+            padding: 6px 20px;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 30px;
             color: #6a6f8a;
             text-decoration: none;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
             transition: all 0.25s ease;
             font-family: 'Inter', sans-serif;
@@ -626,14 +670,14 @@
         /* ===== RESPONSIVO ===== */
         @media (max-width: 750px) {
             .game-container {
-                padding: 18px 16px 20px;
+                padding: 16px;
             }
             .header h1 {
                 font-size: 20px;
             }
             .header .score-group {
                 padding: 4px 14px;
-                gap: 12px;
+                gap: 10px;
             }
             .header .score-group .dupla-a,
             .header .score-group .dupla-b {
@@ -641,45 +685,45 @@
             }
             .jogadores-grid {
                 grid-template-columns: 1fr 1fr;
-                gap: 10px;
+                gap: 8px;
             }
             .jogador-card {
-                padding: 10px 12px;
+                padding: 8px 10px;
             }
             .jogador-card .carta-mao {
-                min-width: 34px;
-                min-height: 42px;
-                padding: 2px 8px;
+                min-width: 32px;
+                min-height: 40px;
+                padding: 2px 6px;
             }
             .jogador-card .carta-mao .carta-valor {
-                font-size: 14px;
+                font-size: 13px;
             }
             .jogador-card .carta-mao .carta-naipe {
-                font-size: 12px;
+                font-size: 11px;
             }
             .carta-mesa {
-                min-width: 56px;
-                min-height: 76px;
-                padding: 6px 10px 4px;
+                min-width: 52px;
+                min-height: 70px;
+                padding: 4px 8px 2px;
             }
             .carta-mesa .carta-valor {
-                font-size: 22px;
+                font-size: 20px;
             }
             .carta-mesa .carta-naipe {
-                font-size: 18px;
+                font-size: 17px;
             }
             .acoes button {
-                font-size: 12px;
-                padding: 8px 14px;
+                font-size: 11px;
+                padding: 6px 12px;
             }
             .vira-area .vira-card {
-                font-size: 20px;
-                padding: 2px 12px;
-                min-width: 40px;
+                font-size: 18px;
+                padding: 2px 10px;
+                min-width: 36px;
             }
             .mensagem {
-                font-size: 13px;
-                padding: 10px 14px;
+                font-size: 12px;
+                padding: 8px 12px;
             }
         }
 
@@ -691,19 +735,19 @@
                 display: none;
             }
             .mesa {
-                padding: 14px;
+                padding: 12px;
             }
             .vira-area {
-                gap: 12px;
-                padding: 8px 12px;
+                gap: 10px;
+                padding: 6px 10px;
             }
             .cartas-mesa {
-                gap: 12px;
-                padding: 6px;
+                gap: 10px;
+                padding: 4px;
             }
             .acoes button {
-                font-size: 11px;
-                padding: 6px 12px;
+                font-size: 10px;
+                padding: 5px 10px;
             }
             .acoes button .sub {
                 display: none;
@@ -756,16 +800,18 @@
 
         <!-- ===== AÇÕES ===== -->
         <div class="acoes" id="acoes">
-            <button class="btn-truco" id="btnTruco" disabled>Pedir Truco</button>
-            <button class="btn-truco" id="btnSeis" disabled>6 <span class="sub">aumentar</span></button>
-            <button class="btn-truco" id="btnNove" disabled>9 <span class="sub">aumentar</span></button>
-            <button class="btn-truco" id="btnDoze" disabled>12 <span class="sub">aumentar</span></button>
+            <button class="btn-truco" id="btnTruco" disabled>Truco</button>
+            <div class="grupo-truco">
+                <button class="btn-truco" id="btnSeis" disabled>6 <span class="sub">após truco</span></button>
+                <button class="btn-truco" id="btnNove" disabled>9 <span class="sub">após 6</span></button>
+                <button class="btn-truco" id="btnDoze" disabled>12 <span class="sub">após 9</span></button>
+            </div>
             <button class="btn-fugir" id="btnFugir" disabled>Fugir</button>
             <button class="btn-aceitar" id="btnAceitar" disabled>Aceitar</button>
         </div>
 
         <!-- ===== MENSAGEM ===== -->
-        <div class="mensagem" id="mensagem">Bem-vindo ao Truco Paulista. Clique em <span class="destaque">Nova Mão</span> para começar.</div>
+        <div class="mensagem" id="mensagem">Bem-vindo ao Truco Paulista.</div>
 
         <!-- ===== STATUS BAR ===== -->
         <div class="status-bar">
@@ -778,7 +824,7 @@
 
     <script>
         // ================================================================
-        //  TRUCO PAULISTA — COM NOVA MÃO AUTOMÁTICA E NOMES CORRIGIDOS
+        //  TRUCO PAULISTA — VERSÃO COMPLETA
         // ================================================================
 
         // CONSTANTES
@@ -886,7 +932,6 @@
         }
 
         function iniciarNovaMao() {
-            // Limpa timeout anterior
             if (estado.novaMaoTimeout) {
                 clearTimeout(estado.novaMaoTimeout);
                 estado.novaMaoTimeout = null;
@@ -1092,7 +1137,6 @@
             atualizarAcoes();
             estado.processando = false;
 
-            // Nova mão automática após 2 segundos
             estado.novaMaoTimeout = setTimeout(() => {
                 if (estado.fase === 'fim_mao' || estado.fase === 'jogando') {
                     iniciarNovaMao();
@@ -1100,7 +1144,10 @@
             }, 2200);
         }
 
-        // TRUCO
+        // ================================================================
+        //  TRUCO — ORDEM CORRETA
+        // ================================================================
+
         function pedirTruco() {
             if (estado.fase !== 'jogando') return;
             if (estado.trucoPedidoPor) return;
@@ -1178,6 +1225,7 @@
             const duplaAtual = jogador.dupla;
             const duplaQuePediu = estado.trucoPedidoPor;
 
+            // Quem pediu não pode pedir mais
             if (duplaAtual === duplaQuePediu) {
                 setMensagem('❌ <span class="erro">Quem pediu não pode pedir mais!</span>');
                 return;
@@ -1210,6 +1258,7 @@
                 setTimeout(() => {
                     if (estado.fase !== 'jogando' || !estado.maoAtiva || estado.processando) return;
 
+                    // Bot decide pedir truco
                     if (!estado.trucoPedidoPor && !estado.mãoDe11 && estado.cartasMesa.length === 0) {
                         const forca = avaliarMao(jogador);
                         if (forca > 22 && Math.random() < 0.25) {
@@ -1218,6 +1267,7 @@
                         }
                     }
 
+                    // Bot responde truco
                     if (estado.trucoPedidoPor && !estado.trucoRespondido) {
                         const duplaBot = jogador.dupla;
                         if (duplaBot !== estado.trucoPedidoPor) {
@@ -1299,27 +1349,52 @@
             }
         }
 
+        function renderVira(carta) {
+            const valor = getValorDisplay(carta);
+            const naipe = getNaipeDisplay(carta);
+            const cor = getCorCarta(carta);
+            const classeCor = cor === 'vermelho' ? 'vira-vermelho' : 'vira-preto';
+            return `<span class="vira-valor ${classeCor}">${valor}</span><span class="vira-naipe ${classeCor}">${naipe}</span>`;
+        }
+
+        function renderManilhaInfo(carta) {
+            const valor = getValorDisplay(carta);
+            const naipe = getNaipeDisplay(carta);
+            const cor = getCorCarta(carta);
+            const classeCor = cor === 'vermelho' ? 'manilha-vermelho' : 'manilha-preto';
+            return `<span class="manilha-carta ${classeCor}">${valor}${naipe}</span>`;
+        }
+
         function atualizarUI() {
             document.getElementById('scoreA').textContent = estado.pontos.A;
             document.getElementById('scoreB').textContent = estado.pontos.B;
 
+            // VIRA
             const viraDisplay = document.getElementById('viraDisplay');
             if (estado.vira) {
-                viraDisplay.innerHTML = renderCarta(estado.vira, 'grande');
+                viraDisplay.innerHTML = renderVira(estado.vira);
                 viraDisplay.className = 'vira-card revelada';
-                const manilhaValor = estado.manilhas[0][0];
-                document.getElementById('manilhaInfo').innerHTML = `Manilha: <strong>${manilhaValor}</strong> ♣ ♥ ♠ ♦`;
             } else {
                 viraDisplay.textContent = '—';
                 viraDisplay.className = 'vira-card';
-                document.getElementById('manilhaInfo').innerHTML = 'Manilha: <strong>—</strong>';
             }
 
+            // MANILHA
+            const manilhaInfo = document.getElementById('manilhaInfo');
+            if (estado.manilhas && estado.manilhas.length > 0) {
+                const manilhaValor = estado.manilhas[0][0];
+                const cartasManilha = estado.manilhas.map(c => renderManilhaInfo(c)).join(' ');
+                manilhaInfo.innerHTML = `Manilha: <strong>${manilhaValor}</strong> ${cartasManilha}`;
+            } else {
+                manilhaInfo.innerHTML = 'Manilha: <strong>—</strong>';
+            }
+
+            // CARTAS NA MESA
             const mesaDiv = document.getElementById('cartasMesa');
             if (estado.cartasMesa.length === 0) {
                 mesaDiv.innerHTML = '<span class="empty-msg">Aguardando jogadas...</span>';
             } else {
-                mesaDiv.innerHTML = estado.cartasMesa.map((c, index) => {
+                mesaDiv.innerHTML = estado.cartasMesa.map((c) => {
                     const jogador = estado.jogadores[c.jogador];
                     const isVencedor = estado.vencedorRodada === c.jogador;
                     return `<div class="carta-mesa ${isVencedor ? 'vencedor' : ''}">
@@ -1330,6 +1405,7 @@
                 }).join('');
             }
 
+            // JOGADORES
             const grid = document.getElementById('jogadoresGrid');
             grid.innerHTML = estado.jogadores.map((j, index) => {
                 const isAtivo = estado.jogadorDaVez === index && estado.fase === 'jogando';
@@ -1366,6 +1442,7 @@
                         `;
             }).join('');
 
+            // DESTAQUE DA MESA
             const mesa = document.getElementById('mesa');
             if (estado.trucoPedidoPor && !estado.trucoRespondido) {
                 mesa.className = 'mesa destaque';
@@ -1373,6 +1450,7 @@
                 mesa.className = 'mesa';
             }
 
+            // STATUS
             const statusInfo = document.getElementById('statusInfo');
             if (estado.fase === 'fim_jogo') {
                 statusInfo.innerHTML = '🏆 Jogo finalizado';
@@ -1400,11 +1478,18 @@
             const temTruco = estado.trucoPedidoPor !== null && !estado.trucoRespondido;
             const isFimJogo = estado.fase === 'fim_jogo';
 
+            // Truco — só pode pedir se for humano, estiver jogando, não tiver truco pendente
             btnTruco.disabled = !(isJogando && isHumano && !temTruco && !estado.mãoDe11 && !estado.processando);
+
+            // 6, 9, 12 — só aparecem se tiver truco pendente e for humano (a outra dupla)
             btnSeis.disabled = !(isJogando && isHumano && temTruco && !estado.processando);
             btnNove.disabled = !(isJogando && isHumano && temTruco && !estado.processando);
             btnDoze.disabled = !(isJogando && isHumano && temTruco && !estado.processando);
+
+            // Fugir — só se tiver truco pendente e for humano (a outra dupla)
             btnFugir.disabled = !(isJogando && isHumano && temTruco && !estado.processando);
+
+            // Aceitar — só se tiver truco pendente e for humano (a outra dupla)
             btnAceitar.disabled = !(isJogando && isHumano && temTruco && !estado.processando);
         }
 
@@ -1412,7 +1497,10 @@
             document.getElementById('mensagem').innerHTML = msg;
         }
 
-        // BOTÕES
+        // ================================================================
+        //  BOTÕES
+        // ================================================================
+
         document.getElementById('btnTruco').addEventListener('click', pedirTruco);
         document.getElementById('btnSeis').addEventListener('click', () => pedirMais(6));
         document.getElementById('btnNove').addEventListener('click', () => pedirMais(9));
@@ -1420,7 +1508,10 @@
         document.getElementById('btnFugir').addEventListener('click', fugir);
         document.getElementById('btnAceitar').addEventListener('click', aceitarTruco);
 
-        // INICIALIZAÇÃO
+        // ================================================================
+        //  INICIALIZAÇÃO
+        // ================================================================
+
         function gerarCodigo() {
             const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             let codigo = '';
@@ -1438,13 +1529,13 @@
         atualizarUI();
         atualizarAcoes();
 
-        // Começa automaticamente após 1 segundo
         setTimeout(() => {
             iniciarPrimeiraMao();
-        }, 1000);
+        }, 800);
 
-        console.log('🃏 Truco Paulista — Com nova mão automática!');
-        console.log('📌 Os bots são: Oponente 1, Parceiro, Oponente 2');
+        console.log('🃏 Truco Paulista — Versão Completa!');
+        console.log('📌 Botões: Truco → 6 → 9 → 12 | Fugir | Aceitar');
+        console.log('📌 Ordem das manilhas mostrada corretamente');
 
         // EXPORTAR
         window.jogarCarta = jogarCarta;
