@@ -2,9 +2,11 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Truco Paulista — PlayHub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js">
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <style>
         * {
             margin: 0;
@@ -32,135 +34,198 @@
             border: 1px solid rgba(255, 255, 255, 0.04);
             border-radius: 28px;
             padding: 24px 28px 26px;
-            max-width: 980px;
+            max-width: 1000px;
             width: 100%;
             box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.8);
         }
 
-        /* ===== HEADER ===== */
+        /* HEADER */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 12px;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
-
         .header .title-group {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
         }
-
         .header .title-group .icon-symbol {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 800;
             color: #d4a54a;
             opacity: 0.6;
             font-family: 'Georgia', serif;
         }
-
         .header h1 {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
             color: #e8e8f0;
-            letter-spacing: -0.01em;
         }
-
         .header .score-group {
             display: flex;
             align-items: center;
-            gap: 18px;
+            gap: 16px;
             background: rgba(255, 255, 255, 0.03);
-            padding: 6px 20px;
+            padding: 4px 18px;
             border-radius: 40px;
             border: 1px solid rgba(255, 255, 255, 0.04);
         }
-
         .header .score-group .dupla-a {
             color: #6b8af5;
             font-weight: 800;
-            font-size: 22px;
+            font-size: 20px;
         }
         .header .score-group .dupla-b {
             color: #d4a54a;
             font-weight: 800;
-            font-size: 22px;
+            font-size: 20px;
         }
         .header .score-group .vs {
             color: #3a3f55;
             font-weight: 600;
-            font-size: 14px;
         }
         .header .score-group .label-pts {
-            font-size: 10px;
+            font-size: 9px;
             color: #4a4f6a;
-            font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.04em;
         }
 
-        /* ===== MESA ===== */
-        .mesa {
-            background: rgba(0, 0, 0, 0.35);
-            border-radius: 20px;
-            padding: 20px;
-            min-height: 200px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            position: relative;
-            transition: all 0.3s ease;
+        /* CONEXÃO */
+        .connection-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .connection-area input {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            padding: 8px 14px;
+            color: #e8e8f0;
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-align: center;
+            width: 120px;
+            outline: none;
+            letter-spacing: 0.1em;
+        }
+        .connection-area input::placeholder {
+            color: #3a3f55;
+            font-weight: 400;
+            font-size: 13px;
+            letter-spacing: 0.04em;
+        }
+        .connection-area button {
+            padding: 8px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.04);
+            color: #aab4d6;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+        .connection-area button:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .connection-area button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .connection-area button.primary {
+            background: rgba(91, 124, 250, 0.12);
+            border-color: rgba(91, 124, 250, 0.15);
+            color: #8ba4fa;
+        }
+        .connection-area button.primary:hover:not(:disabled) {
+            background: rgba(91, 124, 250, 0.2);
+        }
+        .connection-area button.gold {
+            background: rgba(212, 165, 74, 0.08);
+            border-color: rgba(212, 165, 74, 0.12);
+            color: #d4a54a;
+        }
+        .connection-area button.gold:hover:not(:disabled) {
+            background: rgba(212, 165, 74, 0.15);
+        }
+        .connection-area .code-display {
+            font-size: 22px;
+            font-weight: 800;
+            color: #d4a54a;
+            letter-spacing: 0.12em;
+            background: rgba(212, 165, 74, 0.06);
+            padding: 4px 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(212, 165, 74, 0.08);
+            font-family: 'Inter', monospace;
+        }
+        .connection-area .label {
+            color: #4a4f6a;
+            font-size: 12px;
         }
 
+        /* MESA */
+        .mesa {
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 18px;
+            padding: 16px 18px;
+            min-height: 180px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.3s ease;
+        }
         .mesa.destaque {
             border-color: rgba(212, 165, 74, 0.15);
             box-shadow: inset 0 0 60px rgba(212, 165, 74, 0.02);
         }
 
-        /* ===== VIRA ===== */
+        /* VIRA */
         .vira-area {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
-            margin-bottom: 14px;
-            padding: 8px 16px;
+            gap: 16px;
+            margin-bottom: 12px;
+            padding: 6px 14px;
             background: rgba(255, 255, 255, 0.02);
-            border-radius: 14px;
+            border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.03);
             flex-wrap: wrap;
         }
-
         .vira-area .label {
-            font-size: 11px;
+            font-size: 10px;
             color: #5a5f7a;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             font-weight: 600;
         }
-
         .vira-area .vira-card {
             display: inline-block;
-            font-size: 22px;
-            font-weight: 800;
-            padding: 2px 14px;
             background: linear-gradient(145deg, #f5f0e8, #e8e0d5);
-            border: 2px solid rgba(200, 180, 160, 0.3);
+            border: 1.5px solid rgba(180, 160, 140, 0.3);
             border-radius: 8px;
-            color: #1a1a2e;
+            padding: 2px 12px;
             font-family: 'Georgia', serif;
-            transition: 0.3s;
-            min-width: 44px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .vira-area .vira-card .vira-valor {
-            font-size: 24px;
             font-weight: 800;
-        }
-        .vira-area .vira-card .vira-naipe {
-            font-size: 20px;
+            font-size: 22px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            min-width: 40px;
+            text-align: center;
         }
         .vira-area .vira-card .vira-vermelho {
             color: #cc2233;
@@ -168,38 +233,26 @@
         .vira-area .vira-card .vira-preto {
             color: #1a1a2e;
         }
-
-        .vira-area .vira-card.revelada {
-            animation: pulseGold 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulseGold {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(212, 165, 74, 0); }
-            50% { box-shadow: 0 0 30px rgba(212, 165, 74, 0.08); }
-        }
-
         .vira-area .manilha-info {
-            font-size: 14px;
+            font-size: 13px;
             color: #6a6f8a;
             font-weight: 500;
         }
-
         .vira-area .manilha-info strong {
             color: #d4a54a;
             font-weight: 700;
         }
-
         .vira-area .manilha-info .manilha-carta {
             display: inline-block;
             background: linear-gradient(145deg, #f5f0e8, #e8e0d5);
-            border: 1px solid rgba(200, 180, 160, 0.3);
-            border-radius: 6px;
-            padding: 0 10px;
+            border: 1px solid rgba(180, 160, 140, 0.3);
+            border-radius: 4px;
+            padding: 0 8px;
             font-family: 'Georgia', serif;
             font-weight: 800;
-            font-size: 18px;
-            margin: 0 2px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            font-size: 16px;
+            margin: 0 1px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
         }
         .vira-area .manilha-info .manilha-vermelho {
             color: #cc2233;
@@ -208,196 +261,158 @@
             color: #1a1a2e;
         }
 
-        /* ===== CARTAS NA MESA ===== */
+        /* CARTAS NA MESA */
         .cartas-mesa {
             display: flex;
             justify-content: center;
-            gap: 18px;
-            min-height: 100px;
+            gap: 16px;
+            min-height: 90px;
             align-items: center;
             flex-wrap: wrap;
-            margin: 4px 0;
-            padding: 8px;
-            border-radius: 12px;
-            transition: all 0.3s ease;
+            padding: 4px;
         }
-
         .cartas-mesa .empty-msg {
             color: #3a3f55;
             font-size: 13px;
             font-weight: 400;
-            letter-spacing: 0.02em;
         }
 
-        /* ——— CARTA ESTILO BARALHO ——— */
         .carta-mesa {
             background: linear-gradient(145deg, #f8f4ee, #ece4d8);
             border-radius: 10px;
-            padding: 8px 14px 6px;
-            min-width: 64px;
-            min-height: 88px;
+            padding: 6px 12px 4px;
+            min-width: 58px;
+            min-height: 80px;
             text-align: center;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-            transition: all 0.4s ease;
             font-family: 'Georgia', serif;
-            position: relative;
             border: 1.5px solid rgba(180, 160, 140, 0.3);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            transition: all 0.3s ease;
         }
-
         .carta-mesa .carta-valor {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 800;
             line-height: 1;
         }
-
         .carta-mesa .carta-naipe {
-            font-size: 22px;
+            font-size: 20px;
             line-height: 1;
-            margin-top: 2px;
+            margin-top: 1px;
         }
-
         .carta-mesa .carta-naipe-vermelho {
             color: #cc2233;
         }
         .carta-mesa .carta-naipe-preto {
             color: #1a1a2e;
         }
-
         .carta-mesa .jogador-nome {
-            display: block;
-            font-size: 9px;
+            font-size: 8px;
             font-weight: 600;
             color: #4a4a5a;
-            margin-top: 4px;
+            margin-top: 3px;
             font-family: 'Inter', sans-serif;
             text-transform: uppercase;
             letter-spacing: 0.04em;
             background: rgba(0, 0, 0, 0.04);
-            padding: 1px 10px;
-            border-radius: 10px;
+            padding: 1px 8px;
+            border-radius: 8px;
         }
-
         .carta-mesa.vencedor {
             border-color: #4caf84;
             box-shadow: 0 0 30px rgba(76, 175, 132, 0.2), 0 4px 20px rgba(0, 0, 0, 0.4);
-            transform: scale(1.05) translateY(-6px);
+            transform: scale(1.05) translateY(-4px);
         }
-
-        .carta-mesa.vencedor .jogador-nome {
-            background: rgba(76, 175, 132, 0.15);
-            color: #4caf84;
-        }
-
-        .carta-mesa .carta-badge-vencedor {
+        .carta-mesa .badge-vencedor {
             position: absolute;
-            top: -8px;
-            right: -8px;
+            top: -6px;
+            right: -6px;
             background: #4caf84;
             color: #fff;
-            font-size: 9px;
+            font-size: 8px;
             font-weight: 700;
-            padding: 1px 8px;
-            border-radius: 10px;
+            padding: 1px 6px;
+            border-radius: 8px;
             font-family: 'Inter', sans-serif;
-            letter-spacing: 0.04em;
-            box-shadow: 0 2px 8px rgba(76, 175, 132, 0.3);
         }
 
-        /* ===== JOGADORES ===== */
+        /* JOGADORES */
         .jogadores-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 16px;
+            gap: 10px;
+            margin-top: 14px;
         }
-
         .jogador-card {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.04);
-            border-radius: 16px;
-            padding: 12px 16px;
+            border-radius: 14px;
+            padding: 10px 14px;
             transition: all 0.3s ease;
         }
-
         .jogador-card.dupla-a {
-            border-left: 4px solid rgba(91, 124, 250, 0.3);
+            border-left: 3px solid rgba(91, 124, 250, 0.3);
         }
         .jogador-card.dupla-b {
-            border-left: 4px solid rgba(212, 165, 74, 0.3);
+            border-left: 3px solid rgba(212, 165, 74, 0.3);
         }
-
         .jogador-card.ativo {
             background: rgba(255, 255, 255, 0.05);
             border-color: rgba(255, 255, 255, 0.08);
             transform: scale(1.02);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
         }
-
         .jogador-card.ativo .nome {
             color: #fff;
         }
-
-        .jogador-card.bot {
-            opacity: 0.75;
-        }
-        .jogador-card.humano {
-            opacity: 1;
-        }
-
         .jogador-card .topo {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
-
         .jogador-card .nome {
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             color: #aab4d6;
             transition: 0.3s;
         }
-
         .jogador-card .nome .indicador-vez {
             display: inline-block;
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
             background: #4caf84;
-            margin-right: 6px;
+            margin-right: 5px;
             animation: blinkDot 1s ease-in-out infinite;
         }
-
+        @keyframes blinkDot {
+            0%,
+            100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
         .jogador-card .nome .badge-humano {
-            font-size: 8px;
+            font-size: 7px;
             background: rgba(91, 124, 250, 0.12);
             color: #6b8af5;
-            padding: 1px 8px;
-            border-radius: 10px;
+            padding: 1px 6px;
+            border-radius: 8px;
             font-weight: 600;
-            margin-left: 6px;
+            margin-left: 4px;
             text-transform: uppercase;
             font-family: 'Inter', sans-serif;
         }
-
-        @keyframes blinkDot {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.2; }
-        }
-
         .jogador-card .badge-dupla {
-            font-size: 9px;
+            font-size: 8px;
             font-weight: 700;
             text-transform: uppercase;
-            padding: 2px 10px;
-            border-radius: 20px;
+            padding: 1px 8px;
+            border-radius: 16px;
             letter-spacing: 0.04em;
         }
-
         .badge-dupla.a {
             background: rgba(91, 124, 250, 0.12);
             color: #6b8af5;
@@ -406,324 +421,268 @@
             background: rgba(212, 165, 74, 0.12);
             color: #d4a54a;
         }
-
         .jogador-card .cartas {
             display: flex;
-            gap: 6px;
+            gap: 5px;
             flex-wrap: wrap;
-            min-height: 40px;
+            min-height: 36px;
         }
-
-        /* ——— CARTA NA MÃO ——— */
         .jogador-card .carta-mao {
             background: linear-gradient(145deg, #f8f4ee, #ece4d8);
             border: 1.5px solid rgba(180, 160, 140, 0.25);
-            border-radius: 8px;
-            padding: 3px 10px 2px;
-            min-width: 38px;
-            min-height: 48px;
+            border-radius: 6px;
+            padding: 2px 8px 1px;
+            min-width: 32px;
+            min-height: 40px;
             text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
             font-family: 'Georgia', serif;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            transition: all 0.2s ease;
+            cursor: default;
         }
-
         .jogador-card .carta-mao .carta-valor {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 800;
             line-height: 1;
         }
-
         .jogador-card .carta-mao .carta-naipe {
-            font-size: 13px;
+            font-size: 11px;
             line-height: 1;
         }
-
         .jogador-card .carta-mao .naipe-vermelho {
             color: #cc2233;
         }
         .jogador-card .carta-mao .naipe-preto {
             color: #1a1a2e;
         }
-
-        .jogador-card .carta-mao:hover:not(.jogada):not(.bot-card) {
-            transform: translateY(-5px) scale(1.04);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        .jogador-card .carta-mao.clickavel {
+            cursor: pointer;
+        }
+        .jogador-card .carta-mao.clickavel:hover:not(.jogada) {
+            transform: translateY(-4px) scale(1.04);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
             border-color: rgba(91, 124, 250, 0.3);
         }
-
         .jogador-card .carta-mao.jogada {
-            opacity: 0.12;
-            cursor: not-allowed;
+            opacity: 0.15;
             transform: scale(0.85);
             filter: grayscale(1);
+            cursor: not-allowed;
         }
-
         .jogador-card .carta-mao.bot-card {
             opacity: 0.08;
             cursor: default;
             background: linear-gradient(145deg, #1a1a2e, #12121f);
             border-color: rgba(255, 255, 255, 0.03);
-            min-height: 48px;
-            min-width: 38px;
-            font-size: 10px;
-            color: #3a3f55;
         }
-
         .jogador-card .pontos-info {
-            font-size: 10px;
+            font-size: 9px;
             color: #4a4f6a;
-            margin-top: 4px;
+            margin-top: 3px;
             font-weight: 500;
         }
-
         .jogador-card .pontos-info strong {
             color: #8b92b0;
         }
 
-        /* ===== AÇÕES ===== */
+        /* AÇÕES */
         .acoes {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 16px;
+            gap: 6px;
+            margin-top: 14px;
             justify-content: center;
         }
-
         .acoes button {
-            padding: 8px 18px;
+            padding: 6px 16px;
             border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 10px;
+            border-radius: 8px;
             background: rgba(255, 255, 255, 0.03);
             color: #aab4d6;
             font-family: 'Inter', sans-serif;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.25s ease;
-            letter-spacing: 0.02em;
         }
-
         .acoes button:hover:not(:disabled) {
             background: rgba(255, 255, 255, 0.07);
             border-color: rgba(255, 255, 255, 0.1);
             transform: translateY(-2px);
         }
-
         .acoes button:disabled {
             opacity: 0.2;
             cursor: not-allowed;
             transform: none;
         }
-
         .acoes button.btn-truco {
             background: rgba(212, 165, 74, 0.08);
             border-color: rgba(212, 165, 74, 0.12);
             color: #d4a54a;
         }
-
         .acoes button.btn-truco:hover:not(:disabled) {
             background: rgba(212, 165, 74, 0.15);
-            border-color: rgba(212, 165, 74, 0.2);
         }
-
         .acoes button.btn-aceitar {
             background: rgba(76, 175, 132, 0.08);
             border-color: rgba(76, 175, 132, 0.1);
             color: #4caf84;
         }
-
         .acoes button.btn-aceitar:hover:not(:disabled) {
             background: rgba(76, 175, 132, 0.15);
-            border-color: rgba(76, 175, 132, 0.15);
         }
-
         .acoes button.btn-fugir {
             background: rgba(232, 99, 107, 0.08);
             border-color: rgba(232, 99, 107, 0.1);
             color: #e8636b;
         }
-
         .acoes button.btn-fugir:hover:not(:disabled) {
             background: rgba(232, 99, 107, 0.15);
-            border-color: rgba(232, 99, 107, 0.15);
         }
-
         .acoes button .sub {
-            font-size: 9px;
-            opacity: 0.5;
+            font-size: 8px;
+            opacity: 0.4;
             font-weight: 400;
             display: block;
             line-height: 1;
-            margin-top: 1px;
         }
 
-        .acoes .grupo-truco {
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-        }
-
-        /* ===== MENSAGEM ===== */
+        /* MENSAGEM */
         .mensagem {
-            margin-top: 12px;
-            padding: 12px 18px;
+            margin-top: 10px;
+            padding: 10px 16px;
             background: rgba(255, 255, 255, 0.02);
-            border-radius: 12px;
+            border-radius: 10px;
             text-align: center;
-            font-size: 14px;
+            font-size: 13px;
             color: #8b92b0;
-            min-height: 44px;
+            min-height: 38px;
             border: 1px solid rgba(255, 255, 255, 0.03);
-            transition: all 0.3s ease;
             font-weight: 500;
         }
-
         .mensagem .destaque {
             color: #d4a54a;
             font-weight: 700;
         }
-
         .mensagem .sucesso {
             color: #4caf84;
             font-weight: 700;
         }
-
         .mensagem .erro {
             color: #e8636b;
             font-weight: 700;
         }
-
-        .mensagem .info {
-            color: #6b8af5;
-            font-weight: 700;
-        }
-
         .mensagem .automatico {
-            font-size: 11px;
-            opacity: 0.5;
+            font-size: 10px;
+            opacity: 0.4;
             display: block;
-            margin-top: 3px;
+            margin-top: 2px;
         }
 
-        /* ===== STATUS BAR ===== */
+        /* STATUS */
         .status-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 14px;
-            font-size: 11px;
+            margin-top: 12px;
+            font-size: 10px;
             color: #4a4f6a;
             flex-wrap: wrap;
-            gap: 6px;
-            padding-top: 12px;
+            gap: 4px;
+            padding-top: 10px;
             border-top: 1px solid rgba(255, 255, 255, 0.03);
         }
-
-        .status-bar .codigo {
-            font-family: 'Inter', monospace;
-            font-size: 16px;
-            font-weight: 700;
-            color: #d4a54a;
-            letter-spacing: 0.08em;
-            background: rgba(212, 165, 74, 0.06);
-            padding: 1px 14px;
-            border-radius: 6px;
-            border: 1px solid rgba(212, 165, 74, 0.06);
-        }
-
-        .status-bar .status-info {
-            color: #5a5f7a;
-            font-weight: 500;
-        }
-
         .status-bar .status-info .vez {
             color: #aab4d6;
             font-weight: 600;
         }
-
         .btn-voltar {
             display: inline-block;
-            padding: 6px 20px;
+            padding: 4px 16px;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 30px;
+            border-radius: 20px;
             color: #6a6f8a;
             text-decoration: none;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
-            transition: all 0.25s ease;
+            transition: 0.25s;
             font-family: 'Inter', sans-serif;
         }
-
         .btn-voltar:hover {
             background: rgba(255, 255, 255, 0.06);
             color: #e8e8f0;
-            border-color: rgba(255, 255, 255, 0.08);
         }
 
-        /* ===== RESPONSIVO ===== */
         @media (max-width: 750px) {
             .game-container {
-                padding: 16px;
+                padding: 14px;
             }
             .header h1 {
-                font-size: 20px;
+                font-size: 18px;
             }
             .header .score-group {
-                padding: 4px 14px;
+                padding: 2px 12px;
                 gap: 10px;
             }
             .header .score-group .dupla-a,
             .header .score-group .dupla-b {
-                font-size: 18px;
+                font-size: 16px;
             }
             .jogadores-grid {
                 grid-template-columns: 1fr 1fr;
-                gap: 8px;
+                gap: 6px;
             }
             .jogador-card {
-                padding: 8px 10px;
+                padding: 6px 10px;
             }
             .jogador-card .carta-mao {
-                min-width: 32px;
-                min-height: 40px;
-                padding: 2px 6px;
+                min-width: 26px;
+                min-height: 32px;
+                padding: 1px 4px;
             }
             .jogador-card .carta-mao .carta-valor {
-                font-size: 13px;
+                font-size: 11px;
             }
             .jogador-card .carta-mao .carta-naipe {
-                font-size: 11px;
+                font-size: 9px;
             }
             .carta-mesa {
-                min-width: 52px;
-                min-height: 70px;
-                padding: 4px 8px 2px;
+                min-width: 44px;
+                min-height: 60px;
+                padding: 4px 6px 2px;
             }
             .carta-mesa .carta-valor {
-                font-size: 20px;
+                font-size: 18px;
             }
             .carta-mesa .carta-naipe {
-                font-size: 17px;
-            }
-            .acoes button {
-                font-size: 11px;
-                padding: 6px 12px;
+                font-size: 15px;
             }
             .vira-area .vira-card {
                 font-size: 18px;
-                padding: 2px 10px;
-                min-width: 36px;
+                padding: 1px 10px;
+                min-width: 32px;
+            }
+            .connection-area input {
+                width: 80px;
+                font-size: 14px;
+                padding: 4px 10px;
+            }
+            .connection-area button {
+                font-size: 11px;
+                padding: 4px 12px;
+            }
+            .acoes button {
+                font-size: 10px;
+                padding: 4px 10px;
             }
             .mensagem {
-                font-size: 12px;
-                padding: 8px 12px;
+                font-size: 11px;
+                padding: 6px 12px;
             }
         }
 
@@ -734,20 +693,12 @@
             .header .score-group .label-pts {
                 display: none;
             }
-            .mesa {
-                padding: 12px;
-            }
             .vira-area {
-                gap: 10px;
-                padding: 6px 10px;
+                gap: 8px;
+                padding: 4px 10px;
             }
             .cartas-mesa {
-                gap: 10px;
-                padding: 4px;
-            }
-            .acoes button {
-                font-size: 10px;
-                padding: 5px 10px;
+                gap: 8px;
             }
             .acoes button .sub {
                 display: none;
@@ -778,21 +729,25 @@
             </div>
         </div>
 
+        <!-- ===== CONEXÃO P2P ===== -->
+        <div class="connection-area" id="connectionArea">
+            <button class="gold" id="btnCreate">Criar Sala</button>
+            <span class="label">ou</span>
+            <input type="text" id="roomInput" placeholder="Código" maxlength="5" />
+            <button class="primary" id="btnJoin">Entrar</button>
+            <span id="codeDisplay" class="code-display hidden">—</span>
+        </div>
+
         <!-- ===== MESA ===== -->
         <div class="mesa" id="mesa">
-
-            <!-- Vira -->
             <div class="vira-area">
                 <span class="label">Vira</span>
                 <span class="vira-card" id="viraDisplay">—</span>
                 <span class="manilha-info" id="manilhaInfo">Manilha: <strong>—</strong></span>
             </div>
-
-            <!-- Cartas na mesa -->
             <div class="cartas-mesa" id="cartasMesa">
                 <span class="empty-msg">Aguardando jogadas...</span>
             </div>
-
         </div>
 
         <!-- ===== JOGADORES ===== -->
@@ -801,22 +756,19 @@
         <!-- ===== AÇÕES ===== -->
         <div class="acoes" id="acoes">
             <button class="btn-truco" id="btnTruco" disabled>Truco</button>
-            <div class="grupo-truco">
-                <button class="btn-truco" id="btnSeis" disabled>6 <span class="sub">após truco</span></button>
-                <button class="btn-truco" id="btnNove" disabled>9 <span class="sub">após 6</span></button>
-                <button class="btn-truco" id="btnDoze" disabled>12 <span class="sub">após 9</span></button>
-            </div>
+            <button class="btn-truco" id="btnSeis" disabled>6 <span class="sub">após truco</span></button>
+            <button class="btn-truco" id="btnNove" disabled>9 <span class="sub">após 6</span></button>
+            <button class="btn-truco" id="btnDoze" disabled>12 <span class="sub">após 9</span></button>
             <button class="btn-fugir" id="btnFugir" disabled>Fugir</button>
             <button class="btn-aceitar" id="btnAceitar" disabled>Aceitar</button>
         </div>
 
         <!-- ===== MENSAGEM ===== -->
-        <div class="mensagem" id="mensagem">Bem-vindo ao Truco Paulista.</div>
+        <div class="mensagem" id="mensagem">Conecte-se a um amigo ou jogue contra bots.</div>
 
-        <!-- ===== STATUS BAR ===== -->
+        <!-- ===== STATUS ===== -->
         <div class="status-bar">
-            <span>Código: <span class="codigo" id="codigoDisplay">—</span></span>
-            <span class="status-info" id="statusInfo">Aguardando início</span>
+            <span class="status-info" id="statusInfo">Aguardando...</span>
             <a href="index.html" class="btn-voltar">← Voltar</a>
         </div>
 
@@ -824,104 +776,135 @@
 
     <script>
         // ================================================================
-        //  TRUCO PAULISTA — VERSÃO COMPLETA
+        //  TRUCO PAULISTA — P2P + BOTS INTELIGENTES
         // ================================================================
 
-        // CONSTANTES
+        // ================================================================
+        //  1. CONSTANTES
+        // ================================================================
+
         const NAIPES = ['♣', '♥', '♠', '♦'];
         const ORDEM = ['4', '5', '6', '7', 'Q', 'J', 'K', '1', '2', '3'];
         const VALORES = { '4': 0, '5': 1, '6': 2, '7': 3, 'Q': 4, 'J': 5, 'K': 6, '1': 7, '2': 8, '3': 9 };
         const FORCA_NAIPES = { '♣': 3, '♥': 2, '♠': 1, '♦': 0 };
         const NIPES_CORES = { '♣': 'preto', '♥': 'vermelho', '♠': 'preto', '♦': 'vermelho' };
+        const NIVEIS_TRUCO = [3, 6, 9, 12];
 
-        // ESTADO
+        // ================================================================
+        //  2. ESTADO
+        // ================================================================
+
         let estado = {
+            jogadores: [],
             baralho: [],
             vira: null,
             manilhas: [],
-            jogadores: [],
             cartasMesa: [],
-            rodadaAtual: 0,
             rodadasGanhas: { A: 0, B: 0 },
             pontos: { A: 0, B: 0 },
             valorMao: 1,
-            trucoNivel: 1,
             trucoPedidoPor: null,
             trucoRespondido: false,
             maoAtiva: false,
             jogadorDaVez: 0,
-            fase: 'aguardando',
-            vencedorMao: null,
+            fase: 'aguardando', // aguardando | jogando | fim_mao | fim_jogo
             vencedorRodada: null,
             mãoDe11: false,
-            mãoDeFerro: false,
             indexEmbaralhador: 0,
-            codigo: '',
             processando: false,
-            novaMaoTimeout: null,
+            meuIndex: null,
+            isHost: false,
+            conn: null,
+            peer: null,
+            bots: [],
         };
 
-        // FUNÇÕES DO BARALHO
+        // ================================================================
+        //  3. FUNÇÕES DO BARALHO
+        // ================================================================
+
         function criarBaralho() {
-            const baralho = [];
-            for (const naipe of NAIPES) {
-                for (const valor of ORDEM) {
-                    baralho.push(valor + naipe);
-                }
-            }
-            return baralho;
+            const b = [];
+            for (const n of NAIPES)
+                for (const v of ORDEM) b.push(v + n);
+            return b;
         }
 
-        function embaralhar(baralho) {
-            for (let i = baralho.length - 1; i > 0; i--) {
+        function embaralhar(b) {
+            for (let i = b.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [baralho[i], baralho[j]] = [baralho[j], baralho[i]];
+                [b[i], b[j]] = [b[j], b[i]];
             }
-            return baralho;
+            return b;
         }
 
-        function getValor(carta) {
-            return VALORES[carta[0]];
-        }
+        function getValor(c) { return VALORES[c[0]]; }
 
-        function getNaipe(carta) {
-            return carta[1];
-        }
+        function getNaipe(c) { return c[1]; }
 
-        function isManilha(carta, manilhas) {
-            return manilhas.includes(carta);
-        }
+        function isManilha(c, manilhas) { return manilhas.includes(c); }
 
-        function getForca(carta, manilhas) {
-            const valor = getValor(carta);
-            const naipe = getNaipe(carta);
-
-            if (isManilha(carta, manilhas)) {
-                return 10 + FORCA_NAIPES[naipe];
-            }
-            return valor;
+        function getForca(c, manilhas) {
+            const v = getValor(c);
+            const n = getNaipe(c);
+            return isManilha(c, manilhas) ? 10 + FORCA_NAIPES[n] : v;
         }
 
         function getManilhas(vira) {
-            const index = ORDEM.indexOf(vira[0]);
-            const manilhaValor = ORDEM[(index + 1) % ORDEM.length];
-            return NAIPES.map(n => manilhaValor + n);
+            const idx = ORDEM.indexOf(vira[0]);
+            const v = ORDEM[(idx + 1) % ORDEM.length];
+            return NAIPES.map(n => v + n);
         }
 
-        function getCorCarta(carta) {
-            const naipe = getNaipe(carta);
-            return NIPES_CORES[naipe];
+        function getCor(c) { return NIPES_CORES[getNaipe(c)]; }
+
+        function getValorDisplay(c) { return c[0]; }
+
+        function getNaipeDisplay(c) { return c[1]; }
+
+        // ================================================================
+        //  4. RENDERIZAÇÃO DAS CARTAS
+        // ================================================================
+
+        function renderCarta(c, tamanho = 'grande') {
+            const v = getValorDisplay(c);
+            const n = getNaipeDisplay(c);
+            const cor = getCor(c);
+            const cls = cor === 'vermelho' ? 'carta-naipe-vermelho' : 'carta-naipe-preto';
+            if (tamanho === 'grande') {
+                return `<div class="carta-valor ${cls}">${v}</div><div class="carta-naipe ${cls}">${n}</div>`;
+            }
+            return `<span class="carta-valor ${cls}">${v}</span><span class="carta-naipe ${cls}">${n}</span>`;
         }
 
-        function getValorDisplay(carta) {
-            return carta[0];
+        function renderCartaMao(c) {
+            const v = getValorDisplay(c);
+            const n = getNaipeDisplay(c);
+            const cor = getCor(c);
+            const cls = cor === 'vermelho' ? 'naipe-vermelho' : 'naipe-preto';
+            return `<span class="carta-valor ${cls}">${v}</span><span class="carta-naipe ${cls}">${n}</span>`;
         }
 
-        function getNaipeDisplay(carta) {
-            return carta[1];
+        function renderVira(c) {
+            const v = getValorDisplay(c);
+            const n = getNaipeDisplay(c);
+            const cor = getCor(c);
+            const cls = cor === 'vermelho' ? 'vira-vermelho' : 'vira-preto';
+            return `<span class="${cls}">${v}${n}</span>`;
         }
 
-        // INICIALIZAÇÃO
+        function renderManilha(c) {
+            const v = getValorDisplay(c);
+            const n = getNaipeDisplay(c);
+            const cor = getCor(c);
+            const cls = cor === 'vermelho' ? 'manilha-vermelho' : 'manilha-preto';
+            return `<span class="manilha-carta ${cls}">${v}${n}</span>`;
+        }
+
+        // ================================================================
+        //  5. INICIALIZAÇÃO
+        // ================================================================
+
         function initJogadores() {
             return [
                 { id: 'p1', nome: 'Você', dupla: 'A', cartas: [], pontos: 0, humano: true, ativo: true },
@@ -931,20 +914,20 @@
             ];
         }
 
-        function iniciarNovaMao() {
-            if (estado.novaMaoTimeout) {
-                clearTimeout(estado.novaMaoTimeout);
-                estado.novaMaoTimeout = null;
-            }
+        function iniciarPartida() {
+            estado.jogadores = initJogadores();
+            estado.pontos = { A: 0, B: 0 };
+            estado.indexEmbaralhador = 0;
+            iniciarNovaMao();
+        }
 
+        function iniciarNovaMao() {
             if (estado.processando) return;
             estado.processando = true;
 
             const baralho = embaralhar(criarBaralho());
 
-            for (const j of estado.jogadores) {
-                j.cartas = [];
-            }
+            for (const j of estado.jogadores) j.cartas = [];
 
             let idx = 0;
             for (let i = 0; i < 3; i++) {
@@ -953,34 +936,23 @@
                 }
             }
 
-            const vira = baralho[idx];
-            estado.vira = vira;
-            estado.manilhas = getManilhas(vira);
+            estado.vira = baralho[idx];
+            estado.manilhas = getManilhas(estado.vira);
 
             estado.cartasMesa = [];
-            estado.rodadaAtual = 0;
             estado.rodadasGanhas = { A: 0, B: 0 };
             estado.valorMao = 1;
-            estado.trucoNivel = 1;
             estado.trucoPedidoPor = null;
             estado.trucoRespondido = false;
             estado.maoAtiva = true;
-            estado.vencedorMao = null;
             estado.vencedorRodada = null;
             estado.fase = 'jogando';
             estado.processando = false;
 
             estado.mãoDe11 = (estado.pontos.A >= 11 || estado.pontos.B >= 11);
-            estado.mãoDeFerro = (estado.pontos.A >= 11 && estado.pontos.B >= 11);
-
             if (estado.mãoDe11) {
                 estado.valorMao = 3;
-                estado.trucoNivel = 3;
-                setMensagem('⚠️ <span class="destaque">Mão de 11!</span> Vale 3 pontos automaticamente.');
-            }
-
-            if (estado.mãoDeFerro) {
-                setMensagem('🔥 <span class="destaque">Mão de Ferro!</span> Jogar no escuro!');
+                setMensagem('⚠️ <span class="destaque">Mão de 11!</span> Vale 3 pontos.');
             }
 
             estado.jogadorDaVez = (estado.indexEmbaralhador + 1) % 4;
@@ -988,193 +960,7 @@
 
             atualizarUI();
             atualizarAcoes();
-
-            const nome = estado.jogadores[estado.jogadorDaVez].nome;
-            setMensagem(`Nova mão! <span class="destaque">${nome}</span> começa.`);
-
-            setTimeout(() => {
-                if (estado.fase === 'jogando' && !estado.jogadores[estado.jogadorDaVez].humano) {
-                    botJogar();
-                }
-            }, 600);
-        }
-
-        function iniciarPrimeiraMao() {
-            estado.jogadores = initJogadores();
-            estado.pontos = { A: 0, B: 0 };
-            estado.indexEmbaralhador = 0;
-            iniciarNovaMao();
-        }
-
-        // LÓGICA DO JOGO
-        function jogarCarta(jogadorIndex, cartaIndex) {
-            if (estado.processando) return;
-            if (estado.fase !== 'jogando') return;
-            if (estado.jogadorDaVez !== jogadorIndex) return;
-            if (!estado.maoAtiva) return;
-
-            estado.processando = true;
-
-            const jogador = estado.jogadores[jogadorIndex];
-            const carta = jogador.cartas[cartaIndex];
-
-            estado.cartasMesa.push({ jogador: jogadorIndex, carta: carta });
-            jogador.cartas.splice(cartaIndex, 1);
-
-            setMensagem(`<span class="destaque">${jogador.nome}</span> jogou <strong>${carta}</strong>`);
-
-            atualizarUI();
-            atualizarAcoes();
-
-            setTimeout(() => {
-                if (estado.cartasMesa.length === 4) {
-                    resolverRodada();
-                } else {
-                    proximoJogador();
-                    atualizarUI();
-                    atualizarAcoes();
-
-                    setTimeout(() => {
-                        estado.processando = false;
-                        if (estado.fase === 'jogando' && estado.cartasMesa.length < 4) {
-                            const next = estado.jogadores[estado.jogadorDaVez];
-                            if (!next.humano) {
-                                botJogar();
-                            }
-                        }
-                    }, 300);
-                }
-            }, 700);
-        }
-
-        function proximoJogador() {
-            let next = (estado.jogadorDaVez + 1) % 4;
-            while (!estado.jogadores[next].ativo) {
-                next = (next + 1) % 4;
-            }
-            estado.jogadorDaVez = next;
-        }
-
-        function resolverRodada() {
-            const cartas = estado.cartasMesa;
-            const manilhas = estado.manilhas;
-
-            const ordenadas = cartas.map(c => ({
-                ...c,
-                forca: getForca(c.carta, manilhas)
-            }));
-
-            let maior = ordenadas[0];
-            for (const c of ordenadas) {
-                if (c.forca > maior.forca) {
-                    maior = c;
-                }
-            }
-
-            const duplaVencedora = estado.jogadores[maior.jogador].dupla;
-            estado.rodadasGanhas[duplaVencedora]++;
-            estado.vencedorRodada = maior.jogador;
-
-            const nomeVencedor = estado.jogadores[maior.jogador].nome;
-            setMensagem(`🏆 <span class="destaque">${nomeVencedor}</span> ganhou a rodada!`);
-
-            atualizarUI();
-
-            setTimeout(() => {
-                if (estado.rodadasGanhas.A >= 2 || estado.rodadasGanhas.B >= 2) {
-                    finalizarMao(duplaVencedora);
-                    estado.processando = false;
-                    return;
-                }
-
-                estado.rodadaAtual++;
-                estado.cartasMesa = [];
-                estado.jogadorDaVez = maior.jogador;
-                estado.vencedorRodada = null;
-
-                atualizarUI();
-                atualizarAcoes();
-                estado.processando = false;
-
-                setTimeout(() => {
-                    if (estado.fase === 'jogando' && !estado.jogadores[estado.jogadorDaVez].humano) {
-                        botJogar();
-                    }
-                }, 500);
-            }, 1000);
-        }
-
-        function finalizarMao(duplaVencedora) {
-            estado.maoAtiva = false;
-            estado.fase = 'fim_mao';
-            estado.vencedorMao = duplaVencedora;
-
-            const pontos = estado.valorMao;
-            estado.pontos[duplaVencedora] += pontos;
-
-            let msg = `🎉 <span class="sucesso">Dupla ${duplaVencedora}</span> venceu a mão! +${pontos} pontos.`;
-
-            if (estado.pontos.A >= 12) {
-                msg = `🏆 <span class="sucesso">Dupla A venceu o jogo!</span> Parabéns!`;
-                estado.fase = 'fim_jogo';
-                setMensagem(msg);
-                atualizarUI();
-                atualizarAcoes();
-                estado.processando = false;
-                return;
-            } else if (estado.pontos.B >= 12) {
-                msg = `🏆 <span class="sucesso">Dupla B venceu o jogo!</span> Parabéns!`;
-                estado.fase = 'fim_jogo';
-                setMensagem(msg);
-                atualizarUI();
-                atualizarAcoes();
-                estado.processando = false;
-                return;
-            }
-
-            setMensagem(msg + ' <span class="automatico">🔄 Nova mão em 2 segundos...</span>');
-            atualizarUI();
-            atualizarAcoes();
-            estado.processando = false;
-
-            estado.novaMaoTimeout = setTimeout(() => {
-                if (estado.fase === 'fim_mao' || estado.fase === 'jogando') {
-                    iniciarNovaMao();
-                }
-            }, 2200);
-        }
-
-        // ================================================================
-        //  TRUCO — ORDEM CORRETA
-        // ================================================================
-
-        function pedirTruco() {
-            if (estado.fase !== 'jogando') return;
-            if (estado.trucoPedidoPor) return;
-            if (estado.mãoDe11) {
-                setMensagem('❌ <span class="erro">Não pode pedir truco na mão de 11!</span>');
-                return;
-            }
-
-            const jogador = estado.jogadores[estado.jogadorDaVez];
-            estado.trucoPedidoPor = jogador.dupla;
-            estado.trucoRespondido = false;
-
-            setMensagem(`⚡ <span class="destaque">${jogador.nome}</span> pediu TRUCO! (Vale ${estado.valorMao + 2})`);
-            atualizarAcoes();
-        }
-
-        function aceitarTruco() {
-            if (estado.fase !== 'jogando') return;
-            if (!estado.trucoPedidoPor) return;
-
-            estado.valorMao += 2;
-            estado.trucoNivel = estado.valorMao;
-            estado.trucoPedidoPor = null;
-            estado.trucoRespondido = true;
-
-            setMensagem(`✅ Truco aceito! Mão vale <span class="destaque">${estado.valorMao}</span> pontos.`);
-            atualizarAcoes();
+            setMensagem(`Nova mão! <span class="destaque">${estado.jogadores[estado.jogadorDaVez].nome}</span> começa.`);
 
             setTimeout(() => {
                 if (estado.fase === 'jogando' && !estado.jogadores[estado.jogadorDaVez].humano) {
@@ -1183,23 +969,104 @@
             }, 500);
         }
 
-        function fugir() {
-            if (estado.fase !== 'jogando') return;
-            if (!estado.trucoPedidoPor) return;
+        // ================================================================
+        //  6. LÓGICA DO JOGO
+        // ================================================================
 
-            const duplaQuePediu = estado.trucoPedidoPor;
-            const pontos = Math.min(estado.valorMao, 3);
+        function jogarCarta(idxJogador, idxCarta) {
+            if (estado.processando || estado.fase !== 'jogando') return;
+            if (estado.jogadorDaVez !== idxJogador) return;
+            if (!estado.maoAtiva) return;
 
-            estado.pontos[duplaQuePediu] += pontos;
+            estado.processando = true;
+            const j = estado.jogadores[idxJogador];
+            const carta = j.cartas[idxCarta];
+
+            estado.cartasMesa.push({ jogador: idxJogador, carta: carta });
+            j.cartas.splice(idxCarta, 1);
+
+            setMensagem(`<span class="destaque">${j.nome}</span> jogou <strong>${carta}</strong>`);
+            atualizarUI();
+
+            setTimeout(() => {
+                if (estado.cartasMesa.length === 4) {
+                    resolverRodada();
+                } else {
+                    proximoJogador();
+                    atualizarUI();
+                    estado.processando = false;
+                    setTimeout(() => {
+                        if (estado.fase === 'jogando' && !estado.jogadores[estado.jogadorDaVez].humano) {
+                            botJogar();
+                        }
+                    }, 300);
+                }
+            }, 600);
+        }
+
+        function proximoJogador() {
+            let next = (estado.jogadorDaVez + 1) % 4;
+            while (!estado.jogadores[next].ativo) next = (next + 1) % 4;
+            estado.jogadorDaVez = next;
+        }
+
+        function resolverRodada() {
+            const cartas = estado.cartasMesa;
+            let maior = cartas[0];
+            for (const c of cartas) {
+                if (getForca(c.carta, estado.manilhas) > getForca(maior.carta, estado.manilhas)) {
+                    maior = c;
+                }
+            }
+
+            const dupla = estado.jogadores[maior.jogador].dupla;
+            estado.rodadasGanhas[dupla]++;
+            estado.vencedorRodada = maior.jogador;
+
+            setMensagem(`🏆 <span class="destaque">${estado.jogadores[maior.jogador].nome}</span> ganhou a rodada!`);
+            atualizarUI();
+
+            setTimeout(() => {
+                if (estado.rodadasGanhas.A >= 2 || estado.rodadasGanhas.B >= 2) {
+                    finalizarMao(dupla);
+                    estado.processando = false;
+                    return;
+                }
+
+                estado.rodadaAtual++;
+                estado.cartasMesa = [];
+                estado.jogadorDaVez = maior.jogador;
+                estado.vencedorRodada = null;
+                estado.processando = false;
+                atualizarUI();
+
+                setTimeout(() => {
+                    if (estado.fase === 'jogando' && !estado.jogadores[estado.jogadorDaVez].humano) {
+                        botJogar();
+                    }
+                }, 400);
+            }, 900);
+        }
+
+        function finalizarMao(dupla) {
             estado.maoAtiva = false;
             estado.fase = 'fim_mao';
+            const pontos = estado.valorMao;
+            estado.pontos[dupla] += pontos;
 
-            let msg = `🏃 <span class="erro">Fugiu!</span> Dupla ${duplaQuePediu} ganha ${pontos} pontos.`;
-            estado.trucoPedidoPor = null;
+            let msg = `🎉 <span class="sucesso">Dupla ${dupla}</span> venceu a mão! +${pontos} pontos.`;
 
-            if (estado.pontos.A >= 12 || estado.pontos.B >= 12) {
+            if (estado.pontos.A >= 12) {
                 estado.fase = 'fim_jogo';
-                msg = `🏆 <span class="sucesso">Dupla ${duplaQuePediu} venceu o jogo!</span>`;
+                msg = `🏆 <span class="sucesso">Dupla A venceu o jogo!</span>`;
+                setMensagem(msg);
+                atualizarUI();
+                atualizarAcoes();
+                return;
+            }
+            if (estado.pontos.B >= 12) {
+                estado.fase = 'fim_jogo';
+                msg = `🏆 <span class="sucesso">Dupla B venceu o jogo!</span>`;
                 setMensagem(msg);
                 atualizarUI();
                 atualizarAcoes();
@@ -1210,287 +1077,232 @@
             atualizarUI();
             atualizarAcoes();
 
-            estado.novaMaoTimeout = setTimeout(() => {
-                if (estado.fase === 'fim_mao') {
-                    iniciarNovaMao();
-                }
-            }, 2200);
+            setTimeout(() => {
+                if (estado.fase === 'fim_mao') iniciarNovaMao();
+            }, 2000);
         }
 
-        function pedirMais(nivel) {
-            if (estado.fase !== 'jogando') return;
-            if (!estado.trucoPedidoPor) return;
+        // ================================================================
+        //  7. TRUCO
+        // ================================================================
 
-            const jogador = estado.jogadores[estado.jogadorDaVez];
-            const duplaAtual = jogador.dupla;
-            const duplaQuePediu = estado.trucoPedidoPor;
-
-            // Quem pediu não pode pedir mais
-            if (duplaAtual === duplaQuePediu) {
-                setMensagem('❌ <span class="erro">Quem pediu não pode pedir mais!</span>');
-                return;
-            }
-
-            const niveis = [3, 6, 9, 12];
-            const indexAtual = niveis.indexOf(estado.valorMao);
-            const indexNovo = niveis.indexOf(nivel);
-
-            if (indexNovo <= indexAtual) {
-                setMensagem(`❌ <span class="erro">Só pode pedir ${nivel} depois de ${estado.valorMao}!</span>`);
-                return;
-            }
-
-            estado.valorMao = nivel;
-            estado.trucoNivel = nivel;
-            estado.trucoPedidoPor = duplaAtual;
+        function pedirTruco() {
+            if (estado.fase !== 'jogando' || estado.trucoPedidoPor || estado.mãoDe11) return;
+            const j = estado.jogadores[estado.jogadorDaVez];
+            estado.trucoPedidoPor = j.dupla;
             estado.trucoRespondido = false;
-
-            setMensagem(`⚡ <span class="destaque">${jogador.nome}</span> pediu ${nivel}! (Vale ${nivel})`);
+            setMensagem(`⚡ <span class="destaque">${j.nome}</span> pediu TRUCO! (Vale ${estado.valorMao + 2})`);
             atualizarAcoes();
         }
 
-        // BOTS
+        function aceitarTruco() {
+            if (estado.fase !== 'jogando' || !estado.trucoPedidoPor) return;
+            estado.valorMao += 2;
+            estado.trucoPedidoPor = null;
+            estado.trucoRespondido = true;
+            setMensagem(`✅ Truco aceito! Mão vale <span class="destaque">${estado.valorMao}</span> pontos.`);
+            atualizarAcoes();
+            setTimeout(() => {
+                if (estado.fase === 'jogando' && !estado.jogadores[estado.jogadorDaVez].humano) botJogar();
+            }, 400);
+        }
+
+        function fugir() {
+            if (estado.fase !== 'jogando' || !estado.trucoPedidoPor) return;
+            const dupla = estado.trucoPedidoPor;
+            const pts = Math.min(estado.valorMao, 3);
+            estado.pontos[dupla] += pts;
+            estado.maoAtiva = false;
+            estado.fase = 'fim_mao';
+            estado.trucoPedidoPor = null;
+            setMensagem(`🏃 <span class="erro">Fugiu!</span> Dupla ${dupla} ganha ${pts} pontos.`);
+            atualizarUI();
+            atualizarAcoes();
+            setTimeout(() => {
+                if (estado.fase === 'fim_mao') iniciarNovaMao();
+            }, 1500);
+        }
+
+        function pedirMais(nivel) {
+            if (estado.fase !== 'jogando' || !estado.trucoPedidoPor) return;
+            const j = estado.jogadores[estado.jogadorDaVez];
+            if (j.dupla === estado.trucoPedidoPor) {
+                setMensagem('❌ <span class="erro">Quem pediu não pode pedir mais!</span>');
+                return;
+            }
+            const idxAtual = NIVEIS_TRUCO.indexOf(estado.valorMao);
+            const idxNovo = NIVEIS_TRUCO.indexOf(nivel);
+            if (idxNovo <= idxAtual) {
+                setMensagem(`❌ <span class="erro">Só pode pedir ${nivel} depois de ${estado.valorMao}!</span>`);
+                return;
+            }
+            estado.valorMao = nivel;
+            estado.trucoPedidoPor = j.dupla;
+            estado.trucoRespondido = false;
+            setMensagem(`⚡ <span class="destaque">${j.nome}</span> pediu ${nivel}! (Vale ${nivel})`);
+            atualizarAcoes();
+        }
+
+        // ================================================================
+        //  8. BOTS INTELIGENTES
+        // ================================================================
+
         function botJogar() {
-            const jogadorIndex = estado.jogadorDaVez;
-            const jogador = estado.jogadores[jogadorIndex];
+            const idx = estado.jogadorDaVez;
+            const j = estado.jogadores[idx];
+            if (j.humano || estado.fase !== 'jogando' || !estado.maoAtiva || estado.processando) return;
 
-            if (!jogador.humano && estado.fase === 'jogando' && estado.maoAtiva && !estado.processando) {
-                setTimeout(() => {
-                    if (estado.fase !== 'jogando' || !estado.maoAtiva || estado.processando) return;
+            setTimeout(() => {
+                if (estado.fase !== 'jogando' || !estado.maoAtiva || estado.processando) return;
 
-                    // Bot decide pedir truco
-                    if (!estado.trucoPedidoPor && !estado.mãoDe11 && estado.cartasMesa.length === 0) {
-                        const forca = avaliarMao(jogador);
-                        if (forca > 22 && Math.random() < 0.25) {
-                            pedirTruco();
+                // Decisão de truco (só no início da mão)
+                if (!estado.trucoPedidoPor && !estado.mãoDe11 && estado.cartasMesa.length === 0) {
+                    const forca = avaliarMao(j);
+                    if (forca > 24 && Math.random() < 0.3) {
+                        pedirTruco();
+                        return;
+                    }
+                }
+
+                // Resposta ao truco
+                if (estado.trucoPedidoPor && !estado.trucoRespondido) {
+                    if (j.dupla !== estado.trucoPedidoPor) {
+                        const forca = avaliarMao(j);
+                        if (forca > 18) {
+                            aceitarTruco();
+                            return;
+                        } else {
+                            fugir();
                             return;
                         }
                     }
+                }
 
-                    // Bot responde truco
-                    if (estado.trucoPedidoPor && !estado.trucoRespondido) {
-                        const duplaBot = jogador.dupla;
-                        if (duplaBot !== estado.trucoPedidoPor) {
-                            const forca = avaliarMao(jogador);
-                            if (forca > 16) {
-                                aceitarTruco();
-                            } else {
-                                fugir();
-                            }
-                            return;
-                        }
-                    }
-
-                    const cartas = jogador.cartas;
-                    if (cartas.length === 0) return;
-
-                    let melhorIndex = 0;
-                    let melhorForca = -1;
-                    for (let i = 0; i < cartas.length; i++) {
-                        const forca = getForca(cartas[i], estado.manilhas);
-                        if (forca > melhorForca) {
-                            melhorForca = forca;
-                            melhorIndex = i;
-                        }
-                    }
-
-                    jogarCarta(jogadorIndex, melhorIndex);
-                }, 300 + Math.random() * 400);
-            }
+                // Jogar carta
+                const cartas = j.cartas;
+                if (cartas.length === 0) return;
+                let melhorIdx = 0,
+                    melhorForca = -1;
+                for (let i = 0; i < cartas.length; i++) {
+                    const f = getForca(cartas[i], estado.manilhas);
+                    if (f > melhorForca) { melhorForca = f;
+                        melhorIdx = i; }
+                }
+                jogarCarta(idx, melhorIdx);
+            }, 400 + Math.random() * 300);
         }
 
-        function avaliarMao(jogador) {
-            let forcaTotal = 0;
-            for (const carta of jogador.cartas) {
-                forcaTotal += getForca(carta, estado.manilhas);
-            }
-            return forcaTotal;
+        function avaliarMao(j) {
+            let total = 0;
+            for (const c of j.cartas) total += getForca(c, estado.manilhas);
+            return total;
         }
 
         // ================================================================
-        //  UI
+        //  9. UI
         // ================================================================
-
-        function renderCarta(carta, tamanho = 'grande') {
-            const valor = getValorDisplay(carta);
-            const naipe = getNaipeDisplay(carta);
-            const cor = getCorCarta(carta);
-            const classeCor = cor === 'vermelho' ? 'carta-naipe-vermelho' : 'carta-naipe-preto';
-
-            if (tamanho === 'grande') {
-                return `
-                            <div class="carta-valor ${classeCor}">${valor}</div>
-                            <div class="carta-naipe ${classeCor}">${naipe}</div>
-                        `;
-            } else {
-                return `
-                            <span class="carta-valor ${classeCor}">${valor}</span>
-                            <span class="carta-naipe ${classeCor}">${naipe}</span>
-                        `;
-            }
-        }
-
-        function renderCartaMao(carta, tamanho = 'pequeno') {
-            const valor = getValorDisplay(carta);
-            const naipe = getNaipeDisplay(carta);
-            const cor = getCorCarta(carta);
-            const classeCor = cor === 'vermelho' ? 'naipe-vermelho' : 'naipe-preto';
-
-            if (tamanho === 'pequeno') {
-                return `
-                            <span class="carta-valor ${classeCor}">${valor}</span>
-                            <span class="carta-naipe ${classeCor}">${naipe}</span>
-                        `;
-            } else {
-                return `
-                            <div class="carta-valor ${classeCor}">${valor}</div>
-                            <div class="carta-naipe ${classeCor}">${naipe}</div>
-                        `;
-            }
-        }
-
-        function renderVira(carta) {
-            const valor = getValorDisplay(carta);
-            const naipe = getNaipeDisplay(carta);
-            const cor = getCorCarta(carta);
-            const classeCor = cor === 'vermelho' ? 'vira-vermelho' : 'vira-preto';
-            return `<span class="vira-valor ${classeCor}">${valor}</span><span class="vira-naipe ${classeCor}">${naipe}</span>`;
-        }
-
-        function renderManilhaInfo(carta) {
-            const valor = getValorDisplay(carta);
-            const naipe = getNaipeDisplay(carta);
-            const cor = getCorCarta(carta);
-            const classeCor = cor === 'vermelho' ? 'manilha-vermelho' : 'manilha-preto';
-            return `<span class="manilha-carta ${classeCor}">${valor}${naipe}</span>`;
-        }
 
         function atualizarUI() {
             document.getElementById('scoreA').textContent = estado.pontos.A;
             document.getElementById('scoreB').textContent = estado.pontos.B;
 
-            // VIRA
-            const viraDisplay = document.getElementById('viraDisplay');
+            // Vira
+            const vd = document.getElementById('viraDisplay');
             if (estado.vira) {
-                viraDisplay.innerHTML = renderVira(estado.vira);
-                viraDisplay.className = 'vira-card revelada';
+                vd.innerHTML = renderVira(estado.vira);
+                vd.className = 'vira-card';
             } else {
-                viraDisplay.textContent = '—';
-                viraDisplay.className = 'vira-card';
+                vd.textContent = '—';
+                vd.className = 'vira-card';
             }
 
-            // MANILHA
-            const manilhaInfo = document.getElementById('manilhaInfo');
-            if (estado.manilhas && estado.manilhas.length > 0) {
-                const manilhaValor = estado.manilhas[0][0];
-                const cartasManilha = estado.manilhas.map(c => renderManilhaInfo(c)).join(' ');
-                manilhaInfo.innerHTML = `Manilha: <strong>${manilhaValor}</strong> ${cartasManilha}`;
+            // Manilha
+            const mi = document.getElementById('manilhaInfo');
+            if (estado.manilhas && estado.manilhas.length) {
+                const v = estado.manilhas[0][0];
+                const cartas = estado.manilhas.map(c => renderManilha(c)).join(' ');
+                mi.innerHTML = `Manilha: <strong>${v}</strong> ${cartas}`;
             } else {
-                manilhaInfo.innerHTML = 'Manilha: <strong>—</strong>';
+                mi.innerHTML = 'Manilha: <strong>—</strong>';
             }
 
-            // CARTAS NA MESA
+            // Mesa
             const mesaDiv = document.getElementById('cartasMesa');
             if (estado.cartasMesa.length === 0) {
                 mesaDiv.innerHTML = '<span class="empty-msg">Aguardando jogadas...</span>';
             } else {
-                mesaDiv.innerHTML = estado.cartasMesa.map((c) => {
-                    const jogador = estado.jogadores[c.jogador];
-                    const isVencedor = estado.vencedorRodada === c.jogador;
-                    return `<div class="carta-mesa ${isVencedor ? 'vencedor' : ''}">
+                mesaDiv.innerHTML = estado.cartasMesa.map(c => {
+                    const j = estado.jogadores[c.jogador];
+                    const venceu = estado.vencedorRodada === c.jogador;
+                    return `<div class="carta-mesa ${venceu ? 'vencedor' : ''}">
                                 ${renderCarta(c.carta, 'grande')}
-                                <span class="jogador-nome">${jogador.nome}</span>
-                                ${isVencedor ? '<span class="carta-badge-vencedor">Venceu</span>' : ''}
+                                <span class="jogador-nome">${j.nome}</span>
+                                ${venceu ? '<span class="badge-vencedor">Venceu</span>' : ''}
                             </div>`;
                 }).join('');
             }
 
-            // JOGADORES
+            // Jogadores
             const grid = document.getElementById('jogadoresGrid');
-            grid.innerHTML = estado.jogadores.map((j, index) => {
-                const isAtivo = estado.jogadorDaVez === index && estado.fase === 'jogando';
-                const isHumano = j.humano;
+            grid.innerHTML = estado.jogadores.map((j, idx) => {
+                const ativo = estado.jogadorDaVez === idx && estado.fase === 'jogando';
                 const isBot = !j.humano;
+                const isHumano = j.humano;
 
                 let cartasHTML = '';
                 if (isBot) {
-                    cartasHTML = j.cartas.map(() =>
-                        `<span class="carta-mao bot-card">◆</span>`
-                    ).join('');
+                    cartasHTML = j.cartas.map(() => `<span class="carta-mao bot-card">◆</span>`).join('');
                 } else {
                     cartasHTML = j.cartas.map((c, i) => {
-                        const jaJogou = estado.cartasMesa.some(c => c.jogador === index);
-                        return `<span class="carta-mao ${jaJogou ? 'jogada' : ''}" 
-                                     onclick="if(!${jaJogou}) jogarCarta(${index}, ${i})">
-                                    ${renderCartaMao(c, 'pequeno')}
+                        const jogou = estado.cartasMesa.some(c => c.jogador === idx);
+                        const clickavel = estado.jogadorDaVez === idx && estado.fase === 'jogando' && !jogou;
+                        return `<span class="carta-mao ${clickavel ? 'clickavel' : ''} ${jogou ? 'jogada' : ''}" 
+                                     onclick="${clickavel ? `jogarCarta(${idx}, ${i})` : ''}">
+                                    ${renderCartaMao(c)}
                                 </span>`;
                     }).join('');
                 }
 
-                const indicadorVez = isAtivo ? '<span class="indicador-vez"></span>' : '';
-                const badgeHumano = isHumano ? '<span class="badge-humano">Você</span>' : '';
+                const vez = ativo ? '<span class="indicador-vez"></span>' : '';
+                const humanoBadge = isHumano ? '<span class="badge-humano">Você</span>' : '';
 
-                return `
-                            <div class="jogador-card dupla-${j.dupla.toLowerCase()} ${isAtivo ? 'ativo' : ''} ${isBot ? 'bot' : 'humano'}">
-                                <div class="topo">
-                                    <span class="nome">${indicadorVez}${j.nome} ${badgeHumano}</span>
-                                    <span class="badge-dupla ${j.dupla.toLowerCase()}">Dupla ${j.dupla}</span>
-                                </div>
-                                <div class="cartas">${cartasHTML}</div>
-                                <div class="pontos-info">Pontos: <strong>${j.pontos}</strong></div>
+                return `<div class="jogador-card dupla-${j.dupla.toLowerCase()} ${ativo ? 'ativo' : ''}">
+                            <div class="topo">
+                                <span class="nome">${vez}${j.nome} ${humanoBadge}</span>
+                                <span class="badge-dupla ${j.dupla.toLowerCase()}">Dupla ${j.dupla}</span>
                             </div>
-                        `;
+                            <div class="cartas">${cartasHTML}</div>
+                            <div class="pontos-info">Pontos: <strong>${j.pontos}</strong></div>
+                        </div>`;
             }).join('');
 
-            // DESTAQUE DA MESA
-            const mesa = document.getElementById('mesa');
-            if (estado.trucoPedidoPor && !estado.trucoRespondido) {
-                mesa.className = 'mesa destaque';
-            } else {
-                mesa.className = 'mesa';
-            }
+            // Destaque mesa
+            document.getElementById('mesa').className = `mesa${estado.trucoPedidoPor && !estado.trucoRespondido ? ' destaque' : ''}`;
 
-            // STATUS
-            const statusInfo = document.getElementById('statusInfo');
-            if (estado.fase === 'fim_jogo') {
-                statusInfo.innerHTML = '🏆 Jogo finalizado';
-            } else if (estado.fase === 'jogando') {
-                const nome = estado.jogadores[estado.jogadorDaVez].nome;
-                const isHumano = estado.jogadores[estado.jogadorDaVez].humano;
-                statusInfo.innerHTML = `Vez de: <span class="vez">${nome}</span> ${isHumano ? '🎯' : '🤖'}`;
-            } else if (estado.fase === 'fim_mao') {
-                statusInfo.innerHTML = 'Mão finalizada';
-            } else {
-                statusInfo.innerHTML = 'Aguardando...';
-            }
+            // Status
+            const si = document.getElementById('statusInfo');
+            if (estado.fase === 'fim_jogo') si.innerHTML = '🏆 Jogo finalizado';
+            else if (estado.fase === 'jogando') {
+                const n = estado.jogadores[estado.jogadorDaVez].nome;
+                si.innerHTML = `Vez de: <span class="vez">${n}</span>`;
+            } else if (estado.fase === 'fim_mao') si.innerHTML = 'Mão finalizada';
+            else si.innerHTML = 'Aguardando...';
         }
 
         function atualizarAcoes() {
-            const btnTruco = document.getElementById('btnTruco');
-            const btnSeis = document.getElementById('btnSeis');
-            const btnNove = document.getElementById('btnNove');
-            const btnDoze = document.getElementById('btnDoze');
-            const btnFugir = document.getElementById('btnFugir');
-            const btnAceitar = document.getElementById('btnAceitar');
-
+            const j = estado.jogadores[estado.jogadorDaVez];
+            const isHumano = j && j.humano;
             const isJogando = estado.fase === 'jogando';
-            const isHumano = estado.jogadores[estado.jogadorDaVez]?.humano || false;
             const temTruco = estado.trucoPedidoPor !== null && !estado.trucoRespondido;
-            const isFimJogo = estado.fase === 'fim_jogo';
+            const podeTrucar = isJogando && isHumano && !temTruco && !estado.mãoDe11 && !estado.processando;
+            const podeResponder = isJogando && isHumano && temTruco && !estado.processando;
 
-            // Truco — só pode pedir se for humano, estiver jogando, não tiver truco pendente
-            btnTruco.disabled = !(isJogando && isHumano && !temTruco && !estado.mãoDe11 && !estado.processando);
-
-            // 6, 9, 12 — só aparecem se tiver truco pendente e for humano (a outra dupla)
-            btnSeis.disabled = !(isJogando && isHumano && temTruco && !estado.processando);
-            btnNove.disabled = !(isJogando && isHumano && temTruco && !estado.processando);
-            btnDoze.disabled = !(isJogando && isHumano && temTruco && !estado.processando);
-
-            // Fugir — só se tiver truco pendente e for humano (a outra dupla)
-            btnFugir.disabled = !(isJogando && isHumano && temTruco && !estado.processando);
-
-            // Aceitar — só se tiver truco pendente e for humano (a outra dupla)
-            btnAceitar.disabled = !(isJogando && isHumano && temTruco && !estado.processando);
+            document.getElementById('btnTruco').disabled = !podeTrucar;
+            document.getElementById('btnSeis').disabled = !podeResponder;
+            document.getElementById('btnNove').disabled = !podeResponder;
+            document.getElementById('btnDoze').disabled = !podeResponder;
+            document.getElementById('btnFugir').disabled = !podeResponder;
+            document.getElementById('btnAceitar').disabled = !podeResponder;
         }
 
         function setMensagem(msg) {
@@ -1498,53 +1310,436 @@
         }
 
         // ================================================================
-        //  BOTÕES
+        //  10. PEERJS — CONEXÃO P2P
         // ================================================================
 
-        document.getElementById('btnTruco').addEventListener('click', pedirTruco);
-        document.getElementById('btnSeis').addEventListener('click', () => pedirMais(6));
-        document.getElementById('btnNove').addEventListener('click', () => pedirMais(9));
-        document.getElementById('btnDoze').addEventListener('click', () => pedirMais(12));
-        document.getElementById('btnFugir').addEventListener('click', fugir);
-        document.getElementById('btnAceitar').addEventListener('click', aceitarTruco);
-
-        // ================================================================
-        //  INICIALIZAÇÃO
-        // ================================================================
+        let peer = null;
+        let conn = null;
+        let roomId = null;
+        let isHost = false;
 
         function gerarCodigo() {
-            const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            let codigo = '';
-            for (let i = 0; i < 5; i++) {
-                codigo += letras.charAt(Math.floor(Math.random() * letras.length));
-            }
-            return codigo;
+            const l = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let c = '';
+            for (let i = 0; i < 5; i++) c += l[Math.floor(Math.random() * 26)];
+            return c;
         }
 
+        function criarSala() {
+            if (peer) peer.destroy();
+            roomId = gerarCodigo();
+            peer = new Peer(roomId);
+            isHost = true;
+
+            peer.on('open', () => {
+                document.getElementById('codeDisplay').textContent = roomId;
+                document.getElementById('codeDisplay').className = 'code-display';
+                document.getElementById('btnCreate').disabled = true;
+                document.getElementById('btnJoin').disabled = true;
+                document.getElementById('roomInput').disabled = true;
+                setMensagem(`📋 Código: <strong>${roomId}</strong> — compartilhe com seu amigo`);
+
+                peer.on('connection', (incoming) => {
+                    conn = incoming;
+                    conn.on('open', () => {
+                        setMensagem('✅ Conectado! Iniciando partida...');
+                        document.getElementById('codeDisplay').className = 'code-display hidden';
+                        iniciarPartida();
+                    });
+                    conn.on('data', receberDados);
+                    conn.on('close', () => {
+                        setMensagem('❌ Conexão perdida');
+                        document.getElementById('btnCreate').disabled = false;
+                        document.getElementById('btnJoin').disabled = false;
+                        document.getElementById('roomInput').disabled = false;
+                    });
+                });
+            });
+
+            peer.on('error', (err) => {
+                if (err.message.includes('ID is taken')) {
+                    criarSala();
+                } else {
+                    setMensagem('❌ Erro: ' + err.message);
+                    document.getElementById('btnCreate').disabled = false;
+                }
+            });
+        }
+
+        function entrarSala() {
+            const code = document.getElementById('roomInput').value.trim().toUpperCase();
+            if (code.length !== 5) {
+                setMensagem('❌ Digite um código de 5 letras');
+                return;
+            }
+
+            if (peer) peer.destroy();
+            peer = new Peer();
+            isHost = false;
+
+            peer.on('open', () => {
+                conn = peer.connect(code);
+                document.getElementById('btnCreate').disabled = true;
+                document.getElementById('btnJoin').disabled = true;
+                document.getElementById('roomInput').disabled = true;
+                setMensagem('🔄 Conectando...');
+
+                conn.on('open', () => {
+                    setMensagem('✅ Conectado! Iniciando partida...');
+                    iniciarPartida();
+                });
+                conn.on('data', receberDados);
+                conn.on('close', () => {
+                    setMensagem('❌ Conexão perdida');
+                    document.getElementById('btnCreate').disabled = false;
+                    document.getElementById('btnJoin').disabled = false;
+                    document.getElementById('roomInput').disabled = false;
+                });
+                conn.on('error', () => {
+                    setMensagem('❌ Código inválido');
+                    document.getElementById('btnCreate').disabled = false;
+                    document.getElementById('btnJoin').disabled = false;
+                    document.getElementById('roomInput').disabled = false;
+                });
+            });
+
+            peer.on('error', () => {
+                setMensagem('❌ Erro ao conectar');
+                document.getElementById('btnCreate').disabled = false;
+                document.getElementById('btnJoin').disabled = false;
+                document.getElementById('roomInput').disabled = false;
+            });
+        }
+
+        function receberDados(data) {
+            // Sincroniza estado do jogo
+            if (data.type === 'sync') {
+                estado.cartasMesa = data.cartasMesa || [];
+                estado.rodadasGanhas = data.rodadasGanhas || { A: 0, B: 0 };
+                estado.pontos = data.pontos || { A: 0, B: 0 };
+                estado.valorMao = data.valorMao || 1;
+                estado.trucoPedidoPor = data.trucoPedidoPor || null;
+                estado.trucoRespondido = data.trucoRespondido || false;
+                estado.maoAtiva = data.maoAtiva || false;
+                estado.jogadorDaVez = data.jogadorDaVez || 0;
+                estado.fase = data.fase || 'aguardando';
+                estado.vencedorRodada = data.vencedorRodada || null;
+                estado.mãoDe11 = data.mãoDe11 || false;
+                estado.vira = data.vira || null;
+                estado.manilhas = data.manilhas || [];
+
+                // Sincroniza cartas dos jogadores (só as do oponente)
+                if (data.jogadores) {
+                    for (let i = 0; i < estado.jogadores.length; i++) {
+                        if (!estado.jogadores[i].humano) {
+                            estado.jogadores[i].cartas = data.jogadores[i]?.cartas || [];
+                            estado.jogadores[i].pontos = data.jogadores[i]?.pontos || 0;
+                        }
+                    }
+                }
+
+                atualizarUI();
+                atualizarAcoes();
+
+                // Se for a vez de um bot, ele joga
+                setTimeout(() => {
+                    if (estado.fase === 'jogando' && !estado.jogadores[estado.jogadorDaVez].humano) {
+                        botJogar();
+                    }
+                }, 300);
+            }
+
+            if (data.type === 'carta_jogada') {
+                // O outro jogador jogou uma carta
+                const idx = data.jogadorIndex;
+                const carta = data.carta;
+                estado.cartasMesa.push({ jogador: idx, carta: carta });
+                // Remove a carta do jogador (se for o oponente)
+                if (!estado.jogadores[idx].humano) {
+                    const pos = estado.jogadores[idx].cartas.indexOf(carta);
+                    if (pos > -1) estado.jogadores[idx].cartas.splice(pos, 1);
+                }
+                setMensagem(`<span class="destaque">${estado.jogadores[idx].nome}</span> jogou <strong>${carta}</strong>`);
+                atualizarUI();
+                atualizarAcoes();
+
+                // Verifica se todos jogaram
+                if (estado.cartasMesa.length === 4) {
+                    resolverRodada();
+                } else {
+                    proximoJogador();
+                    estado.processando = false;
+                    atualizarUI();
+                    setTimeout(() => {
+                        if (estado.fase === 'jogando' && !estado.jogadores[estado.jogadorDaVez].humano) {
+                            botJogar();
+                        }
+                    }, 300);
+                }
+            }
+
+            if (data.type === 'truco') {
+                estado.trucoPedidoPor = data.dupla;
+                estado.trucoRespondido = false;
+                setMensagem(`⚡ <span class="destaque">${data.nome}</span> pediu TRUCO! (Vale ${estado.valorMao + 2})`);
+                atualizarAcoes();
+            }
+
+            if (data.type === 'aceitar_truco') {
+                estado.valorMao += 2;
+                estado.trucoPedidoPor = null;
+                estado.trucoRespondido = true;
+                setMensagem(`✅ Truco aceito! Mão vale <span class="destaque">${estado.valorMao}</span> pontos.`);
+                atualizarAcoes();
+            }
+
+            if (data.type === 'fugir_truco') {
+                const dupla = data.dupla;
+                const pts = Math.min(estado.valorMao, 3);
+                estado.pontos[dupla] += pts;
+                estado.maoAtiva = false;
+                estado.fase = 'fim_mao';
+                estado.trucoPedidoPor = null;
+                setMensagem(`🏃 <span class="erro">Fugiu!</span> Dupla ${dupla} ganha ${pts} pontos.`);
+                atualizarUI();
+                atualizarAcoes();
+                setTimeout(() => {
+                    if (estado.fase === 'fim_mao') iniciarNovaMao();
+                }, 1500);
+            }
+
+            if (data.type === 'pedir_mais') {
+                estado.valorMao = data.nivel;
+                estado.trucoPedidoPor = data.dupla;
+                estado.trucoRespondido = false;
+                setMensagem(`⚡ <span class="destaque">${data.nome}</span> pediu ${data.nivel}! (Vale ${data.nivel})`);
+                atualizarAcoes();
+            }
+        }
+
+        function enviarDados(tipo, dados) {
+            if (conn && conn.open) {
+                conn.send({ type: tipo, ...dados });
+            }
+        }
+
+        // ================================================================
+        //  11. BOTÕES E INICIALIZAÇÃO
+        // ================================================================
+
+        document.getElementById('btnCreate').addEventListener('click', criarSala);
+        document.getElementById('btnJoin').addEventListener('click', entrarSala);
+        document.getElementById('roomInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') entrarSala();
+            setTimeout(() => {
+                document.getElementById('roomInput').value = document.getElementById('roomInput').value.toUpperCase();
+            }, 10);
+        });
+        document.getElementById('roomInput').addEventListener('input', function() {
+            if (this.value.length > 5) this.value = this.value.slice(0, 5);
+            this.value = this.value.toUpperCase();
+        });
+
+        document.getElementById('btnTruco').addEventListener('click', () => {
+            pedirTruco();
+            if (conn) enviarDados('truco', { dupla: estado.jogadores[estado.jogadorDaVez].dupla, nome: estado.jogadores[
+                    estado.jogadorDaVez].nome });
+        });
+        document.getElementById('btnAceitar').addEventListener('click', () => {
+            aceitarTruco();
+            if (conn) enviarDados('aceitar_truco', {});
+        });
+        document.getElementById('btnFugir').addEventListener('click', () => {
+            fugir();
+            if (conn) enviarDados('fugir_truco', { dupla: estado.trucoPedidoPor });
+        });
+        document.getElementById('btnSeis').addEventListener('click', () => {
+            pedirMais(6);
+            if (conn) enviarDados('pedir_mais', { nivel: 6, dupla: estado.jogadores[estado.jogadorDaVez].dupla, nome: estado
+                    .jogadores[estado.jogadorDaVez].nome });
+        });
+        document.getElementById('btnNove').addEventListener('click', () => {
+            pedirMais(9);
+            if (conn) enviarDados('pedir_mais', { nivel: 9, dupla: estado.jogadores[estado.jogadorDaVez].dupla, nome: estado
+                    .jogadores[estado.jogadorDaVez].nome });
+        });
+        document.getElementById('btnDoze').addEventListener('click', () => {
+            pedirMais(12);
+            if (conn) enviarDados('pedir_mais', { nivel: 12, dupla: estado.jogadores[estado.jogadorDaVez].dupla, nome: estado
+                    .jogadores[estado.jogadorDaVez].nome });
+        });
+
+        // Sobrescreve funções para enviar dados via P2P
+        const originalJogarCarta = jogarCarta;
+        jogarCarta = function(idxJogador, idxCarta) {
+            if (estado.processando || estado.fase !== 'jogando') return;
+            if (estado.jogadorDaVez !== idxJogador) return;
+            if (!estado.maoAtiva) return;
+
+            const j = estado.jogadores[idxJogador];
+            const carta = j.cartas[idxCarta];
+
+            // Envia para o outro jogador
+            if (conn && conn.open) {
+                enviarDados('carta_jogada', { jogadorIndex: idxJogador, carta: carta });
+            }
+
+            // Executa localmente
+            estado.processando = true;
+            estado.cartasMesa.push({ jogador: idxJogador, carta: carta });
+            j.cartas.splice(idxCarta, 1);
+
+            setMensagem(`<span class="destaque">${j.nome}</span> jogou <strong>${carta}</strong>`);
+            atualizarUI();
+
+            setTimeout(() => {
+                if (estado.cartasMesa.length === 4) {
+                    resolverRodada();
+                } else {
+                    proximoJogador();
+                    atualizarUI();
+                    estado.processando = false;
+                    setTimeout(() => {
+                        if (estado.fase === 'jogando' && !estado.jogadores[estado.jogadorDaVez].humano) {
+                            botJogar();
+                        }
+                    }, 300);
+                }
+            }, 600);
+        };
+
+        // Sobrescreve finalizarMao para sincronizar
+        const originalFinalizarMao = finalizarMao;
+        finalizarMao = function(dupla) {
+            estado.maoAtiva = false;
+            estado.fase = 'fim_mao';
+            const pontos = estado.valorMao;
+            estado.pontos[dupla] += pontos;
+
+            let msg = `🎉 <span class="sucesso">Dupla ${dupla}</span> venceu a mão! +${pontos} pontos.`;
+
+            if (estado.pontos.A >= 12) {
+                estado.fase = 'fim_jogo';
+                msg = `🏆 <span class="sucesso">Dupla A venceu o jogo!</span>`;
+                setMensagem(msg);
+                atualizarUI();
+                atualizarAcoes();
+                // Sincroniza
+                if (conn) enviarDados('sync', { fase: 'fim_jogo', pontos: estado.pontos });
+                return;
+            }
+            if (estado.pontos.B >= 12) {
+                estado.fase = 'fim_jogo';
+                msg = `🏆 <span class="sucesso">Dupla B venceu o jogo!</span>`;
+                setMensagem(msg);
+                atualizarUI();
+                atualizarAcoes();
+                if (conn) enviarDados('sync', { fase: 'fim_jogo', pontos: estado.pontos });
+                return;
+            }
+
+            setMensagem(msg + ' <span class="automatico">🔄 Nova mão em 2 segundos...</span>');
+            atualizarUI();
+            atualizarAcoes();
+
+            // Sincroniza
+            if (conn) enviarDados('sync', {
+                pontos: estado.pontos,
+                fase: 'fim_mao',
+                cartasMesa: estado.cartasMesa,
+                rodadasGanhas: estado.rodadasGanhas
+            });
+
+            setTimeout(() => {
+                if (estado.fase === 'fim_mao') iniciarNovaMao();
+            }, 2000);
+        };
+
+        // Sobrescreve iniciarNovaMao para sincronizar
+        const originalIniciarNovaMao = iniciarNovaMao;
+        iniciarNovaMao = function() {
+            if (estado.processando) return;
+            estado.processando = true;
+
+            const baralho = embaralhar(criarBaralho());
+
+            for (const j of estado.jogadores) j.cartas = [];
+
+            let idx = 0;
+            for (let i = 0; i < 3; i++) {
+                for (const j of estado.jogadores) {
+                    j.cartas.push(baralho[idx++]);
+                }
+            }
+
+            estado.vira = baralho[idx];
+            estado.manilhas = getManilhas(estado.vira);
+
+            estado.cartasMesa = [];
+            estado.rodadasGanhas = { A: 0, B: 0 };
+            estado.valorMao = 1;
+            estado.trucoPedidoPor = null;
+            estado.trucoRespondido = false;
+            estado.maoAtiva = true;
+            estado.vencedorRodada = null;
+            estado.fase = 'jogando';
+            estado.processando = false;
+
+            estado.mãoDe11 = (estado.pontos.A >= 11 || estado.pontos.B >= 11);
+            if (estado.mãoDe11) {
+                estado.valorMao = 3;
+                setMensagem('⚠️ <span class="destaque">Mão de 11!</span> Vale 3 pontos.');
+            }
+
+            estado.jogadorDaVez = (estado.indexEmbaralhador + 1) % 4;
+            estado.indexEmbaralhador = (estado.indexEmbaralhador + 1) % 4;
+
+            // Sincroniza com o outro jogador
+            if (conn && conn.open) {
+                enviarDados('sync', {
+                    jogadores: estado.jogadores.map(j => ({ cartas: j.cartas, pontos: j.pontos })),
+                    vira: estado.vira,
+                    manilhas: estado.manilhas,
+                    pontos: estado.pontos,
+                    valorMao: estado.valorMao,
+                    jogadorDaVez: estado.jogadorDaVez,
+                    mãoDe11: estado.mãoDe11,
+                    fase: estado.fase
+                });
+            }
+
+            atualizarUI();
+            atualizarAcoes();
+            setMensagem(`Nova mão! <span class="destaque">${estado.jogadores[estado.jogadorDaVez].nome}</span> começa.`);
+
+            setTimeout(() => {
+                if (estado.fase === 'jogando' && !estado.jogadores[estado.jogadorDaVez].humano) {
+                    botJogar();
+                }
+            }, 500);
+        };
+
+        // ================================================================
+        //  12. INÍCIO
+        // ================================================================
+
+        setMensagem('Conecte-se a um amigo ou jogue contra bots.');
         estado.jogadores = initJogadores();
-        estado.codigo = gerarCodigo();
-        document.getElementById('codigoDisplay').textContent = estado.codigo;
-
-        setMensagem('Bem-vindo ao Truco Paulista. <span class="destaque">Nova mão</span> começando...');
         atualizarUI();
-        atualizarAcoes();
 
-        setTimeout(() => {
-            iniciarPrimeiraMao();
-        }, 800);
+        console.log('🃏 Truco Paulista — P2P + Bots Inteligentes');
+        console.log('📌 Crie uma sala ou entre com o código de 5 letras');
+        console.log('🤖 Bots: Oponente 1, Parceiro, Oponente 2');
 
-        console.log('🃏 Truco Paulista — Versão Completa!');
-        console.log('📌 Botões: Truco → 6 → 9 → 12 | Fugir | Aceitar');
-        console.log('📌 Ordem das manilhas mostrada corretamente');
-
-        // EXPORTAR
+        // EXPORTAR FUNÇÕES
         window.jogarCarta = jogarCarta;
         window.pedirTruco = pedirTruco;
         window.aceitarTruco = aceitarTruco;
         window.fugir = fugir;
         window.pedirMais = pedirMais;
         window.iniciarNovaMao = iniciarNovaMao;
-        window.iniciarPrimeiraMao = iniciarPrimeiraMao;
+        window.criarSala = criarSala;
+        window.entrarSala = entrarSala;
     </script>
 
 </body>
