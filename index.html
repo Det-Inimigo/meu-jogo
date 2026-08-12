@@ -2,206 +2,333 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Pong 2 Jogadores</title>
+    <title>Jogo Multiplayer Online</title>
+    <script src="https://unpkg.com/peerjs@1.5.1/dist/peerjs.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; }
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: Arial; 
+            background: #1a1a2e; 
+            color: #fff; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
             height: 100vh;
-            background: #0a0a0a;
-            font-family: Arial, sans-serif;
+            flex-direction: column;
         }
         .container {
+            background: #16213e;
+            padding: 30px;
+            border-radius: 15px;
             text-align: center;
-            border: 2px solid #333;
-            border-radius: 10px;
+            max-width: 500px;
+        }
+        input, button {
+            padding: 12px 20px;
+            margin: 8px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        button {
+            background: #e94560;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover { background: #c73652; }
+        input { background: #0f3460; color: white; width: 200px; }
+        #status { margin: 15px 0; padding: 15px; background: #0f3460; border-radius: 8px; min-height: 60px; }
+        .hidden { display: none; }
+        #gameArea {
+            background: #0f3460;
             padding: 20px;
-            background: #111;
+            border-radius: 10px;
+            margin-top: 15px;
         }
         canvas {
             background: #1a1a2e;
             border: 2px solid #e94560;
-            border-radius: 5px;
+            border-radius: 8px;
             display: block;
+            margin: 0 auto;
         }
-        .info {
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
             color: #aaa;
-            margin-top: 15px;
             font-size: 14px;
         }
-        .info span {
-            color: #e94560;
-            font-weight: bold;
-        }
-        .info .p1 { color: #4fc3f7; }
-        .info .p2 { color: #ffb74d; }
+        .controls .p1 { color: #4fc3f7; }
+        .controls .p2 { color: #ffb74d; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <canvas id="game" width="700" height="450"></canvas>
-        <div class="info">
-            <span class="p1">Jogador 1: W / S</span> 
-            | <span class="p2">Jogador 2: ↑ / ↓</span>
-            | <span>Placar: <span id="scoreDisplay">0 - 0</span></span>
+    <div class="container" id="app">
+        <h1>🎮 Jogo Multiplayer</h1>
+        <p style="color:#aaa;margin:10px 0;">Conecte-se com seu amigo pela internet!</p>
+
+        <div id="menu">
+            <button onclick="criarSala()">🎯 Criar Sala</button>
+            <br>
+            <input type="text" id="codigoInput" placeholder="Código da sala">
+            <button onclick="entrarSala()">🔗 Entrar na Sala</button>
+        </div>
+
+        <div id="status">Aguardando...</div>
+
+        <div id="gameArea" class="hidden">
+            <canvas id="game" width="500" height="350"></canvas>
+            <div class="controls">
+                <span class="p1">⬆️ Você (W/S)</span>
+                <span class="p2">⬇️ Amigo (Setas)</span>
+            </div>
+            <div style="margin-top:10px;color:#4fc3f7;" id="scoreDisplay">0 - 0</div>
         </div>
     </div>
 
     <script>
+        // ==================== CONFIGURAÇÃO ====================
+        let peer, connection;
+        let isHost = false;
+        let roomId = '';
+        let connected = false;
+        let gameRunning = false;
+
+        // Variáveis do jogo
         const canvas = document.getElementById('game');
         const ctx = canvas.getContext('2d');
         const scoreDisplay = document.getElementById('scoreDisplay');
+        const W = 500, H = 350;
+        const PADDLE_W = 10, PADDLE_H = 70;
+        const BALL_R = 7;
+        const SPEED = 4;
 
-        const W = 700, H = 450;
-        const PADDLE_W = 12, PADDLE_H = 90;
-        const BALL_R = 8;
-        const SPEED = 4.5;
-
-        // Jogadores
-        const p1 = { x: 20, y: H/2 - PADDLE_H/2, w: PADDLE_W, h: PADDLE_H, dy: 0, score: 0 };
-        const p2 = { x: W - 20 - PADDLE_W, y: H/2 - PADDLE_H/2, w: PADDLE_W, h: PADDLE_H, dy: 0, score: 0 };
-
-        // Bola
-        const ball = {
-            x: W/2,
-            y: H/2,
-            r: BALL_R,
-            dx: (Math.random() > 0.5 ? 1 : -1) * 4.2,
-            dy: (Math.random() > 0.5 ? 1 : -1) * 3
+        // Estado do jogo (sincronizado entre os dois)
+        let gameState = {
+            p1: { x: 15, y: H/2 - PADDLE_H/2, w: PADDLE_W, h: PADDLE_H, dy: 0, score: 0 },
+            p2: { x: W - 15 - PADDLE_W, y: H/2 - PADDLE_H/2, w: PADDLE_W, h: PADDLE_H, dy: 0, score: 0 },
+            ball: { x: W/2, y: H/2, r: BALL_R, dx: 3, dy: 2 },
+            lastUpdate: Date.now()
         };
 
-        // Teclado
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'w' || e.key === 'W') p1.dy = -SPEED;
-            if (e.key === 's' || e.key === 'S') p1.dy = SPEED;
-            if (e.key === 'ArrowUp') p2.dy = -SPEED;
-            if (e.key === 'ArrowDown') p2.dy = SPEED;
-        });
-        document.addEventListener('keyup', (e) => {
-            if (e.key === 'w' || e.key === 'W' || e.key === 's' || e.key === 'S') p1.dy = 0;
-            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') p2.dy = 0;
-        });
+        let localPaddle = 'p1'; // 'p1' ou 'p2'
+        let keys = { w: false, s: false, up: false, down: false };
 
-        // Reiniciar bola
-        function resetBall(direction) {
-            ball.x = W/2;
-            ball.y = H/2 + (Math.random() - 0.5) * 60;
-            ball.dx = direction * 4.2;
-            ball.dy = (Math.random() - 0.5) * 3.5;
+        // ==================== FUNÇÕES DE CONEXÃO ====================
+        function criarSala() {
+            peer = new Peer();
+            peer.on('open', (id) => {
+                roomId = id;
+                isHost = true;
+                localPaddle = 'p1';
+                document.getElementById('status').innerHTML = `
+                    ✅ Sala criada!<br>
+                    <strong style="color:#4fc3f7;">Código: ${id}</strong><br>
+                    Mande esse código para seu amigo entrar.
+                `;
+                document.getElementById('menu').classList.add('hidden');
+                document.getElementById('gameArea').classList.remove('hidden');
+                iniciarJogo();
+            });
+
+            peer.on('connection', (conn) => {
+                connection = conn;
+                connected = true;
+                document.getElementById('status').innerHTML = '🎮 Amigo conectado! Jogando...';
+                configurarConexao();
+            });
         }
 
-        // Atualizar jogo
-        function update() {
-            // Movimento dos paddles
-            p1.y += p1.dy;
-            p2.y += p2.dy;
-            p1.y = Math.max(0, Math.min(H - p1.h, p1.y));
-            p2.y = Math.max(0, Math.min(H - p2.h, p2.y));
-
-            // Movimento da bola
-            ball.x += ball.dx;
-            ball.y += ball.dy;
-
-            // Colisão com topo e fundo
-            if (ball.y - ball.r < 0 || ball.y + ball.r > H) {
-                ball.dy *= -1;
+        function entrarSala() {
+            const codigo = document.getElementById('codigoInput').value.trim();
+            if (!codigo) {
+                document.getElementById('status').innerHTML = '❌ Digite um código!';
+                return;
             }
 
-            // Colisão com paddle J1
-            if (ball.dx < 0 &&
-                ball.x - ball.r < p1.x + p1.w &&
-                ball.x + ball.r > p1.x &&
-                ball.y > p1.y && ball.y < p1.y + p1.h) {
-                ball.dx = Math.abs(ball.dx);
-                // Aumenta um pouco a velocidade
-                ball.dx *= 1.04;
-                ball.dy += (Math.random() - 0.5) * 0.5;
-            }
+            peer = new Peer();
+            peer.on('open', () => {
+                connection = peer.connect(codigo);
+                localPaddle = 'p2';
+                document.getElementById('menu').classList.add('hidden');
+                document.getElementById('gameArea').classList.remove('hidden');
+                document.getElementById('status').innerHTML = '🔄 Conectando...';
+                
+                connection.on('open', () => {
+                    connected = true;
+                    document.getElementById('status').innerHTML = '🎮 Conectado! Jogando...';
+                    configurarConexao();
+                    iniciarJogo();
+                });
 
-            // Colisão com paddle J2
-            if (ball.dx > 0 &&
-                ball.x + ball.r > p2.x &&
-                ball.x - ball.r < p2.x + p2.w &&
-                ball.y > p2.y && ball.y < p2.y + p2.h) {
-                ball.dx = -Math.abs(ball.dx);
-                ball.dx *= 1.04;
-                ball.dy += (Math.random() - 0.5) * 0.5;
-            }
-
-            // Pontuação
-            if (ball.x - ball.r < 0) {
-                p2.score++;
-                resetBall(1);
-            }
-            if (ball.x + ball.r > W) {
-                p1.score++;
-                resetBall(-1);
-            }
-
-            // Atualizar placar na tela
-            scoreDisplay.textContent = p1.score + ' - ' + p2.score;
+                connection.on('error', () => {
+                    document.getElementById('status').innerHTML = '❌ Erro ao conectar. Verifique o código.';
+                });
+            });
         }
 
-        // Desenhar
+        function configurarConexao() {
+            connection.on('data', (data) => {
+                if (data.type === 'paddleMove') {
+                    if (localPaddle === 'p1') {
+                        gameState.p2.y = data.y;
+                    } else {
+                        gameState.p1.y = data.y;
+                    }
+                }
+                if (data.type === 'sync') {
+                    gameState.ball.x = data.ball.x;
+                    gameState.ball.y = data.ball.y;
+                    gameState.ball.dx = data.ball.dx;
+                    gameState.ball.dy = data.ball.dy;
+                    gameState.p1.score = data.scoreP1;
+                    gameState.p2.score = data.scoreP2;
+                }
+            });
+
+            // Envia estado do jogo periodicamente se for o host
+            if (isHost) {
+                setInterval(() => {
+                    if (connected && connection) {
+                        connection.send({
+                            type: 'sync',
+                            ball: gameState.ball,
+                            scoreP1: gameState.p1.score,
+                            scoreP2: gameState.p2.score
+                        });
+                    }
+                }, 50);
+            }
+        }
+
+        // ==================== JOGO ====================
+        function iniciarJogo() {
+            gameRunning = true;
+            if (isHost) {
+                // Só o host controla a física da bola
+                setInterval(() => {
+                    if (isHost && connected) {
+                        updateBall();
+                    }
+                }, 16);
+            }
+            loop();
+        }
+
+        function updateBall() {
+            const b = gameState.ball;
+            b.x += b.dx;
+            b.y += b.dy;
+
+            if (b.y - b.r < 0 || b.y + b.r > H) b.dy *= -1;
+
+            // Colisão com paddles
+            if (b.dx < 0 && b.x - b.r < gameState.p1.x + gameState.p1.w && 
+                b.y > gameState.p1.y && b.y < gameState.p1.y + gameState.p1.h) {
+                b.dx = Math.abs(b.dx) * 1.05;
+            }
+            if (b.dx > 0 && b.x + b.r > gameState.p2.x && 
+                b.y > gameState.p2.y && b.y < gameState.p2.y + gameState.p2.h) {
+                b.dx = -Math.abs(b.dx) * 1.05;
+            }
+
+            if (b.x - b.r < 0) { gameState.p2.score++; resetBall(1); }
+            if (b.x + b.r > W) { gameState.p1.score++; resetBall(-1); }
+        }
+
+        function resetBall(dir) {
+            gameState.ball.x = W/2;
+            gameState.ball.y = H/2 + (Math.random()-0.5)*40;
+            gameState.ball.dx = dir * 3.5;
+            gameState.ball.dy = (Math.random()-0.5) * 3;
+        }
+
+        function loop() {
+            if (!gameRunning) return;
+            
+            // Movimento local do paddle
+            if (localPaddle === 'p1') {
+                if (keys.w) gameState.p1.y -= SPEED;
+                if (keys.s) gameState.p1.y += SPEED;
+                gameState.p1.y = Math.max(0, Math.min(H - gameState.p1.h, gameState.p1.y));
+                // Envia posição para o outro
+                if (connected && connection) {
+                    connection.send({ type: 'paddleMove', y: gameState.p1.y });
+                }
+            } else {
+                if (keys.up) gameState.p2.y -= SPEED;
+                if (keys.down) gameState.p2.y += SPEED;
+                gameState.p2.y = Math.max(0, Math.min(H - gameState.p2.h, gameState.p2.y));
+                if (connected && connection) {
+                    connection.send({ type: 'paddleMove', y: gameState.p2.y });
+                }
+            }
+
+            draw();
+            requestAnimationFrame(loop);
+        }
+
         function draw() {
             ctx.clearRect(0, 0, W, H);
-
+            
             // Linha central
-            ctx.strokeStyle = '#444';
-            ctx.setLineDash([10, 15]);
-            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#333';
+            ctx.setLineDash([8, 12]);
             ctx.beginPath();
             ctx.moveTo(W/2, 0);
             ctx.lineTo(W/2, H);
             ctx.stroke();
             ctx.setLineDash([]);
 
-            // Círculo central
-            ctx.strokeStyle = '#444';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.arc(W/2, H/2, 50, 0, Math.PI * 2);
-            ctx.stroke();
-
             // Paddles
             ctx.fillStyle = '#4fc3f7';
             ctx.shadowColor = '#4fc3f7';
-            ctx.shadowBlur = 15;
-            ctx.fillRect(p1.x, p1.y, p1.w, p1.h);
-
+            ctx.shadowBlur = 10;
+            ctx.fillRect(gameState.p1.x, gameState.p1.y, gameState.p1.w, gameState.p1.h);
+            
             ctx.fillStyle = '#ffb74d';
             ctx.shadowColor = '#ffb74d';
-            ctx.shadowBlur = 15;
-            ctx.fillRect(p2.x, p2.y, p2.w, p2.h);
+            ctx.fillRect(gameState.p2.x, gameState.p2.y, gameState.p2.w, gameState.p2.h);
             ctx.shadowBlur = 0;
 
             // Bola
             ctx.fillStyle = '#fff';
             ctx.shadowColor = '#fff';
-            ctx.shadowBlur = 20;
+            ctx.shadowBlur = 15;
             ctx.beginPath();
-            ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+            ctx.arc(gameState.ball.x, gameState.ball.y, gameState.ball.r, 0, Math.PI*2);
             ctx.fill();
             ctx.shadowBlur = 0;
 
-            // Placar grande no centro
-            ctx.font = '60px Arial';
-            ctx.fillStyle = 'rgba(255,255,255,0.05)';
+            // Placar
+            ctx.font = '30px Arial';
+            ctx.fillStyle = 'rgba(255,255,255,0.08)';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(p1.score + '  ·  ' + p2.score, W/2, H/2 + 5);
+            ctx.fillText(gameState.p1.score + '  ·  ' + gameState.p2.score, W/2, H/2);
+
+            scoreDisplay.textContent = gameState.p1.score + ' - ' + gameState.p2.score;
         }
 
-        // Loop do jogo
-        function gameLoop() {
-            update();
-            draw();
-            requestAnimationFrame(gameLoop);
-        }
+        // Teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'w' || e.key === 'W') keys.w = true;
+            if (e.key === 's' || e.key === 'S') keys.s = true;
+            if (e.key === 'ArrowUp') { keys.up = true; e.preventDefault(); }
+            if (e.key === 'ArrowDown') { keys.down = true; e.preventDefault(); }
+        });
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'w' || e.key === 'W') keys.w = false;
+            if (e.key === 's' || e.key === 'S') keys.s = false;
+            if (e.key === 'ArrowUp') { keys.up = false; e.preventDefault(); }
+            if (e.key === 'ArrowDown') { keys.down = false; e.preventDefault(); }
+        });
 
-        gameLoop();
+        // ==================== INÍCIO ====================
+        console.log('🎮 Jogo Multiplayer carregado!');
+        console.log('📌 Um jogador cria a sala, o outro entra com o código.');
     </script>
 </body>
 </html>
