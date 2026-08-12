@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Pong 2 Jogadores</title>
+    <style>
+        * { margin: 0; padding: 0; }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #0a0a0a;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            background: #111;
+        }
+        canvas {
+            background: #1a1a2e;
+            border: 2px solid #e94560;
+            border-radius: 5px;
+            display: block;
+        }
+        .info {
+            color: #aaa;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .info span {
+            color: #e94560;
+            font-weight: bold;
+        }
+        .info .p1 { color: #4fc3f7; }
+        .info .p2 { color: #ffb74d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <canvas id="game" width="700" height="450"></canvas>
+        <div class="info">
+            <span class="p1">Jogador 1: W / S</span> 
+            | <span class="p2">Jogador 2: ↑ / ↓</span>
+            | <span>Placar: <span id="scoreDisplay">0 - 0</span></span>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('game');
+        const ctx = canvas.getContext('2d');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+
+        const W = 700, H = 450;
+        const PADDLE_W = 12, PADDLE_H = 90;
+        const BALL_R = 8;
+        const SPEED = 4.5;
+
+        // Jogadores
+        const p1 = { x: 20, y: H/2 - PADDLE_H/2, w: PADDLE_W, h: PADDLE_H, dy: 0, score: 0 };
+        const p2 = { x: W - 20 - PADDLE_W, y: H/2 - PADDLE_H/2, w: PADDLE_W, h: PADDLE_H, dy: 0, score: 0 };
+
+        // Bola
+        const ball = {
+            x: W/2,
+            y: H/2,
+            r: BALL_R,
+            dx: (Math.random() > 0.5 ? 1 : -1) * 4.2,
+            dy: (Math.random() > 0.5 ? 1 : -1) * 3
+        };
+
+        // Teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'w' || e.key === 'W') p1.dy = -SPEED;
+            if (e.key === 's' || e.key === 'S') p1.dy = SPEED;
+            if (e.key === 'ArrowUp') p2.dy = -SPEED;
+            if (e.key === 'ArrowDown') p2.dy = SPEED;
+        });
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'w' || e.key === 'W' || e.key === 's' || e.key === 'S') p1.dy = 0;
+            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') p2.dy = 0;
+        });
+
+        // Reiniciar bola
+        function resetBall(direction) {
+            ball.x = W/2;
+            ball.y = H/2 + (Math.random() - 0.5) * 60;
+            ball.dx = direction * 4.2;
+            ball.dy = (Math.random() - 0.5) * 3.5;
+        }
+
+        // Atualizar jogo
+        function update() {
+            // Movimento dos paddles
+            p1.y += p1.dy;
+            p2.y += p2.dy;
+            p1.y = Math.max(0, Math.min(H - p1.h, p1.y));
+            p2.y = Math.max(0, Math.min(H - p2.h, p2.y));
+
+            // Movimento da bola
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+
+            // Colisão com topo e fundo
+            if (ball.y - ball.r < 0 || ball.y + ball.r > H) {
+                ball.dy *= -1;
+            }
+
+            // Colisão com paddle J1
+            if (ball.dx < 0 &&
+                ball.x - ball.r < p1.x + p1.w &&
+                ball.x + ball.r > p1.x &&
+                ball.y > p1.y && ball.y < p1.y + p1.h) {
+                ball.dx = Math.abs(ball.dx);
+                // Aumenta um pouco a velocidade
+                ball.dx *= 1.04;
+                ball.dy += (Math.random() - 0.5) * 0.5;
+            }
+
+            // Colisão com paddle J2
+            if (ball.dx > 0 &&
+                ball.x + ball.r > p2.x &&
+                ball.x - ball.r < p2.x + p2.w &&
+                ball.y > p2.y && ball.y < p2.y + p2.h) {
+                ball.dx = -Math.abs(ball.dx);
+                ball.dx *= 1.04;
+                ball.dy += (Math.random() - 0.5) * 0.5;
+            }
+
+            // Pontuação
+            if (ball.x - ball.r < 0) {
+                p2.score++;
+                resetBall(1);
+            }
+            if (ball.x + ball.r > W) {
+                p1.score++;
+                resetBall(-1);
+            }
+
+            // Atualizar placar na tela
+            scoreDisplay.textContent = p1.score + ' - ' + p2.score;
+        }
+
+        // Desenhar
+        function draw() {
+            ctx.clearRect(0, 0, W, H);
+
+            // Linha central
+            ctx.strokeStyle = '#444';
+            ctx.setLineDash([10, 15]);
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(W/2, 0);
+            ctx.lineTo(W/2, H);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Círculo central
+            ctx.strokeStyle = '#444';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(W/2, H/2, 50, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Paddles
+            ctx.fillStyle = '#4fc3f7';
+            ctx.shadowColor = '#4fc3f7';
+            ctx.shadowBlur = 15;
+            ctx.fillRect(p1.x, p1.y, p1.w, p1.h);
+
+            ctx.fillStyle = '#ffb74d';
+            ctx.shadowColor = '#ffb74d';
+            ctx.shadowBlur = 15;
+            ctx.fillRect(p2.x, p2.y, p2.w, p2.h);
+            ctx.shadowBlur = 0;
+
+            // Bola
+            ctx.fillStyle = '#fff';
+            ctx.shadowColor = '#fff';
+            ctx.shadowBlur = 20;
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Placar grande no centro
+            ctx.font = '60px Arial';
+            ctx.fillStyle = 'rgba(255,255,255,0.05)';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(p1.score + '  ·  ' + p2.score, W/2, H/2 + 5);
+        }
+
+        // Loop do jogo
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+    </script>
+</body>
+</html>
