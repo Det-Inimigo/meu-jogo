@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ping Pong — PlayHub</title>
 
-    <!-- PeerJS (conexão P2P) -->
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js">
     </script>
 
@@ -104,24 +103,28 @@
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.04);
             border-radius: 14px;
-            padding: 16px 20px;
+            padding: 18px 20px;
         }
 
         .connection-area input {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 8px;
-            padding: 10px 16px;
+            padding: 12px 16px;
             color: #e8e8f0;
             font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            width: 180px;
+            font-size: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-align: center;
+            width: 140px;
             outline: none;
             transition: 0.2s;
+            letter-spacing: 0.1em;
         }
 
         .connection-area input:focus {
@@ -129,14 +132,17 @@
         }
 
         .connection-area input::placeholder {
-            color: #4a4f6a;
+            color: #3a3f55;
+            font-weight: 400;
+            font-size: 14px;
+            letter-spacing: 0.04em;
         }
 
         .connection-area button {
             background: rgba(91, 124, 250, 0.12);
             border: 1px solid rgba(91, 124, 250, 0.15);
             border-radius: 8px;
-            padding: 10px 22px;
+            padding: 12px 24px;
             color: #8ba4fa;
             font-family: 'Inter', sans-serif;
             font-size: 14px;
@@ -161,23 +167,34 @@
             border-color: rgba(212, 165, 74, 0.2);
         }
 
+        .connection-area button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
         .connection-area .code-display {
-            font-size: 18px;
-            font-weight: 700;
+            font-size: 28px;
+            font-weight: 800;
             color: #d4a54a;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.12em;
             background: rgba(212, 165, 74, 0.06);
-            padding: 6px 18px;
+            padding: 6px 24px;
             border-radius: 8px;
             border: 1px solid rgba(212, 165, 74, 0.08);
-            font-family: monospace;
-            min-width: 100px;
+            font-family: 'Inter', monospace;
+            min-width: 120px;
+        }
+
+        .connection-area .label {
+            color: #4a4f6a;
+            font-size: 13px;
         }
 
         #status {
-            margin-top: 10px;
-            font-size: 13px;
+            margin-top: 12px;
+            font-size: 14px;
             color: #5a5f7a;
+            min-height: 24px;
         }
 
         #status .connected {
@@ -279,14 +296,23 @@
                 font-size: 20px;
                 padding: 0 12px;
             }
+            .connection-area {
+                padding: 14px 12px;
+                gap: 8px;
+            }
             .connection-area input {
-                width: 130px;
-                font-size: 13px;
-                padding: 8px 12px;
+                width: 110px;
+                font-size: 16px;
+                padding: 10px 10px;
             }
             .connection-area button {
                 font-size: 13px;
-                padding: 8px 16px;
+                padding: 10px 16px;
+            }
+            .connection-area .code-display {
+                font-size: 20px;
+                padding: 4px 16px;
+                min-width: 80px;
             }
             .controls {
                 font-size: 11px;
@@ -298,6 +324,23 @@
             .btn-back {
                 font-size: 12px;
                 padding: 8px 20px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .connection-area input {
+                width: 90px;
+                font-size: 14px;
+                padding: 8px 8px;
+            }
+            .connection-area button {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+            .connection-area .code-display {
+                font-size: 16px;
+                padding: 4px 12px;
+                min-width: 60px;
             }
         }
     </style>
@@ -325,17 +368,18 @@
 
         <!-- ÁREA DE CONEXÃO P2P -->
         <div class="connection-area" id="connectionArea">
-            <button id="btnCreate" class="secondary">🎯 Criar sala</button>
+            <button id="btnCreate" class="secondary">Criar sala</button>
 
-            <span style="color:#4a4f6a; font-size:13px;">ou</span>
+            <span class="label">ou</span>
 
-            <input type="text" id="roomInput" placeholder="Código da sala" />
+            <input type="text" id="roomInput" placeholder="Código" maxlength="5" />
+
             <button id="btnJoin">Entrar</button>
 
             <span id="codeDisplay" class="code-display hidden">—</span>
         </div>
 
-        <div id="status">🔄 Aguardando conexão...</div>
+        <div id="status">📡 Pronto para conectar</div>
 
         <!-- CONTROLES -->
         <div class="controls">
@@ -364,7 +408,7 @@
 
     <script>
         // ================================================================
-        //  PING PONG P2P — PeerJS
+        //  PING PONG P2P — com código de 5 letras
         // ================================================================
 
         // --- Canvas ---
@@ -408,6 +452,19 @@
         const p2Label = document.getElementById('p2Label');
 
         // ================================================================
+        //  GERADOR DE CÓDIGO DE 5 LETRAS
+        // ================================================================
+
+        function gerarCodigo() {
+            const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let codigo = '';
+            for (let i = 0; i < 5; i++) {
+                codigo += letras.charAt(Math.floor(Math.random() * letras.length));
+            }
+            return codigo;
+        }
+
+        // ================================================================
         //  PEERJS — CONEXÃO
         // ================================================================
 
@@ -419,17 +476,20 @@
         function criarSala() {
             if (peer) peer.destroy();
 
-            peer = new Peer();
+            // Gera um código de 5 letras
+            roomId = gerarCodigo();
+
+            peer = new Peer(roomId);
             isHost = true;
 
-            peer.on('open', (id) => {
-                roomId = id;
-                codeDisplay.textContent = id;
+            peer.on('open', () => {
+                codeDisplay.textContent = roomId;
                 codeDisplay.classList.remove('hidden');
-                setStatus(`📋 Código: <strong>${id}</strong> — compartilhe com seu amigo`, 'waiting');
+                setStatus(`📋 Código: <strong>${roomId}</strong> — compartilhe com seu amigo`, 'waiting');
                 btnCreate.disabled = true;
                 btnJoin.disabled = true;
                 roomInput.disabled = true;
+                roomInput.value = '';
 
                 // Aguarda conexão
                 peer.on('connection', (incoming) => {
@@ -450,15 +510,20 @@
             });
 
             peer.on('error', (err) => {
-                setStatus('❌ Erro: ' + err.message, 'error');
-                btnCreate.disabled = false;
+                // Se o código já existir, tenta outro
+                if (err.message.includes('ID is taken')) {
+                    criarSala(); // tenta de novo com outro código
+                } else {
+                    setStatus('❌ Erro: ' + err.message, 'error');
+                    btnCreate.disabled = false;
+                }
             });
         }
 
         function entrarSala() {
-            const code = roomInput.value.trim();
-            if (!code) {
-                setStatus('❌ Digite um código', 'error');
+            const code = roomInput.value.trim().toUpperCase();
+            if (code.length !== 5) {
+                setStatus('❌ Digite um código de 5 letras', 'error');
                 return;
             }
 
@@ -488,7 +553,7 @@
                 conn.on('data', handleData);
                 conn.on('close', handleDisconnect);
                 conn.on('error', () => {
-                    setStatus('❌ Falha ao conectar. Verifique o código.', 'error');
+                    setStatus('❌ Código inválido ou sala inexistente', 'error');
                     btnCreate.disabled = false;
                     btnJoin.disabled = false;
                     roomInput.disabled = false;
@@ -504,7 +569,6 @@
         }
 
         function setupConnection() {
-            // Envia estado inicial se for host
             if (isHost) {
                 setTimeout(() => {
                     if (conn && connected) {
@@ -519,7 +583,6 @@
 
         function handleData(data) {
             if (data.type === 'move') {
-                // Atualiza posição do oponente
                 if (localPlayer === 'p1') {
                     localState.p2.y = data.y;
                 } else {
@@ -528,7 +591,6 @@
             }
 
             if (data.type === 'sync') {
-                // Sincroniza o estado (usado pelo host)
                 localState.ball.x = data.state.ball.x;
                 localState.ball.y = data.state.ball.y;
                 localState.ball.dx = data.state.ball.dx;
@@ -560,12 +622,10 @@
         // ================================================================
 
         function iniciarJogo() {
-            // Se for host, controla a física da bola
             if (isHost) {
                 setInterval(() => {
                     if (connected && isHost) {
                         updateBall();
-                        // Envia estado para sincronizar
                         if (conn) {
                             conn.send({
                                 type: 'sync',
@@ -586,7 +646,6 @@
 
             if (b.y - b.r < 0 || b.y + b.r > H) b.dy *= -1;
 
-            // Colisão P1
             if (b.dx < 0 &&
                 b.x - b.r < localState.p1.x + localState.p1.w &&
                 b.y > localState.p1.y && b.y < localState.p1.y + localState.p1.h) {
@@ -594,7 +653,6 @@
                 b.dy += (Math.random() - 0.5) * 0.4;
             }
 
-            // Colisão P2
             if (b.dx > 0 &&
                 b.x + b.r > localState.p2.x &&
                 b.y > localState.p2.y && b.y < localState.p2.y + localState.p2.h) {
@@ -620,7 +678,6 @@
             localState.ball.dx = dir * 3.8;
             localState.ball.dy = (Math.random() - 0.5) * 3;
 
-            // Avisa o outro jogador
             if (conn) {
                 conn.send({ type: 'reset', dir: dir });
             }
@@ -639,7 +696,6 @@
                 if (keys.w) localState.p1.y -= SPEED;
                 if (keys.s) localState.p1.y += SPEED;
                 localState.p1.y = Math.max(0, Math.min(H - localState.p1.h, localState.p1.y));
-                // Envia posição para o oponente
                 if (conn && connected) {
                     conn.send({ type: 'move', y: localState.p1.y });
                 }
@@ -656,7 +712,6 @@
         function draw() {
             ctx.clearRect(0, 0, W, H);
 
-            // Linha central
             ctx.strokeStyle = 'rgba(255,255,255,0.04)';
             ctx.setLineDash([10, 16]);
             ctx.lineWidth = 1.5;
@@ -666,14 +721,12 @@
             ctx.stroke();
             ctx.setLineDash([]);
 
-            // Círculo central
             ctx.strokeStyle = 'rgba(255,255,255,0.025)';
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.arc(W / 2, H / 2, 46, 0, Math.PI * 2);
             ctx.stroke();
 
-            // Paddles
             ctx.shadowColor = '#6b8af5';
             ctx.shadowBlur = 18;
             ctx.fillStyle = '#6b8af5';
@@ -685,7 +738,6 @@
             ctx.fillRect(localState.p2.x, localState.p2.y, localState.p2.w, localState.p2.h);
             ctx.shadowBlur = 0;
 
-            // Bola
             ctx.shadowColor = '#ffffff';
             ctx.shadowBlur = 22;
             ctx.fillStyle = '#ffffff';
@@ -694,7 +746,6 @@
             ctx.fill();
             ctx.shadowBlur = 0;
 
-            // Placar decorativo
             ctx.font = '64px Inter, sans-serif';
             ctx.fillStyle = 'rgba(255,255,255,0.02)';
             ctx.textAlign = 'center';
@@ -733,28 +784,37 @@
 
         roomInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') entrarSala();
+            // Converte para maiúsculas automaticamente
+            setTimeout(() => {
+                roomInput.value = roomInput.value.toUpperCase();
+            }, 10);
+        });
+
+        // Impede digitar mais de 5 caracteres
+        roomInput.addEventListener('input', () => {
+            if (roomInput.value.length > 5) {
+                roomInput.value = roomInput.value.slice(0, 5);
+            }
+            roomInput.value = roomInput.value.toUpperCase();
         });
 
         // ================================================================
         //  INÍCIO
         // ================================================================
 
-        setStatus('🔄 Criando conexão...', 'waiting');
+        setStatus('📡 Pronto para conectar', '');
 
-        // Inicializa peer para agilizar
+        // Inicializa peer
         peer = new Peer();
         peer.on('open', () => {
-            setStatus('📡 Pronto! Crie uma sala ou entre em uma.', '');
             btnCreate.disabled = false;
             btnJoin.disabled = false;
             roomInput.disabled = false;
         });
-        peer.on('error', () => {
-            // ignora
-        });
+        peer.on('error', () => { /* ignora */ });
 
         console.log('🏓 Ping Pong P2P carregado!');
-        console.log('📌 Um jogador cria a sala, o outro entra com o código.');
+        console.log('📌 Código: 5 letras maiúsculas (ex: ABXKZ)');
     </script>
 
 </body>
